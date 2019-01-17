@@ -1,0 +1,12 @@
+{
+    "name": "Project Omega documentation",
+    "version": "0.3.0",
+    "description": "The last event management tool you will ever need",
+    "title": "Custom apiDoc browser title",
+    "url" : "http://localhost/api/v1",
+    "sampleUrl": "http://localhost/api/v1",
+    "template": {
+        "withCompare": true,
+        "withGenerator": true
+    }
+  }
