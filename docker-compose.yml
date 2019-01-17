@@ -1,0 +1,12 @@
+version: "2"
+services:
+  events:
+    build:
+      context: .
+      dockerfile: events/Dockerfile
+    restart: always
+    volumes:
+    - .:/go/src/angadsharma1016/omega_microservices
+    container_name: events
+    ports:
+    - 3000:8081
