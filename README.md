@@ -1,4 +1,4 @@
-# Project omega
+# Project hades
 The last event coordinator you will ever need
 
 <br />
