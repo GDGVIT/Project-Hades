@@ -49,8 +49,8 @@ type Query struct {
 }
 
 type EventReturn struct {
-	Event Event
-	Err   error
+	Event Event `json:"event"`
+	Err   error `json:"err"`
 }
 
 func (v Event) GetField(field string, value string) string {
