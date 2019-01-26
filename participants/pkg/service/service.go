@@ -19,6 +19,19 @@ type ParticipantsService interface {
 
 type basicParticipantsService struct{}
 
+/**
+{
+	"details":{
+      "name":"angad sharma",
+      "registrationNumber":"17BBE1010",
+      "email":"SDADAS@A.COM",
+      "phoneNumber":"919191991911",
+      "gender":"M",
+      "eventsAttended":"ALL",
+      "eventName":"DEVSOC"
+   }
+}
+**/
 func (b *basicParticipantsService) CreateAttendee(ctx context.Context, details model.Attendee) (rs string, err error) {
 
 	conn := model.ConnectToDB()
@@ -42,7 +55,29 @@ func (b *basicParticipantsService) CreateAttendee(ctx context.Context, details m
 	return rs, err
 }
 
+/**
+{
+	"query":{
+		"key":"name",
+		"Value":"angad sharma"
+	}
+}
+
+{
+    "rs": [
+        {
+            "name": "angad sharma",
+            "registrationNumber": "17BBE1010",
+            "email": "SDADAS@A.COM",
+            "phoneNumber": "919191991911",
+            "gender": "M"
+        }
+    ],
+    "err": null
+}
+**/
 func (b *basicParticipantsService) ReadAttendee(ctx context.Context, query model.Query) (rs []model.Participant, err error) {
+
 	conn := model.ConnectToDB()
 	defer conn.Close()
 
