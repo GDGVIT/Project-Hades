@@ -1,15 +1,14 @@
 package model
 
 import (
-	bolt "github.com/johnnadratowski/golang-neo4j-bolt-driver"
 	"log"
 	"sync"
 )
 
-func CreateEvent(e Event, ce chan error, conn bolt.Conn) {
+func CreateEvent(e Event, ce chan error) {
 	c := make(chan error)
 	//go createParticipant(e, "StudentCoordinator", c)
-	result, err := conn.ExecNeo(`CREATE (n:EVENT {name:$name, clubName:$clubName, toDate:$toDate, 
+	result, err := con.ExecNeo(`CREATE (n:EVENT {name:$name, clubName:$clubName, toDate:$toDate, 
 		fromDate: $fromDate, toTime:$toTime, fromTime:$fromTime, budget:$budget, 
 		description:$description, category:$category, venue:$venue, attendance:$attendance, 
 		expectedParticipants:$expectedParticipants, PROrequest:$PROrequest, 
@@ -40,10 +39,10 @@ func CreateEvent(e Event, ce chan error, conn bolt.Conn) {
 
 	// CREATE STUDENT COORDINATOR, FACULTY COORDINATOR, SPONSOR AND GUEST NODES
 	var mutex = &sync.Mutex{}
-	go CreateParticipant(e, "StudentCoordinator", c, mutex, conn)
-	go CreateParticipant(e, "FacultyCoordinator", c, mutex, conn)
-	go CreateParticipant(e, "MainSponsor", c, mutex, conn)
-	go CreateGuest(e, c, mutex, conn)
+	go CreateParticipant(e, "StudentCoordinator", c, mutex)
+	go CreateParticipant(e, "FacultyCoordinator", c, mutex)
+	go CreateParticipant(e, "MainSponsor", c, mutex)
+	go CreateGuest(e, c, mutex)
 
 	err1, err2, err3, err4 := <-c, <-c, <-c, <-c
 

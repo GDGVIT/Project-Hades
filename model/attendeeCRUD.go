@@ -4,14 +4,12 @@ import (
 	"fmt"
 	"log"
 	"sync"
-
-	bolt "github.com/johnnadratowski/golang-neo4j-bolt-driver"
 )
 
-func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.Mutex, conn bolt.Conn) {
+func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.Mutex) {
 
 	mutex.Lock()
-	_, err := conn.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
+	_, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
 	CREATE (n:ATTENDEE {name:$name, registrationNumber:$registrationNumber,
 		email:$email, phoneNumber:$phoneNumber, gender: $gender, attended:$attended})<-[:ATTENDS]-(a) `, map[string]interface{}{
 		"EventName":          eventName,
@@ -32,10 +30,51 @@ func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.M
 	return
 }
 
-func ReadAttendee(q Query, c chan ParticipantReturn, mutex *sync.Mutex, conn bolt.Conn) {
+func UpdateAttendee(q Query, c chan error) {
+
+	result, err := con.ExecNeo(`
+		MATCH(n:ATTENDEE)
+		WHERE n.`+q.Key+`=$val
+		SET n.`+q.ChangeKey+`=$val1
+		RETURN n.`+q.ChangeKey+`
+	`, map[string]interface{}{
+		"val":  q.Value,
+		"val1": q.ChangeKey,
+	})
+
+	if err != nil {
+		c <- err
+		return
+	}
+	c <- nil
+
+	log.Println(result)
+	log.Printf("Updated")
+
+}
+
+func DeleteAttendee(q Query, c chan error) {
+	result, err := con.ExecNeo(`
+		MATCH(n:ATTENDEE)<-[r]-(a)
+		WHERE n.`+q.Key+`=$val
+		DETACH DELETE n
+	`, map[string]interface{}{
+		"val": q.Value,
+	})
+	if err != nil {
+		c <- err
+	}
+
+	log.Println(result)
+	log.Println("Event deleted")
+	c <- nil
+	return
+}
+
+func ReadAttendee(q Query, c chan ParticipantReturn, mutex *sync.Mutex) {
 
 	mutex.Lock()
-	data, _, _, err := conn.QueryNeoAll(`MATCH(a:ATTENDEE) WHERE a.`+q.Key+`=$val
+	data, _, _, err := con.QueryNeoAll(`MATCH(a:ATTENDEE) WHERE a.`+q.Key+`=$val
 	RETURN a.name, a.registrationNumber,a.email, a.phoneNumber, a.gender, a.attended`, map[string]interface{}{
 		"val": q.Value,
 	})
@@ -67,46 +106,5 @@ func ReadAttendee(q Query, c chan ParticipantReturn, mutex *sync.Mutex, conn bol
 	log.Printf("Found attendee node")
 	c <- ParticipantReturn{pt, nil}
 
-	return
-}
-
-func UpdateAttendee(q Query, c chan error, conn bolt.Conn) {
-
-	result, err := conn.ExecNeo(`
-		MATCH(n:ATTENDEE)
-		WHERE n.`+q.Key+`=$val
-		SET n.`+q.ChangeKey+`=$val1
-		RETURN n.`+q.ChangeKey+`
-	`, map[string]interface{}{
-		"val":  q.Value,
-		"val1": q.ChangeKey,
-	})
-
-	if err != nil {
-		c <- err
-		return
-	}
-	c <- nil
-
-	log.Println(result)
-	log.Printf("Updated")
-
-}
-
-func DeleteAttendee(q Query, c chan error, conn bolt.Conn) {
-	result, err := conn.ExecNeo(`
-		MATCH(n:ATTENDEE)<-[r]-(a)
-		WHERE n.`+q.Key+`=$val
-		DETACH DELETE n
-	`, map[string]interface{}{
-		"val": q.Value,
-	})
-	if err != nil {
-		c <- err
-	}
-
-	log.Println(result)
-	log.Println("Event deleted")
-	c <- nil
 	return
 }

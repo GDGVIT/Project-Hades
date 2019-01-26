@@ -1,13 +1,12 @@
 package model
 
 import (
-	bolt "github.com/johnnadratowski/golang-neo4j-bolt-driver"
 	"log"
 )
 
 // delete event with given query
-func DeleteEvent(q Query, c chan error, conn bolt.Conn) {
-	result, err := conn.ExecNeo(`
+func DeleteEvent(q Query, c chan error) {
+	result, err := con.ExecNeo(`
 		MATCH(n:EVENT)-[r]->(a)
 		WHERE n.`+q.Key+`=$val
 		DETACH DELETE n, a
@@ -25,8 +24,8 @@ func DeleteEvent(q Query, c chan error, conn bolt.Conn) {
 }
 
 // update event with given query and new value
-func UpdateEvent(q Query, c chan error, conn bolt.Conn) {
-	result, err := conn.ExecNeo(`
+func UpdateEvent(q Query, c chan error) {
+	result, err := con.ExecNeo(`
 		MATCH(n:EVENT)
 		WHERE n.`+q.Key+`=$val
 		SET n.`+q.ChangeKey+`=$val1

@@ -1,19 +1,18 @@
 package model
 
 import (
-	bolt "github.com/johnnadratowski/golang-neo4j-bolt-driver"
 	"log"
 	"sync"
 )
 
 // create a new node with given label and participant data struct
-func CreateParticipant(e Event, label string, c chan error, mutex *sync.Mutex, conn bolt.Conn) {
+func CreateParticipant(e Event, label string, c chan error, mutex *sync.Mutex) {
 	if e.GetField(label, "Email") == "" {
 		c <- nil
 		return
 	}
 	mutex.Lock()
-	result, err := conn.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
+	result, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
 	CREATE (n:INCHARGE {name:$name, registrationNumber:$registrationNumber,
 		email:$email, phoneNumber:$phoneNumber, gender: $gender})<-[:`+label+`]-(a) `, map[string]interface{}{
 		"EventName":          e.Name,
@@ -35,13 +34,13 @@ func CreateParticipant(e Event, label string, c chan error, mutex *sync.Mutex, c
 }
 
 // create a new guest node with relationship to the event
-func CreateGuest(e Event, c chan error, mutex *sync.Mutex, conn bolt.Conn) {
+func CreateGuest(e Event, c chan error, mutex *sync.Mutex) {
 	if e.GuestDetails.Email == "" {
 		c <- nil
 		return
 	}
 	mutex.Lock()
-	result, err := conn.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
+	result, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
 	CREATE (n:GUEST {name:$name, stake:$stake,
 	email:$email, phoneNumber:$phoneNumber, gender: $gender, locationOfStay:$locationOfStay
 	})<-[:GUEST]-(a) `, map[string]interface{}{
