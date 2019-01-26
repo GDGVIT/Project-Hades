@@ -1,10 +1,10 @@
 package http
 
 import (
-	endpoint "angadsharma1016/omega_microservices/events/pkg/endpoint"
 	"context"
 	"encoding/json"
 	"errors"
+	endpoint "github.com/GDGVIT/Project-Hades/events/pkg/endpoint"
 	http1 "github.com/go-kit/kit/transport/http"
 	"net/http"
 )

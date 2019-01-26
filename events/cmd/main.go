@@ -1,6 +1,6 @@
 package main
 
-import service "angadsharma1016/omega_microservices/events/cmd/service"
+import service "github.com/GDGVIT/Project-Hades/events/cmd/service"
 
 func main() {
 	service.Run()

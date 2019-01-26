@@ -2,7 +2,7 @@
 package http
 
 import (
-	endpoint "angadsharma1016/omega_microservices/events/pkg/endpoint"
+	endpoint "github.com/GDGVIT/Project-Hades/events/pkg/endpoint"
 	http "github.com/go-kit/kit/transport/http"
 	http1 "net/http"
 )

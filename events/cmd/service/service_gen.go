@@ -2,9 +2,9 @@
 package service
 
 import (
-	endpoint "angadsharma1016/omega_microservices/events/pkg/endpoint"
-	http1 "angadsharma1016/omega_microservices/events/pkg/http"
-	service "angadsharma1016/omega_microservices/events/pkg/service"
+	endpoint "github.com/GDGVIT/Project-Hades/events/pkg/endpoint"
+	http1 "github.com/GDGVIT/Project-Hades/events/pkg/http"
+	service "github.com/GDGVIT/Project-Hades/events/pkg/service"
 	endpoint1 "github.com/go-kit/kit/endpoint"
 	log "github.com/go-kit/kit/log"
 	prometheus "github.com/go-kit/kit/metrics/prometheus"

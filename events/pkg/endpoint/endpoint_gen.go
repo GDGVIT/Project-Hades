@@ -2,7 +2,7 @@
 package endpoint
 
 import (
-	service "angadsharma1016/omega_microservices/events/pkg/service"
+	service "github.com/GDGVIT/Project-Hades/events/pkg/service"
 	endpoint "github.com/go-kit/kit/endpoint"
 )
 

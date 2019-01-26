@@ -4,9 +4,9 @@ services:
     build:
       context: .
       dockerfile: events/Dockerfile
-    restart: always
-    volumes:
-    - .:/go/src/angadsharma1016/omega_microservices
     container_name: events
     ports:
-    - 3000:8081
+    - 8800:8081
+    restart: always
+    volumes:
+    - .:/go/src/github.com/GDGVIT/Project-Hades

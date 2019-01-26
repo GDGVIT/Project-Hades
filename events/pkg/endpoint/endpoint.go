@@ -1,15 +1,15 @@
 package endpoint
 
 import (
-	service "angadsharma1016/omega_microservices/events/pkg/service"
 	"context"
-	omegadbconfig "github.com/angadsharma1016/omega_dbconfig"
+	service "github.com/GDGVIT/Project-Hades/events/pkg/service"
+	model "github.com/GDGVIT/Project-Hades/model"
 	endpoint "github.com/go-kit/kit/endpoint"
 )
 
 // CreateEventRequest collects the request parameters for the CreateEvent method.
 type CreateEventRequest struct {
-	S omegadbconfig.Event `json:"s"`
+	Event model.Event `json:"event"`
 }
 
 // CreateEventResponse collects the response parameters for the CreateEvent method.
@@ -22,7 +22,7 @@ type CreateEventResponse struct {
 func MakeCreateEventEndpoint(s service.EventsService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(CreateEventRequest)
-		rs, err := s.CreateEvent(ctx, req.S)
+		rs, err := s.CreateEvent(ctx, req.Event)
 		return CreateEventResponse{
 			Err: err,
 			Rs:  rs,
@@ -37,20 +37,20 @@ func (r CreateEventResponse) Failed() error {
 
 // ReadEventRequest collects the request parameters for the ReadEvent method.
 type ReadEventRequest struct {
-	S omegadbconfig.Query `json:"s"`
+	Query model.Query `json:"query"`
 }
 
 // ReadEventResponse collects the response parameters for the ReadEvent method.
 type ReadEventResponse struct {
-	Rs  string `json:"rs"`
-	Err error  `json:"err"`
+	Rs  model.Event `json:"rs"`
+	Err error       `json:"err"`
 }
 
 // MakeReadEventEndpoint returns an endpoint that invokes ReadEvent on the service.
 func MakeReadEventEndpoint(s service.EventsService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(ReadEventRequest)
-		rs, err := s.ReadEvent(ctx, req.S)
+		rs, err := s.ReadEvent(ctx, req.Query)
 		return ReadEventResponse{
 			Err: err,
 			Rs:  rs,
@@ -65,7 +65,7 @@ func (r ReadEventResponse) Failed() error {
 
 // UpdateEventRequest collects the request parameters for the UpdateEvent method.
 type UpdateEventRequest struct {
-	S omegadbconfig.Query `json:"s"`
+	Query model.Query `json:"query"`
 }
 
 // UpdateEventResponse collects the response parameters for the UpdateEvent method.
@@ -78,7 +78,7 @@ type UpdateEventResponse struct {
 func MakeUpdateEventEndpoint(s service.EventsService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(UpdateEventRequest)
-		rs, err := s.UpdateEvent(ctx, req.S)
+		rs, err := s.UpdateEvent(ctx, req.Query)
 		return UpdateEventResponse{
 			Err: err,
 			Rs:  rs,
@@ -93,7 +93,7 @@ func (r UpdateEventResponse) Failed() error {
 
 // DeleteEventRequest collects the request parameters for the DeleteEvent method.
 type DeleteEventRequest struct {
-	S omegadbconfig.Query `json:"s"`
+	Query model.Query `json:"query"`
 }
 
 // DeleteEventResponse collects the response parameters for the DeleteEvent method.
@@ -106,7 +106,7 @@ type DeleteEventResponse struct {
 func MakeDeleteEventEndpoint(s service.EventsService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(DeleteEventRequest)
-		rs, err := s.DeleteEvent(ctx, req.S)
+		rs, err := s.DeleteEvent(ctx, req.Query)
 		return DeleteEventResponse{
 			Err: err,
 			Rs:  rs,
@@ -127,8 +127,8 @@ type Failure interface {
 }
 
 // CreateEvent implements Service. Primarily useful in a client.
-func (e Endpoints) CreateEvent(ctx context.Context, s omegadbconfig.Event) (rs string, err error) {
-	request := CreateEventRequest{S: s}
+func (e Endpoints) CreateEvent(ctx context.Context, event model.Event) (rs string, err error) {
+	request := CreateEventRequest{Event: event}
 	response, err := e.CreateEventEndpoint(ctx, request)
 	if err != nil {
 		return
@@ -137,8 +137,8 @@ func (e Endpoints) CreateEvent(ctx context.Context, s omegadbconfig.Event) (rs s
 }
 
 // ReadEvent implements Service. Primarily useful in a client.
-func (e Endpoints) ReadEvent(ctx context.Context, s omegadbconfig.Query) (rs string, err error) {
-	request := ReadEventRequest{S: s}
+func (e Endpoints) ReadEvent(ctx context.Context, query model.Query) (rs model.Event, err error) {
+	request := ReadEventRequest{Query: query}
 	response, err := e.ReadEventEndpoint(ctx, request)
 	if err != nil {
 		return
@@ -147,8 +147,8 @@ func (e Endpoints) ReadEvent(ctx context.Context, s omegadbconfig.Query) (rs str
 }
 
 // UpdateEvent implements Service. Primarily useful in a client.
-func (e Endpoints) UpdateEvent(ctx context.Context, s omegadbconfig.Query) (rs string, err error) {
-	request := UpdateEventRequest{S: s}
+func (e Endpoints) UpdateEvent(ctx context.Context, query model.Query) (rs string, err error) {
+	request := UpdateEventRequest{Query: query}
 	response, err := e.UpdateEventEndpoint(ctx, request)
 	if err != nil {
 		return
@@ -157,8 +157,8 @@ func (e Endpoints) UpdateEvent(ctx context.Context, s omegadbconfig.Query) (rs s
 }
 
 // DeleteEvent implements Service. Primarily useful in a client.
-func (e Endpoints) DeleteEvent(ctx context.Context, s omegadbconfig.Query) (rs string, err error) {
-	request := DeleteEventRequest{S: s}
+func (e Endpoints) DeleteEvent(ctx context.Context, query model.Query) (rs string, err error) {
+	request := DeleteEventRequest{Query: query}
 	response, err := e.DeleteEventEndpoint(ctx, request)
 	if err != nil {
 		return

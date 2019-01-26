@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	omegadbconfig "github.com/angadsharma1016/omega_dbconfig"
+	model "github.com/GDGVIT/Project-Hades/model"
 	log "github.com/go-kit/kit/log"
 )
 
@@ -23,27 +23,27 @@ func LoggingMiddleware(logger log.Logger) Middleware {
 
 }
 
-func (l loggingMiddleware) CreateEvent(ctx context.Context, s omegadbconfig.Event) (rs string, err error) {
+func (l loggingMiddleware) CreateEvent(ctx context.Context, event model.Event) (rs string, err error) {
 	defer func() {
-		l.logger.Log("method", "CreateEvent", "s", s, "rs", rs, "err", err)
+		l.logger.Log("method", "CreateEvent", "event", event, "rs", rs, "err", err)
 	}()
-	return l.next.CreateEvent(ctx, s)
+	return l.next.CreateEvent(ctx, event)
 }
-func (l loggingMiddleware) ReadEvent(ctx context.Context, s omegadbconfig.Query) (rs string, err error) {
+func (l loggingMiddleware) ReadEvent(ctx context.Context, query model.Query) (rs model.Event, err error) {
 	defer func() {
-		l.logger.Log("method", "ReadEvent", "s", s, "rs", rs, "err", err)
+		l.logger.Log("method", "ReadEvent", "query", query, "rs", rs, "err", err)
 	}()
-	return l.next.ReadEvent(ctx, s)
+	return l.next.ReadEvent(ctx, query)
 }
-func (l loggingMiddleware) UpdateEvent(ctx context.Context, s omegadbconfig.Query) (rs string, err error) {
+func (l loggingMiddleware) UpdateEvent(ctx context.Context, query model.Query) (rs string, err error) {
 	defer func() {
-		l.logger.Log("method", "UpdateEvent", "s", s, "rs", rs, "err", err)
+		l.logger.Log("method", "UpdateEvent", "query", query, "rs", rs, "err", err)
 	}()
-	return l.next.UpdateEvent(ctx, s)
+	return l.next.UpdateEvent(ctx, query)
 }
-func (l loggingMiddleware) DeleteEvent(ctx context.Context, s omegadbconfig.Query) (rs string, err error) {
+func (l loggingMiddleware) DeleteEvent(ctx context.Context, query model.Query) (rs string, err error) {
 	defer func() {
-		l.logger.Log("method", "DeleteEvent", "s", s, "rs", rs, "err", err)
+		l.logger.Log("method", "DeleteEvent", "query", query, "rs", rs, "err", err)
 	}()
-	return l.next.DeleteEvent(ctx, s)
+	return l.next.DeleteEvent(ctx, query)
 }
