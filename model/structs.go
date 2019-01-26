@@ -17,6 +17,7 @@ type Attendee struct {
 	PhoneNumber        string `json:"phoneNumber"`
 	Gender             string `json:"gender"`
 	EventName          string `json:"eventName"`
+	Attended           string `json:"attended"`
 }
 
 type Event struct {
@@ -63,8 +64,8 @@ type EventReturn struct {
 }
 
 type ParticipantReturn struct {
-	Attendees []Participant `json:"attendee"`
-	Err       error         `json:"err"`
+	Attendees []Attendee `json:"attendee"`
+	Err       error      `json:"err"`
 }
 
 func (v Event) GetField(field string, value string) string {

@@ -13,13 +13,14 @@ func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.M
 	mutex.Lock()
 	_, err := conn.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
 	CREATE (n:ATTENDEE {name:$name, registrationNumber:$registrationNumber,
-		email:$email, phoneNumber:$phoneNumber, gender: $gender})<-[:ATTENDS]-(a) `, map[string]interface{}{
+		email:$email, phoneNumber:$phoneNumber, gender: $gender, attended:$attended})<-[:ATTENDS]-(a) `, map[string]interface{}{
 		"EventName":          eventName,
 		"name":               p.Name,
 		"registrationNumber": p.RegistrationNumber,
 		"email":              p.Email,
 		"phoneNumber":        p.PhoneNumber,
 		"gender":             p.Gender,
+		"attended":           "absent",
 	})
 	if err != nil {
 		c <- err
@@ -35,13 +36,13 @@ func ReadAttendee(q Query, c chan ParticipantReturn, mutex *sync.Mutex, conn bol
 
 	mutex.Lock()
 	data, _, _, err := conn.QueryNeoAll(`MATCH(a:ATTENDEE) WHERE a.`+q.Key+`=$val
-	RETURN a.name, a.registrationNumber,a.email, a.phoneNumber, a.gender`, map[string]interface{}{
+	RETURN a.name, a.registrationNumber,a.email, a.phoneNumber, a.gender, a.attended`, map[string]interface{}{
 		"val": q.Value,
 	})
 
 	mutex.Unlock()
 
-	var pt []Participant
+	var pt []Attendee
 
 	if err != nil {
 		c <- ParticipantReturn{pt, err}
@@ -54,12 +55,13 @@ func ReadAttendee(q Query, c chan ParticipantReturn, mutex *sync.Mutex, conn bol
 	}
 
 	for i, _ := range data {
-		pt = append(pt, Participant{
+		pt = append(pt, Attendee{
 			Name:               data[i][0].(string),
 			RegistrationNumber: data[i][1].(string),
 			Email:              data[i][2].(string),
 			PhoneNumber:        data[i][3].(string),
 			Gender:             data[i][4].(string),
+			Attended:           data[i][5].(string),
 		})
 	}
 	log.Printf("Found attendee node")
@@ -69,6 +71,7 @@ func ReadAttendee(q Query, c chan ParticipantReturn, mutex *sync.Mutex, conn bol
 }
 
 func UpdateAttendee(q Query, c chan error, conn bolt.Conn) {
+
 	result, err := conn.ExecNeo(`
 		MATCH(n:ATTENDEE)
 		WHERE n.`+q.Key+`=$val
@@ -76,7 +79,7 @@ func UpdateAttendee(q Query, c chan error, conn bolt.Conn) {
 		RETURN n.`+q.ChangeKey+`
 	`, map[string]interface{}{
 		"val":  q.Value,
-		"val1": q.ChangeValue,
+		"val1": q.ChangeKey,
 	})
 
 	if err != nil {
