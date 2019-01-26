@@ -64,7 +64,7 @@ func (b *basicParticipantsService) CreateAttendee(ctx context.Context, details m
 		Email:              details.Email,
 		PhoneNumber:        details.PhoneNumber,
 		Gender:             details.Gender,
-	}, c, mutex, conn)
+	}, c, mutex)
 
 	if err := <-c; err != nil {
 		return "", err
@@ -105,13 +105,10 @@ func (b *basicParticipantsService) CreateAttendee(ctx context.Context, details m
 **/
 func (b *basicParticipantsService) ReadAttendee(ctx context.Context, query model.Query) (rs []model.Attendee, err error) {
 
-	conn := model.ConnectToDB()
-	defer conn.Close()
-
 	c := make(chan model.ParticipantReturn)
 	var mutex = &sync.Mutex{}
 
-	go model.ReadAttendee(query, c, mutex, conn)
+	go model.ReadAttendee(query, c, mutex)
 
 	cb := <-c
 
@@ -149,12 +146,9 @@ func (b *basicParticipantsService) ReadAttendee(ctx context.Context, query model
 *}
 **/
 func (b *basicParticipantsService) UpdateAttendee(ctx context.Context, query model.Query) (rs string, err error) {
-	conn := model.ConnectToDB()
-	defer conn.Close()
-
 	c := make(chan error)
 
-	go model.UpdateAttendee(query, c, conn)
+	go model.UpdateAttendee(query, c)
 
 	if err := <-c; err != nil {
 		log.Println("Error updating attendees")
@@ -186,12 +180,9 @@ func (b *basicParticipantsService) UpdateAttendee(ctx context.Context, query mod
 *}
 **/
 func (b *basicParticipantsService) DeleteAttendee(ctx context.Context, query model.Query) (rs string, err error) {
-	conn := model.ConnectToDB()
-	defer conn.Close()
-
 	c := make(chan error)
 
-	go model.DeleteAttendee(query, c, conn)
+	go model.DeleteAttendee(query, c)
 
 	if err := <-c; err != nil {
 		log.Println("Error deleting attendees")

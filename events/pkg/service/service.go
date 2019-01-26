@@ -97,12 +97,8 @@ type basicEventsService struct{}
  */
 func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event) (rs string, err error) {
 
-	// create connection to DB
-	conn := model.ConnectToDB() //("bolt://username:password@localhost:7687"
-	defer conn.Close()
-
 	ce := make(chan error)
-	go model.CreateEvent(event, ce, conn)
+	go model.CreateEvent(event, ce)
 	if err := <-ce; err != nil {
 		return "", err
 	}
@@ -174,13 +170,10 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 *}
 **/
 func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (rs model.Event, err error) {
-	// create connection to DB
-	conn := model.ConnectToDB() //("bolt://username:password@localhost:7687"
-	defer conn.Close()
 
 	ce := make(chan model.EventReturn)
 
-	go model.ShowEventData(query, ce, conn)
+	go model.ShowEventData(query, ce)
 
 	cb := <-ce
 	if cb.Err != nil {
@@ -214,14 +207,10 @@ func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (
 *}
 **/
 func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query) (rs string, err error) {
-	// create connection to DB
-	conn := model.ConnectToDB()
-
-	defer conn.Close()
 
 	ce := make(chan error)
 
-	go model.UpdateEvent(query, ce, conn)
+	go model.UpdateEvent(query, ce)
 	if err := <-ce; err != nil {
 		return "", err
 	}
@@ -250,14 +239,10 @@ func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query)
 *
 **/
 func (b *basicEventsService) DeleteEvent(ctx context.Context, query model.Query) (rs string, err error) {
-	// create connection to DB
-	conn := model.ConnectToDB() //("bolt://username:password@localhost:7687"
-
-	defer conn.Close()
 
 	ce := make(chan error)
 
-	go model.DeleteEvent(query, ce, conn)
+	go model.DeleteEvent(query, ce)
 	if err := <-ce; err != nil {
 		return "", err
 	}

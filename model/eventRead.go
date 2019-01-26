@@ -2,12 +2,10 @@ package model
 
 import (
 	"fmt"
-
-	bolt "github.com/johnnadratowski/golang-neo4j-bolt-driver"
 )
 
-func ShowEventData(q Query, c chan EventReturn, conn bolt.Conn) {
-	data, _, _, err := conn.QueryNeoAll(`
+func ShowEventData(q Query, c chan EventReturn) {
+	data, _, _, err := con.QueryNeoAll(`
 	MATCH (n:EVENT)-[:StudentCoordinator]->(a)
 	MATCH (n:EVENT)-[:FacultyCoordinator]->(b)
 	MATCH (n:EVENT)-[:GUEST]->(c)
