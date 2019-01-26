@@ -11,7 +11,7 @@ import (
 // ParticipantsService describes the service.
 type ParticipantsService interface {
 	CreateAttendee(ctx context.Context, details model.Attendee) (rs string, err error)
-	ReadAttendee(ctx context.Context, query model.Query) (rs []model.Participant, err error)
+	ReadAttendee(ctx context.Context, query model.Query) (rs []model.Attendee, err error)
 	UpdateAttendee(ctx context.Context, query model.Query) (rs string, err error)
 	DeleteAttendee(ctx context.Context, query model.Query) (rs string, err error)
 	DeleteAllAttendee(ctx context.Context, query model.Query) (rs string, err error)
@@ -102,7 +102,7 @@ func (b *basicParticipantsService) CreateAttendee(ctx context.Context, details m
 *    "err": null
 *}
 **/
-func (b *basicParticipantsService) ReadAttendee(ctx context.Context, query model.Query) (rs []model.Participant, err error) {
+func (b *basicParticipantsService) ReadAttendee(ctx context.Context, query model.Query) (rs []model.Attendee, err error) {
 
 	conn := model.ConnectToDB()
 	defer conn.Close()

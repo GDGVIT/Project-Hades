@@ -43,8 +43,8 @@ type ReadAttendeeRequest struct {
 
 // ReadAttendeeResponse collects the response parameters for the ReadAttendee method.
 type ReadAttendeeResponse struct {
-	Rs  []model.Participant `json:"rs"`
-	Err error               `json:"err"`
+	Rs  []model.Attendee `json:"rs"`
+	Err error            `json:"err"`
 }
 
 // MakeReadAttendeeEndpoint returns an endpoint that invokes ReadAttendee on the service.
@@ -168,7 +168,7 @@ func (e Endpoints) CreateAttendee(ctx context.Context, details model.Attendee) (
 }
 
 // ReadAttendee implements Service. Primarily useful in a client.
-func (e Endpoints) ReadAttendee(ctx context.Context, query model.Query) (rs []model.Participant, err error) {
+func (e Endpoints) ReadAttendee(ctx context.Context, query model.Query) (rs []model.Attendee, err error) {
 	request := ReadAttendeeRequest{Query: query}
 	response, err := e.ReadAttendeeEndpoint(ctx, request)
 	if err != nil {
