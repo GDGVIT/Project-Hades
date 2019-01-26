@@ -79,3 +79,26 @@ The last event coordinator you will ever need
 ```
 
 <br />
+
+#### Secret file
+model/creds.go
+
+```go
+package model
+
+type secret struct {
+	DB_USERNAME string
+	DB_PASSWORD string
+	DB_ENDPOINT string
+}
+
+var DB_SECRET = secret{
+
+	DB_USERNAME: "your DB username",
+	DB_PASSWORD: "your DB password",
+	DB_ENDPOINT: "your DB endpoint URI eg: localhost:7687",
+}
+
+```
+
+<br />
