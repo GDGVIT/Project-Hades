@@ -94,11 +94,6 @@ type basicEventsService struct{}
 *  }
 *
 *
-*apiParamExample {json} response-example
-*
-*{ rs:"",
-*err:null
-* }
 *
  */
 func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event) (rs string, err error) {
