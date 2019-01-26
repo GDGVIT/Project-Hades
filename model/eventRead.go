@@ -1,21 +1,10 @@
 package model
 
 import (
-	bolt "github.com/johnnadratowski/golang-neo4j-bolt-driver"
 	"log"
+
+	bolt "github.com/johnnadratowski/golang-neo4j-bolt-driver"
 )
-
-type Query struct {
-	Key         string `json:"key"`
-	Value       string `json:"value"`
-	ChangeKey   string `json:"changeKey"`
-	ChangeValue string `json:"changeValue"`
-}
-
-type EventReturn struct {
-	Event Event
-	Err   error
-}
 
 func ShowEventData(q Query, c chan EventReturn, conn bolt.Conn) {
 	result, err := conn.ExecNeo(`

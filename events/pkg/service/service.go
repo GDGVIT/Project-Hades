@@ -40,12 +40,58 @@ func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (
 	// TODO implement the business logic of ReadEvent
 	return rs, err
 }
+
+/*
+{
+	"query":{
+		"key":"clubName",
+		"value":"GDG",
+		"changeKey":"clubName",
+		"changeValue":"codechef"
+	}
+}
+*/
 func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query) (rs string, err error) {
-	// TODO implement the business logic of UpdateEvent
+	// create connection to DB
+	conn := model.ConnectToDB(fmt.Sprintf("bolt://%s:%s@%s",
+		model.DB_SECRET.DB_USERNAME, model.DB_SECRET.DB_PASSWORD,
+		model.DB_SECRET.DB_ENDPOINT)) //("bolt://username:password@localhost:7687"
+	fmt.Println(conn)
+
+	defer conn.Close()
+
+	ce := make(chan error)
+
+	go model.UpdateEvent(query, ce, conn)
+	if err := <-ce; err != nil {
+		return "", err
+	}
 	return rs, err
 }
+
+/*
+{
+	"query":{
+		"key":"clubName",
+		"value":"GDG"
+	}
+}
+*/
 func (b *basicEventsService) DeleteEvent(ctx context.Context, query model.Query) (rs string, err error) {
-	// TODO implement the business logic of DeleteEvent
+	// create connection to DB
+	conn := model.ConnectToDB(fmt.Sprintf("bolt://%s:%s@%s",
+		model.DB_SECRET.DB_USERNAME, model.DB_SECRET.DB_PASSWORD,
+		model.DB_SECRET.DB_ENDPOINT)) //("bolt://username:password@localhost:7687"
+	fmt.Println(conn)
+
+	defer conn.Close()
+
+	ce := make(chan error)
+
+	go model.DeleteEvent(query, ce, conn)
+	if err := <-ce; err != nil {
+		return "", err
+	}
 	return rs, err
 }
 
