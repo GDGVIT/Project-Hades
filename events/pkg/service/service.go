@@ -36,9 +36,75 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 	return rs, err
 }
 
+/*
+{
+    "rs": {
+        "clubName": "GDG",
+        "name": "DEVRELCONF",
+        "toDate": "10TH OCTOBER",
+        "fromDate": "8TH OCTOBER",
+        "toTime": "10 PM",
+        "fromTime": "11 AM",
+        "budget": "200000",
+        "description": "TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING",
+        "category": "TECHNICAL",
+        "venue": "ANNA AUDI",
+        "attendance": "4000",
+        "expectedParticipants": "4000",
+        "facultyCoordinator": {
+            "name": "Murali S",
+            "registrationNumber": "",
+            "email": "SDADAS@A.COM",
+            "phoneNumber": "919191991911",
+            "gender": "M"
+        },
+        "studentCoordinator": {
+            "name": "Dhruv sharma",
+            "registrationNumber": "17BBE1010",
+            "email": "SDADAS@A.COM",
+            "phoneNumber": "919191991911",
+            "gender": "M"
+        },
+        "guest": {
+            "name": "angad sharma"",
+            "email": "ASDSAD#ASD.COM",
+            "phoneNumber": "11111111111",
+            "gender": "F",
+            "stake": "SOME MONAYYYY",
+            "locationOfStay": "VIT campus"
+        },
+        "PROrequest": "SAJDOOSIJANDFSAKFDSAFD",
+        "campusEngineerRequest": "SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD",
+        "duration": "16 hours",
+        "mainSponsor": {
+            "name": "",
+            "registrationNumber": "",
+            "email": "",
+            "phoneNumber": "",
+            "gender": ""
+        }
+    },
+    "err": null
+}
+*/
 func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (rs model.Event, err error) {
-	// TODO implement the business logic of ReadEvent
-	return rs, err
+	// create connection to DB
+	conn := model.ConnectToDB(fmt.Sprintf("bolt://%s:%s@%s",
+		model.DB_SECRET.DB_USERNAME, model.DB_SECRET.DB_PASSWORD,
+		model.DB_SECRET.DB_ENDPOINT)) //("bolt://username:password@localhost:7687"
+	fmt.Println(conn)
+
+	defer conn.Close()
+
+	ce := make(chan model.EventReturn)
+
+	go model.ShowEventData(query, ce, conn)
+
+	cb := <-ce
+	if cb.Err != nil {
+		return cb.Event, cb.Err
+	}
+	return cb.Event, err
 }
 
 /*

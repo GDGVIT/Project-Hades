@@ -1,13 +1,13 @@
 package model
 
 import (
-	"log"
+	"fmt"
 
 	bolt "github.com/johnnadratowski/golang-neo4j-bolt-driver"
 )
 
 func ShowEventData(q Query, c chan EventReturn, conn bolt.Conn) {
-	result, err := conn.ExecNeo(`
+	data, _, _, err := conn.QueryNeoAll(`
 	MATCH (n:EVENT)-[:StudentCoordinator]->(a)
 	MATCH (n:EVENT)-[:FacultyCoordinator]->(b)
 	MATCH (n:EVENT)-[:GUEST]->(c)
@@ -24,51 +24,55 @@ func ShowEventData(q Query, c chan EventReturn, conn bolt.Conn) {
 		c <- EventReturn{Event{}, err}
 		return
 	}
-	var ev Event
-	// for result.Next() {
-	// 	log.Println(result.Record())
-	// 	ev = Event{
-	// 		ClubName:              result.Record().GetByIndex(0).(string),
-	// 		Name:                  result.Record().GetByIndex(1).(string),
-	// 		ToDate:                result.Record().GetByIndex(2).(string),
-	// 		FromDate:              result.Record().GetByIndex(3).(string),
-	// 		ToTime:                result.Record().GetByIndex(4).(string),
-	// 		FromTime:              result.Record().GetByIndex(5).(string),
-	// 		Budget:                result.Record().GetByIndex(6).(string),
-	// 		Description:           result.Record().GetByIndex(7).(string),
-	// 		Category:              result.Record().GetByIndex(8).(string),
-	// 		Venue:                 result.Record().GetByIndex(9).(string),
-	// 		Attendance:            result.Record().GetByIndex(10).(string),
-	// 		ExpectedParticipants:  result.Record().GetByIndex(11).(string),
-	// 		PROrequest:            result.Record().GetByIndex(12).(string),
-	// 		CampusEngineerRequest: result.Record().GetByIndex(13).(string),
-	// 		Duration:              result.Record().GetByIndex(14).(string),
-	// 		StudentCoordinator: Participant{
-	// 			result.Record().GetByIndex(15).(string),
-	// 			result.Record().GetByIndex(16).(string),
-	// 			result.Record().GetByIndex(17).(string),
-	// 			result.Record().GetByIndex(18).(string),
-	// 			result.Record().GetByIndex(19).(string),
-	// 		},
-	// 		FacultyCoordinator: Participant{
-	// 			result.Record().GetByIndex(20).(string),
-	// 			result.Record().GetByIndex(21).(string),
-	// 			result.Record().GetByIndex(22).(string),
-	// 			result.Record().GetByIndex(23).(string),
-	// 			result.Record().GetByIndex(24).(string),
-	// 		},
-	// 		GuestDetails: Guest{
-	// 			result.Record().GetByIndex(25).(string),
-	// 			result.Record().GetByIndex(26).(string),
-	// 			result.Record().GetByIndex(27).(string),
-	// 			result.Record().GetByIndex(28).(string),
-	// 			result.Record().GetByIndex(29).(string),
-	// 			result.Record().GetByIndex(30).(string),
-	// 		},
-	// 	}
-	// }
 
-	log.Println(result)
+	var ev Event
+
+	if len(data) < 1 {
+		c <- EventReturn{ev, fmt.Errorf("No Event found")}
+		return
+	}
+
+	ev = Event{
+		ClubName:              data[0][0].(string),
+		Name:                  data[0][1].(string),
+		ToDate:                data[0][2].(string),
+		FromDate:              data[0][3].(string),
+		ToTime:                data[0][4].(string),
+		FromTime:              data[0][5].(string),
+		Budget:                data[0][6].(string),
+		Description:           data[0][7].(string),
+		Category:              data[0][8].(string),
+		Venue:                 data[0][9].(string),
+		Attendance:            data[0][10].(string),
+		ExpectedParticipants:  data[0][11].(string),
+		PROrequest:            data[0][12].(string),
+		CampusEngineerRequest: data[0][13].(string),
+		Duration:              data[0][14].(string),
+		StudentCoordinator: Participant{
+			data[0][15].(string),
+			data[0][16].(string),
+			data[0][17].(string),
+			data[0][18].(string),
+			data[0][19].(string),
+		},
+		FacultyCoordinator: Participant{
+			data[0][20].(string),
+			data[0][21].(string),
+			data[0][22].(string),
+			data[0][23].(string),
+			data[0][24].(string),
+		},
+		GuestDetails: Guest{
+			data[0][25].(string),
+			data[0][26].(string),
+			data[0][27].(string),
+			data[0][28].(string),
+			data[0][29].(string),
+			data[0][30].(string),
+		},
+	}
+
 	c <- EventReturn{ev, nil}
+
 	return
 }
