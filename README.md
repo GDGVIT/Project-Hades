@@ -8,13 +8,11 @@ The last event coordinator you will ever need
 
 <br />
 
-* Download seabolt from [here](https://github.com/neo4j-drivers/seabolt/releases)
+```
+docker-compose up
+```
 
-* seabolt installation steps [here](https://github.com/neo4j-drivers/seabolt.git)
-
-*  go get github.com/neo4j/neo4j-go-driver/neo4j
-
-* Set up neo4j
+<br />
 
 #### Event schema
 
