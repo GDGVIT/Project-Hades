@@ -96,7 +96,8 @@ func (b *basicParticipantsService) CreateAttendee(ctx context.Context, details m
 *            "registrationNumber": "17BBE1010",
 *            "email": "SDADAS@A.COM",
 *            "phoneNumber": "919191991911",
-*            "gender": "M"
+*            "gender": "M",
+			 "attended":"absent"
 *        }
 *    ],
 *    "err": null
