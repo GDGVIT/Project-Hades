@@ -99,9 +99,7 @@ type basicEventsService struct{}
 func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event) (rs string, err error) {
 
 	// create connection to DB
-	conn := model.ConnectToDB(fmt.Sprintf("bolt://%s:%s@%s",
-		model.DB_SECRET.DB_USERNAME, model.DB_SECRET.DB_PASSWORD,
-		model.DB_SECRET.DB_ENDPOINT)) //("bolt://username:password@localhost:7687"
+	conn := model.ConnectToDB() //("bolt://username:password@localhost:7687"
 	fmt.Println(conn)
 
 	defer conn.Close()
@@ -180,9 +178,7 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 **/
 func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (rs model.Event, err error) {
 	// create connection to DB
-	conn := model.ConnectToDB(fmt.Sprintf("bolt://%s:%s@%s",
-		model.DB_SECRET.DB_USERNAME, model.DB_SECRET.DB_PASSWORD,
-		model.DB_SECRET.DB_ENDPOINT)) //("bolt://username:password@localhost:7687"
+	conn := model.ConnectToDB() //("bolt://username:password@localhost:7687"
 	fmt.Println(conn)
 
 	defer conn.Close()
@@ -224,9 +220,7 @@ func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (
 **/
 func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query) (rs string, err error) {
 	// create connection to DB
-	conn := model.ConnectToDB(fmt.Sprintf("bolt://%s:%s@%s",
-		model.DB_SECRET.DB_USERNAME, model.DB_SECRET.DB_PASSWORD,
-		model.DB_SECRET.DB_ENDPOINT))
+	conn := model.ConnectToDB()
 	fmt.Println(conn)
 
 	defer conn.Close()
@@ -263,9 +257,7 @@ func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query)
 **/
 func (b *basicEventsService) DeleteEvent(ctx context.Context, query model.Query) (rs string, err error) {
 	// create connection to DB
-	conn := model.ConnectToDB(fmt.Sprintf("bolt://%s:%s@%s",
-		model.DB_SECRET.DB_USERNAME, model.DB_SECRET.DB_PASSWORD,
-		model.DB_SECRET.DB_ENDPOINT)) //("bolt://username:password@localhost:7687"
+	conn := model.ConnectToDB() //("bolt://username:password@localhost:7687"
 	fmt.Println(conn)
 
 	defer conn.Close()
