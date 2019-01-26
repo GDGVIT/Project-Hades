@@ -1,33 +1,5 @@
 [
   {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "optional": false,
-            "field": "varname1",
-            "description": "<p>No type.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "varname2",
-            "description": "<p>With type.</p>"
-          }
-        ]
-      }
-    },
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "./docs/main.js",
-    "group": "_home_angad_go_src_github_com_GDGVIT_Project_Hades_docs_main_js",
-    "groupTitle": "_home_angad_go_src_github_com_GDGVIT_Project_Hades_docs_main_js",
-    "name": ""
-  },
-  {
     "type": "post",
     "url": "/create-event",
     "title": "create a new event",
@@ -190,6 +162,53 @@
   },
   {
     "type": "post",
+    "url": "/delete-attendee",
+    "title": "delete an attendee",
+    "name": "delete_an_attendee",
+    "group": "admin",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "key",
+            "description": "<p>key to query the attendee by</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "value",
+            "description": "<p>value of the key</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"query\":{\n\t\t\"key\":\"name\",\n\t\t\"Value\":\"dhruv sharma\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": \"\",\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./participants/pkg/service/service.go",
+    "groupTitle": "admin",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8800/delete-attendee"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/delete-event",
     "title": "delete an event",
     "name": "delete_an_event",
@@ -237,6 +256,53 @@
   },
   {
     "type": "post",
+    "url": "/read-attendee",
+    "title": "read an attendee",
+    "name": "read_an_attendee",
+    "group": "admin",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "key",
+            "description": "<p>key to query the attendee by</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "value",
+            "description": "<p>value of the key</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"query\":{\n\t\t\"key\":\"name\",\n\t\t\"Value\":\"angad sharma\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": [\n       {\n           \"name\": \"angad sharma\",\n           \"registrationNumber\": \"17BBE1010\",\n           \"email\": \"SDADAS@A.COM\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       }\n   ],\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./participants/pkg/service/service.go",
+    "groupTitle": "admin",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8800/read-attendee"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/read-event",
     "title": "read an event",
     "name": "read_an_event",
@@ -279,6 +345,67 @@
     "sampleRequest": [
       {
         "url": "http://localhost:8800/read-event"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/update-attendee",
+    "title": "update an attendee",
+    "name": "update_an_attendee",
+    "group": "admin",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "key",
+            "description": "<p>key to query the attendee by</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "value",
+            "description": "<p>value of the key</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "changeKey",
+            "description": "<p>key of the value which needs to be altered</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "changeValue",
+            "description": "<p>the new value</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"query\":{\n\t\t\"key\":\"name\",\n\t\t\"Value\":\"dhruv sharma\",\n\t\t\"changeKey\":\"name\",\n\t\t\"changeValue\":\"dhruv sharma\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "\n{\n   \"rs\": \"\",\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./participants/pkg/service/service.go",
+    "groupTitle": "admin",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8800/update-attendee"
       }
     ]
   },
@@ -340,6 +467,81 @@
     "sampleRequest": [
       {
         "url": "http://localhost:8800/update-event"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/create-attendee",
+    "title": "create an attendee",
+    "name": "create_an_attendee",
+    "group": "all",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>name of the participant</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "registrationNumber",
+            "description": "<p>registration number of the participant</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>email of the participant</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "phoneNumber",
+            "description": "<p>phoneNumber of the participant</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "gender",
+            "description": "<p>gender of the participant</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "eventName",
+            "description": "<p>name of the event registering for</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"details\":{\n     \"name\":\"angad sharma\",\n     \"registrationNumber\":\"17BBE1010\",\n     \"email\":\"SDADAS@A.COM\",\n     \"phoneNumber\":\"919191991911\",\n     \"gender\":\"M\",\n     \"eventsAttended\":\"ALL\",\n     \"eventName\":\"DEVSOC\"\n  }\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": \"\",\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./participants/pkg/service/service.go",
+    "groupTitle": "all",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8800/create-attendee"
       }
     ]
   }

@@ -68,7 +68,6 @@ func ReadAttendee(q Query, c chan ParticipantReturn, mutex *sync.Mutex, conn bol
 	return
 }
 
-// update Attendee with given query and new value
 func UpdateAttendee(q Query, c chan error, conn bolt.Conn) {
 	result, err := conn.ExecNeo(`
 		MATCH(n:ATTENDEE)
@@ -91,7 +90,6 @@ func UpdateAttendee(q Query, c chan error, conn bolt.Conn) {
 
 }
 
-// delete attendee with given query
 func DeleteAttendee(q Query, c chan error, conn bolt.Conn) {
 	result, err := conn.ExecNeo(`
 		MATCH(n:ATTENDEE)<-[r]-(a)
