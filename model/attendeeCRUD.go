@@ -35,7 +35,7 @@ func ReadAttendee(q Query, c chan ParticipantReturn, mutex *sync.Mutex, conn bol
 
 	mutex.Lock()
 	data, _, _, err := conn.QueryNeoAll(`MATCH(a:ATTENDEE) WHERE a.`+q.Key+`=$val
-	RETURN a.name, a.registrationNumber,a.email, a.phoneNumber, a.gender: $gender `, map[string]interface{}{
+	RETURN a.name, a.registrationNumber,a.email, a.phoneNumber, a.gender`, map[string]interface{}{
 		"val": q.Value,
 	})
 
