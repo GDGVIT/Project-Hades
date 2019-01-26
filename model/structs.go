@@ -41,6 +41,18 @@ type Guest struct {
 	LocationOfStay string `json:"locationOfStay"`
 }
 
+type Query struct {
+	Key         string `json:"key"`
+	Value       string `json:"value"`
+	ChangeKey   string `json:"changeKey"`
+	ChangeValue string `json:"changeValue"`
+}
+
+type EventReturn struct {
+	Event Event
+	Err   error
+}
+
 func (v Event) GetField(field string, value string) string {
 	r := reflect.ValueOf(v)
 	f := reflect.Indirect(r).FieldByName(field)
