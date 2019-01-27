@@ -20,6 +20,7 @@ type basicEventsService struct{}
 * @api {post} /create-event create a new event
 * @apiName create a new event
 * @apiGroup admin
+* @apiSampleRequest http://localhost:8800/
 *
 * @apiParam {String} clubName Name of your club
 * @apiParam {String} name Name of your event
