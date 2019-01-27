@@ -33,6 +33,11 @@
     "title": "create a new event",
     "name": "create_a_new_event",
     "group": "admin",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8800/"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -181,12 +186,7 @@
     },
     "version": "0.0.0",
     "filename": "./events/pkg/service/service.go",
-    "groupTitle": "admin",
-    "sampleRequest": [
-      {
-        "url": "http://localhost:8800/create-event"
-      }
-    ]
+    "groupTitle": "admin"
   },
   {
     "type": "post",
@@ -228,12 +228,7 @@
     },
     "version": "0.0.0",
     "filename": "./participants/pkg/service/service.go",
-    "groupTitle": "admin",
-    "sampleRequest": [
-      {
-        "url": "http://localhost:8800/delete-attendee"
-      }
-    ]
+    "groupTitle": "admin"
   },
   {
     "type": "post",
@@ -275,12 +270,7 @@
     },
     "version": "0.0.0",
     "filename": "./events/pkg/service/service.go",
-    "groupTitle": "admin",
-    "sampleRequest": [
-      {
-        "url": "http://localhost:8800/delete-event"
-      }
-    ]
+    "groupTitle": "admin"
   },
   {
     "type": "post",
@@ -322,12 +312,7 @@
     },
     "version": "0.0.0",
     "filename": "./participants/pkg/service/service.go",
-    "groupTitle": "admin",
-    "sampleRequest": [
-      {
-        "url": "http://localhost:8800/read-attendee"
-      }
-    ]
+    "groupTitle": "admin"
   },
   {
     "type": "post",
@@ -369,12 +354,7 @@
     },
     "version": "0.0.0",
     "filename": "./events/pkg/service/service.go",
-    "groupTitle": "admin",
-    "sampleRequest": [
-      {
-        "url": "http://localhost:8800/read-event"
-      }
-    ]
+    "groupTitle": "admin"
   },
   {
     "type": "post",
@@ -430,12 +410,7 @@
     },
     "version": "0.0.0",
     "filename": "./participants/pkg/service/service.go",
-    "groupTitle": "admin",
-    "sampleRequest": [
-      {
-        "url": "http://localhost:8800/update-attendee"
-      }
-    ]
+    "groupTitle": "admin"
   },
   {
     "type": "post",
@@ -491,12 +466,7 @@
     },
     "version": "0.0.0",
     "filename": "./events/pkg/service/service.go",
-    "groupTitle": "admin",
-    "sampleRequest": [
-      {
-        "url": "http://localhost:8800/update-event"
-      }
-    ]
+    "groupTitle": "admin"
   },
   {
     "type": "post",
@@ -566,11 +536,6 @@
     },
     "version": "0.0.0",
     "filename": "./participants/pkg/service/service.go",
-    "groupTitle": "all",
-    "sampleRequest": [
-      {
-        "url": "http://localhost:8800/create-attendee"
-      }
-    ]
+    "groupTitle": "all"
   }
 ]
