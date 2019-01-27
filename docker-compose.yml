@@ -1,15 +1,15 @@
 version: "2"
 services:
-  # events:
-  #   build:
-  #     context: .
-  #     dockerfile: events/Dockerfile
-  #   container_name: events
-  #   ports:
-  #   - 8800:8081
-  #   restart: always
-  #   volumes:
-  #   - .:/go/src/github.com/GDGVIT/Project-Hades
+  events:
+    build:
+      context: .
+      dockerfile: events/Dockerfile
+    container_name: events
+    ports:
+    - 8800:8081
+    restart: always
+    volumes:
+    - .:/go/src/github.com/GDGVIT/Project-Hades
   participants:
     build:
       context: .
