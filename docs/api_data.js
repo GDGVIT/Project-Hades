@@ -184,7 +184,12 @@ define({ "api": [
       "examples": [
         {
           "title": "request-example",
-          "content": "\n\"event\":{\n \"clubName\":\"GDG\",\n \"name\":\"DEVRELCONF\",\n \"toDate\":\"10TH OCTOBER\",\n \"fromDate\":\"8TH OCTOBER\",\n \"toTime\":\"10 PM\",\n \"fromTime\":\"11 AM\",\n \"budget\":\"200000\",\n \"description\":\"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\",\n \"category\":\"TECHNICAL\",\n \"venue\":\"ANNA AUDI\",\n \"attendance\":\"4000\",\n \"expectedParticipants\":\"4000\",\n \"facultyCoordinator\":{\n    \"name\":\"NOORU MAA\",\n    \"registrationNumber\":\"17BBE1010\",\n    \"email\":\"SDADAS@A.COM\",\n    \"phoneNumber\":\"919191991911\",\n    \"gender\":\"M\",\n    \"eventsAttended\":\"ALL\"\n },\n \"studentCoordinator\":{\n    \"name\":\"NOORU BAAP\",\n    \"registrationNumber\":\"17BBE1010\",\n    \"email\":\"SDADAS@A.COM\",\n    \"phoneNumber\":\"919191991911\",\n    \"gender\":\"M\",\n    \"eventsAttended\":\"ALL\"\n },\n \"guest\":{\n    \"name\":\"ALLAHH DAAS\",\n    \"email\":\"ASDSAD#ASD.COM\",\n    \"phoneNumber\":\"11111111111\",\n    \"gender\":\"F\",\n    \"stake\":\"SOME MONAYYYY\",\n    \"locationOfStay\":\"TERA GHAR\"\n },\n \"PROrequest\":\"SAJDOOSIJANDFSAKFDSAFD\",\n \"campusEngineerRequest\":\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\",\n \"duration\":\"16 hours\",\n \"mainSponsor\":{\n    \"name\":\"ALLAHH DAAS\",\n    \"email\":\"ASDSAD#ASD.COM\",\n    \"phoneNumber\":\"11111111111\",\n    \"gender\":\"F\",\n    \"stake\":\"SOME MONAYYYY\",\n    \"locationOfStay\":\"TERA GHAR\"\n }",
+          "content": "\n\"event\":{\n \"clubName\":\"GDG\",\n \"name\":\"DEVRELCONF\",\n \"toDate\":\"10TH OCTOBER\",\n \"fromDate\":\"8TH OCTOBER\",\n \"toTime\":\"10 PM\",\n \"fromTime\":\"11 AM\",\n \"budget\":\"200000\",\n \"description\":\"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\",\n \"category\":\"TECHNICAL\",\n \"venue\":\"ANNA AUDI\",\n \"attendance\":\"4000\",\n \"expectedParticipants\":\"4000\",\n \"facultyCoordinator\":{\n    \"name\":\"NOORU MAA\",\n    \"registrationNumber\":\"17BBE1010\",\n    \"email\":\"SDADAS@A.COM\",\n    \"phoneNumber\":\"919191991911\",\n    \"gender\":\"M\",\n    \"eventsAttended\":\"ALL\"\n },\n \"studentCoordinator\":{\n    \"name\":\"NOOR\",\n    \"registrationNumber\":\"17BBE1010\",\n    \"email\":\"SDADAS@A.COM\",\n    \"phoneNumber\":\"919191991911\",\n    \"gender\":\"M\",\n    \"eventsAttended\":\"ALL\"\n },\n \"guest\":{\n    \"name\":\"DAAS\",\n    \"email\":\"ASDSAD#ASD.COM\",\n    \"phoneNumber\":\"11111111111\",\n    \"gender\":\"F\",\n    \"stake\":\"SOME MONAYYYY\",\n    \"locationOfStay\":\"GHAR\"\n },\n \"PROrequest\":\"SAJDOOSIJANDFSAKFDSAFD\",\n \"campusEngineerRequest\":\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\",\n \"duration\":\"16 hours\",\n \"mainSponsor\":{\n    \"name\":\"DAASA\",\n    \"email\":\"ASDSAD#ASD.COM\",\n    \"phoneNumber\":\"11111111111\",\n    \"gender\":\"F\",\n    \"stake\":\"SOME MONAYYYY\",\n    \"locationOfStay\":\"GHAR2\"\n }",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n\trs:\"created\",\n\terr:null\n}",
           "type": "json"
         }
       ]
@@ -231,7 +236,7 @@ define({ "api": [
         },
         {
           "title": "response-example",
-          "content": "{\n\t rs:\"\",\n\t err:null\n}",
+          "content": "{\n\t rs:\"deleted\",\n\t err:null\n}",
           "type": "json"
         }
       ]
@@ -278,7 +283,7 @@ define({ "api": [
         },
         {
           "title": "response-example",
-          "content": "{\n   \"rs\": {\n       \"clubName\": \"GDG\",\n       \"name\": \"DEVRELCONF\",\n       \"toDate\": \"10TH OCTOBER\",\n       \"fromDate\": \"8TH OCTOBER\",\n       \"toTime\": \"10 PM\",\n       \"fromTime\": \"11 AM\",\n       \"budget\": \"200000\",\n       \"description\": \"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\",\n       \"category\": \"TECHNICAL\",\n       \"venue\": \"ANNA AUDI\",\n       \"attendance\": \"4000\",\n       \"expectedParticipants\": \"4000\",\n       \"facultyCoordinator\": {\n           \"name\": \"Murali S\",\n           \"registrationNumber\": \"\",\n           \"email\": \"SDADAS@A.COM\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       },\n       \"studentCoordinator\": {\n           \"name\": \"Dhruv sharma\",\n           \"registrationNumber\": \"17BBE1010\",\n           \"email\": \"SDADAS@A.COM\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       },\n       \"guest\": {\n           \"name\": \"angad sharma\"\",\n           \"email\": \"ASDSAD#ASD.COM\",\n           \"phoneNumber\": \"11111111111\",\n           \"gender\": \"F\",\n           \"stake\": \"SOME MONAYYYY\",\n           \"locationOfStay\": \"VIT campus\"\n       },\n       \"PROrequest\": \"SAJDOOSIJANDFSAKFDSAFD\",\n       \"campusEngineerRequest\": \"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\",\n       \"duration\": \"16 hours\",\n       \"mainSponsor\": {\n           \"name\": \"\",\n           \"registrationNumber\": \"\",\n           \"email\": \"\",\n           \"phoneNumber\": \"\",\n           \"gender\": \"\"\n       }\n   },\n   \"err\": null\n}",
+          "content": "{\n   \"rs\": {\n       \"clubName\": \"GDG\",\n       \"name\": \"DEVRELCONF\",\n       \"toDate\": \"10TH OCTOBER\",\n       \"fromDate\": \"8TH OCTOBER\",\n       \"toTime\": \"10 PM\",\n       \"fromTime\": \"11 AM\",\n       \"budget\": \"200000\",\n       \"description\": \"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\",\n       \"category\": \"TECHNICAL\",\n       \"venue\": \"ANNA AUDI\",\n       \"attendance\": \"4000\",\n       \"expectedParticipants\": \"4000\",\n       \"facultyCoordinator\": {\n           \"name\": \"NOORU MAA\",\n           \"registrationNumber\": \"17BBE1010\",\n           \"email\": \"SDADAS@A.COM\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       },\n       \"studentCoordinator\": {\n           \"name\": \"NOORU BAAP\",\n           \"registrationNumber\": \"17BBE1010\",\n           \"email\": \"SDADAS@A.COM\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       },\n       \"guest\": {\n           \"name\": \"ALLAHH DAAS\",\n           \"email\": \"ASDSAD#ASD.COM\",\n           \"phoneNumber\": \"11111111111\",\n           \"gender\": \"F\",\n           \"stake\": \"SOME MONAYYYY\",\n           \"locationOfStay\": \"TERA GHAR\"\n       },\n       \"PROrequest\": \"SAJDOOSIJANDFSAKFDSAFD\",\n       \"campusEngineerRequest\": \"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\",\n       \"duration\": \"16 hours\",\n       \"mainSponsor\": {\n           \"name\": \"\",\n           \"registrationNumber\": \"\",\n           \"email\": \"\",\n           \"phoneNumber\": \"\",\n           \"gender\": \"\"\n       },\n       \"status\": \"false\"\n   },\n   \"err\": null\n}",
           "type": "json"
         }
       ]
@@ -339,7 +344,7 @@ define({ "api": [
         },
         {
           "title": "response-example",
-          "content": "{\n\trs:\"\",\n\terr:null\n}",
+          "content": "{\n\trs:\"updated\",\n\terr:null\n}",
           "type": "json"
         }
       ]
@@ -409,7 +414,7 @@ define({ "api": [
         },
         {
           "title": "response-example",
-          "content": "{\n   \"rs\": \"\",\n   \"err\": null\n}",
+          "content": "{\n   \"rs\": \"created\",\n   \"err\": null\n}",
           "type": "json"
         }
       ]
@@ -456,7 +461,7 @@ define({ "api": [
         },
         {
           "title": "response-example",
-          "content": "{\n   \"rs\": \"\",\n   \"err\": null\n}",
+          "content": "{\n   \"rs\": \"deleted\",\n   \"err\": null\n}",
           "type": "json"
         }
       ]
@@ -564,7 +569,7 @@ define({ "api": [
         },
         {
           "title": "response-example",
-          "content": "\n{\n   \"rs\": \"\",\n   \"err\": null\n}",
+          "content": "\n{\n   \"rs\": \"updated\",\n   \"err\": null\n}",
           "type": "json"
         }
       ]

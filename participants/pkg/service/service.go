@@ -45,15 +45,12 @@ type basicParticipantsService struct{}
 *
 *@apiParamExample {json} response-example
 *{
-*    "rs": "",
+*    "rs": "created",
 *    "err": null
 *}
 *
 **/
 func (b *basicParticipantsService) CreateAttendee(ctx context.Context, details model.Attendee) (rs string, err error) {
-
-	conn := model.ConnectToDB()
-	defer conn.Close()
 
 	c := make(chan error)
 	var mutex = &sync.Mutex{}
@@ -67,10 +64,10 @@ func (b *basicParticipantsService) CreateAttendee(ctx context.Context, details m
 	}, c, mutex)
 
 	if err := <-c; err != nil {
-		return "", err
+		return "some error occurred", err
 	}
 
-	return rs, err
+	return "created", err
 }
 
 /**
@@ -143,7 +140,7 @@ func (b *basicParticipantsService) ReadAttendee(ctx context.Context, query model
 *@apiParamExample {json} response-example
 *
 *{
-*    "rs": "",
+*    "rs": "updated",
 *    "err": null
 *}
 **/
@@ -154,10 +151,10 @@ func (b *basicParticipantsService) UpdateAttendee(ctx context.Context, query mod
 
 	if err := <-c; err != nil {
 		log.Println("Error updating attendees")
-		return rs, err
+		return "some error occurred", err
 	}
 
-	return rs, nil
+	return "updated", nil
 }
 
 /**
@@ -178,7 +175,7 @@ func (b *basicParticipantsService) UpdateAttendee(ctx context.Context, query mod
 *
 *@apiParamExample {json} response-example
 *{
-*    "rs": "",
+*    "rs": "deleted",
 *    "err": null
 *}
 **/
@@ -188,11 +185,10 @@ func (b *basicParticipantsService) DeleteAttendee(ctx context.Context, query mod
 	go model.DeleteAttendee(query, c)
 
 	if err := <-c; err != nil {
-		log.Println("Error deleting attendees")
-		return rs, err
+		return "some error occurred", err
 	}
 
-	return rs, nil
+	return "deleted", nil
 }
 
 func (b *basicParticipantsService) DeleteAllAttendee(ctx context.Context, query model.Query) (rs string, err error) {

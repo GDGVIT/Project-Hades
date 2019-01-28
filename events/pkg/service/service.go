@@ -67,7 +67,7 @@ type basicEventsService struct{}
 *     "eventsAttended":"ALL"
 *  },
 *  "studentCoordinator":{
-*     "name":"NOORU BAAP",
+*     "name":"NOOR",
 *     "registrationNumber":"17BBE1010",
 *     "email":"SDADAS@A.COM",
 *     "phoneNumber":"919191991911",
@@ -75,26 +75,30 @@ type basicEventsService struct{}
 *     "eventsAttended":"ALL"
 *  },
 *  "guest":{
-*     "name":"ALLAHH DAAS",
+*     "name":"DAAS",
 *     "email":"ASDSAD#ASD.COM",
 *     "phoneNumber":"11111111111",
 *     "gender":"F",
 *     "stake":"SOME MONAYYYY",
-*     "locationOfStay":"TERA GHAR"
+*     "locationOfStay":"GHAR"
 *  },
 *  "PROrequest":"SAJDOOSIJANDFSAKFDSAFD",
 *  "campusEngineerRequest":"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD",
 *  "duration":"16 hours",
 *  "mainSponsor":{
-*     "name":"ALLAHH DAAS",
+*     "name":"DAASA",
 *     "email":"ASDSAD#ASD.COM",
 *     "phoneNumber":"11111111111",
 *     "gender":"F",
 *     "stake":"SOME MONAYYYY",
-*     "locationOfStay":"TERA GHAR"
+*     "locationOfStay":"GHAR2"
 *  }
 *
-*
+*@apiParamExample {json} response-example
+*{
+*	rs:"created",
+*	err:null
+*}
 *
  */
 func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event) (rs string, err error) {
@@ -102,9 +106,9 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 	ce := make(chan error)
 	go model.CreateEvent(event, ce)
 	if err := <-ce; err != nil {
-		return "", err
+		return "some error occurred", err
 	}
-	return rs, err
+	return "created", err
 }
 
 /**
@@ -136,26 +140,26 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 *        "attendance": "4000",
 *        "expectedParticipants": "4000",
 *        "facultyCoordinator": {
-*            "name": "Murali S",
-*            "registrationNumber": "",
+*            "name": "NOORU MAA",
+*            "registrationNumber": "17BBE1010",
 *            "email": "SDADAS@A.COM",
 *            "phoneNumber": "919191991911",
 *            "gender": "M"
 *        },
 *        "studentCoordinator": {
-*            "name": "Dhruv sharma",
+*            "name": "NOORU BAAP",
 *            "registrationNumber": "17BBE1010",
 *            "email": "SDADAS@A.COM",
 *            "phoneNumber": "919191991911",
 *            "gender": "M"
 *        },
 *        "guest": {
-*            "name": "angad sharma"",
+*            "name": "ALLAHH DAAS",
 *            "email": "ASDSAD#ASD.COM",
 *            "phoneNumber": "11111111111",
 *            "gender": "F",
 *            "stake": "SOME MONAYYYY",
-*            "locationOfStay": "VIT campus"
+*            "locationOfStay": "TERA GHAR"
 *        },
 *        "PROrequest": "SAJDOOSIJANDFSAKFDSAFD",
 *        "campusEngineerRequest": "SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD",
@@ -166,7 +170,8 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 *            "email": "",
 *            "phoneNumber": "",
 *            "gender": ""
-*        }
+*        },
+*        "status": "false"
 *    },
 *    "err": null
 *}
@@ -205,7 +210,7 @@ func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (
 *}
 *@apiParamExample {json} response-example
 *{
-*	rs:"",
+*	rs:"updated",
 *	err:null
 *}
 **/
@@ -215,9 +220,9 @@ func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query)
 
 	go model.UpdateEvent(query, ce)
 	if err := <-ce; err != nil {
-		return "", err
+		return "some error occurred", err
 	}
-	return rs, err
+	return "updated", err
 }
 
 /**
@@ -237,7 +242,7 @@ func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query)
 *}
 *@apiParamExample {json} response-example
 *{
-*	 rs:"",
+*	 rs:"deleted",
 *	 err:null
 * }
 *
@@ -248,9 +253,9 @@ func (b *basicEventsService) DeleteEvent(ctx context.Context, query model.Query)
 
 	go model.DeleteEvent(query, ce)
 	if err := <-ce; err != nil {
-		return "", err
+		return "some error occurred", err
 	}
-	return rs, err
+	return "deleted", err
 }
 
 // NewBasicEventsService returns a naive, stateless implementation of EventsService.
