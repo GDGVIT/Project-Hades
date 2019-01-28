@@ -40,6 +40,7 @@ type Event struct {
 	CampusEngineerRequest string      `json:"campusEngineerRequest"`
 	Duration              string      `json:"duration"`
 	MainSponsor           Participant `json:"mainSponsor"`
+	Status                string      `json:"status"`
 }
 
 type Guest struct {

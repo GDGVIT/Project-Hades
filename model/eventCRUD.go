@@ -13,7 +13,7 @@ func CreateEvent(e Event, ce chan error) {
 		fromDate: $fromDate, toTime:$toTime, fromTime:$fromTime, budget:$budget, 
 		description:$description, category:$category, venue:$venue, attendance:$attendance, 
 		expectedParticipants:$expectedParticipants, PROrequest:$PROrequest, 
-		campusEngineerRequest:$campusEngineerRequest, duration:$duration}) 
+		campusEngineerRequest:$campusEngineerRequest, duration:$duration, status:$status}) 
 		RETURN n.name`, map[string]interface{}{
 
 		"name":                  e.Name,
@@ -31,6 +31,7 @@ func CreateEvent(e Event, ce chan error) {
 		"duration":              e.Duration,
 		"attendance":            e.Attendance,
 		"expectedParticipants":  e.ExpectedParticipants,
+		"status":                "true",
 	})
 	if err != nil {
 		ce <- err
@@ -76,7 +77,7 @@ func ShowEventData(q Query, c chan EventReturn) {
 	RETURN n.clubName, n.name, n.toDate, n.fromDate, n.toTime, n.fromTime, n.budget, n.description, n.category,
 	n.venue, n.attendance, n.expectedParticipants, n.PROrequest, n.campusEngineerRequest, n.duration, a.name, 
 	a.registrationNumber, a.email, a.phoneNumber, a.gender, b.name, b.registrationNumber, b.email, 
-	b.phoneNumber, b.gender, c.name, c.email, c.phoneNumber, c.gender, c.stake, c.locationOfStay
+	b.phoneNumber, b.gender, c.name, c.email, c.phoneNumber, c.gender, c.stake, c.locationOfStay, n.status
 	`, map[string]interface{}{
 		"val": q.Value,
 	})
@@ -131,6 +132,7 @@ func ShowEventData(q Query, c chan EventReturn) {
 			data[0][29].(string),
 			data[0][30].(string),
 		},
+		Status: data[0][31].(string),
 	}
 
 	c <- EventReturn{ev, nil}
@@ -180,7 +182,7 @@ func UpdateEvent(q Query, c chan error) {
 
 }
 
-// create a new node with given label and participant data struct
+// create a new node with given label and participant data struct (FOR COORDINATORS)
 func CreateParticipant(e Event, label string, c chan error, mutex *sync.Mutex) {
 	if e.GetField(label, "Email") == "" {
 		c <- nil

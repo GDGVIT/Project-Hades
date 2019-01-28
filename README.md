@@ -32,12 +32,14 @@ docker-compose up
 	Venue                 string      `json:"venue"`
 	Attendance            string      `json:"attendance"`
 	ExpectedParticipants  string      `json:"expectedParticipants"`
-	FacultyCoordinator    Participant `json:"sacultyCoordinator"`
+	FacultyCoordinator    Participant `json:"facultyCoordinator"`
 	StudentCoordinator    Participant `json:"studentCoordinator"`
 	GuestDetails          Guest       `json:"guest"`
 	PROrequest            string      `json:"PROrequest"`
 	CampusEngineerRequest string      `json:"campusEngineerRequest"`
 	Duration              string      `json:"duration"`
+	MainSponsor           Participant `json:"mainSponsor"`
+	Status                string      `json:"status"`
 }
 
 ```
@@ -62,7 +64,7 @@ docker-compose up
 
 <br />
 
-#### Participant schema
+#### Attendee schema
 
 <br />
 
@@ -73,6 +75,8 @@ docker-compose up
 	Email              string `json:"email"`
 	PhoneNumber        string `json:"phoneNumber"`
 	Gender             string `json:"gender"`
+	EventName          string `json:"eventName"`
+	Attended           string `json:"attended"`
 }
 ```
 
