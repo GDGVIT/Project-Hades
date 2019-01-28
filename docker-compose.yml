@@ -1,5 +1,6 @@
-version: "2"
+version: "3.2"
 services:
+
   events:
     build:
       context: .
@@ -10,6 +11,11 @@ services:
     restart: always
     volumes:
     - .:/go/src/github.com/GDGVIT/Project-Hades
+    # depends_on:
+    #   - neo4j
+    # networks:
+    #   - neo4j_go_net
+
   participants:
     build:
       context: .
@@ -20,3 +26,29 @@ services:
     container_name: participants
     ports:
     - 8801:8081
+    # depends_on:
+    #   - neo4j
+    # networks:
+    #   - neo4j_go_net
+
+
+#   neo4j:
+#     image: neo4j:latest
+#     container_name: 'neo4j'
+#     volumes:
+#       - './db/data:/data'
+#     ports:
+#       - 7474:7474
+#       - 7687:7687
+#     restart: on-failure
+#     networks: 
+#         - neo4j_go_net
+#     command: neo4j
+      
+  
+# networks:
+#   neo4j_go_net:
+#     driver: bridge
+
+# volumes:
+#   dgraph:
