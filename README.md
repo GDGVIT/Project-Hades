@@ -82,25 +82,14 @@ docker-compose up
 
 <br />
 
-#### Secret file
-model/creds.go
+#### .env environment variable file
 
-```go
-package model
+Place .nv file with the following details in each of the microservice folders
 
-type secret struct {
-	DB_USERNAME string
-	DB_PASSWORD string
-	DB_ENDPOINT string
-}
-
-var DB_SECRET = secret{
-
-	DB_USERNAME: "your DB username",
-	DB_PASSWORD: "your DB password",
-	DB_ENDPOINT: "your DB endpoint URI eg: localhost:7687",
-}
-
+```
+DB_USERNAME=DB_USERNAME
+DB_PASSWORD=DB_PASSWORD
+DB_ENDPOINT=DB_ENDPOINT
 ```
 
 <br />
