@@ -19,7 +19,8 @@ type basicEventsService struct{}
 /**
 * @api {post} /create-event create a new event
 * @apiName create a new event
-* @apiGroup admin
+* @apiGroup events
+* @apiPermission admin
 * @apiSampleRequest http://localhost:8800/
 *
 * @apiParam {String} clubName Name of your club
@@ -109,10 +110,10 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 /**
 *@api {post} /read-event read an event
 *@apiName read an event
-*@apiGroup admin
+*@apiGroup events
+*@apiPermission admin
 *@apiParam {String} key key to query the event by
 *@apiParam {String} value value of the key
-*
 *@apiParamExample {json} request-example
 *    "query":{
 *		"key":"clubName",
@@ -186,7 +187,8 @@ func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (
 /**
 *@api {post} /update-event update an event
 *@apiName update an event
-*@apiGroup admin
+*@apiGroup events
+*@apiPermission admin
 *@apiParam {String} key key to query the event by
 *@apiParam {String} value value of the key
 *@apiParam {String} changeKey key of the value which needs to be altered
@@ -221,7 +223,8 @@ func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query)
 /**
 *@api {post} /delete-event delete an event
 *@apiName delete an event
-*@apiGroup admin
+*@apiGroup events
+*@apiPermission admin
 *@apiParam {String} key key to query the event by
 *@apiParam {String} value value of the key
 *

@@ -22,7 +22,7 @@ type basicParticipantsService struct{}
 /**
 *@api {post} /create-attendee create an attendee
 *@apiName create an attendee
-*@apiGroup all
+*@apiGroup participants
 *@apiParam {String} name name of the participant
 *@apiParam {String} registrationNumber registration number of the participant
 *@apiParam {String} email email of the participant
@@ -76,7 +76,8 @@ func (b *basicParticipantsService) CreateAttendee(ctx context.Context, details m
 /**
 *@api {post} /read-attendee read an attendee
 *@apiName read an attendee
-*@apiGroup admin
+*@apiPermission admin
+*@apiGroup participants
 *@apiParam {String} key key to query the attendee by
 *@apiParam {String} value value of the key
 *
@@ -122,7 +123,8 @@ func (b *basicParticipantsService) ReadAttendee(ctx context.Context, query model
 /**
 *@api {post} /update-attendee update an attendee
 *@apiName update an attendee
-*@apiGroup admin
+*@apiGroup participants
+*@apiPermission admin
 *@apiParam {String} key key to query the attendee by
 *@apiParam {String} value value of the key
 *@apiParam {String} changeKey key of the value which needs to be altered
@@ -161,7 +163,8 @@ func (b *basicParticipantsService) UpdateAttendee(ctx context.Context, query mod
 /**
 *@api {post} /delete-attendee delete an attendee
 *@apiName delete an attendee
-*@apiGroup admin
+*@apiGroup participants
+*@apiPermission admin
 *@apiParam {String} key key to query the attendee by
 *@apiParam {String} value value of the key
 *

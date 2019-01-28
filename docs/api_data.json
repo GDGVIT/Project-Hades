@@ -32,7 +32,12 @@
     "url": "/create-event",
     "title": "create a new event",
     "name": "create_a_new_event",
-    "group": "admin",
+    "group": "events",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
     "sampleRequest": [
       {
         "url": "http://localhost:8800/"
@@ -186,56 +191,19 @@
     },
     "version": "0.0.0",
     "filename": "./events/pkg/service/service.go",
-    "groupTitle": "admin"
-  },
-  {
-    "type": "post",
-    "url": "/delete-attendee",
-    "title": "delete an attendee",
-    "name": "delete_an_attendee",
-    "group": "admin",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "key",
-            "description": "<p>key to query the attendee by</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "value",
-            "description": "<p>value of the key</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "request-example",
-          "content": "{\n\t\"query\":{\n\t\t\"key\":\"name\",\n\t\t\"Value\":\"dhruv sharma\"\n\t}\n}",
-          "type": "json"
-        },
-        {
-          "title": "response-example",
-          "content": "{\n   \"rs\": \"\",\n   \"err\": null\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./participants/pkg/service/service.go",
-    "groupTitle": "admin"
+    "groupTitle": "events"
   },
   {
     "type": "post",
     "url": "/delete-event",
     "title": "delete an event",
     "name": "delete_an_event",
-    "group": "admin",
+    "group": "events",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -270,56 +238,19 @@
     },
     "version": "0.0.0",
     "filename": "./events/pkg/service/service.go",
-    "groupTitle": "admin"
-  },
-  {
-    "type": "post",
-    "url": "/read-attendee",
-    "title": "read an attendee",
-    "name": "read_an_attendee",
-    "group": "admin",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "key",
-            "description": "<p>key to query the attendee by</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "value",
-            "description": "<p>value of the key</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "request-example",
-          "content": "{\n\t\"query\":{\n\t\t\"key\":\"name\",\n\t\t\"Value\":\"angad sharma\"\n\t}\n}",
-          "type": "json"
-        },
-        {
-          "title": "response-example",
-          "content": "{\n   \"rs\": [\n       {\n           \"name\": \"angad sharma\",\n           \"registrationNumber\": \"17BBE1010\",\n           \"email\": \"SDADAS@A.COM\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\",\n\t\t\t \"attended\":\"absent\"\n       }\n   ],\n   \"err\": null\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./participants/pkg/service/service.go",
-    "groupTitle": "admin"
+    "groupTitle": "events"
   },
   {
     "type": "post",
     "url": "/read-event",
     "title": "read an event",
     "name": "read_an_event",
-    "group": "admin",
+    "group": "events",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -354,70 +285,19 @@
     },
     "version": "0.0.0",
     "filename": "./events/pkg/service/service.go",
-    "groupTitle": "admin"
-  },
-  {
-    "type": "post",
-    "url": "/update-attendee",
-    "title": "update an attendee",
-    "name": "update_an_attendee",
-    "group": "admin",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "key",
-            "description": "<p>key to query the attendee by</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "value",
-            "description": "<p>value of the key</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "changeKey",
-            "description": "<p>key of the value which needs to be altered</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "changeValue",
-            "description": "<p>the new value</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "request-example",
-          "content": "{\n\t\"query\":{\n\t\t\"key\":\"name\",\n\t\t\"Value\":\"dhruv sharma\",\n\t\t\"changeKey\":\"name\",\n\t\t\"changeValue\":\"dhruv sharma\"\n\t}\n}",
-          "type": "json"
-        },
-        {
-          "title": "response-example",
-          "content": "\n{\n   \"rs\": \"\",\n   \"err\": null\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./participants/pkg/service/service.go",
-    "groupTitle": "admin"
+    "groupTitle": "events"
   },
   {
     "type": "post",
     "url": "/update-event",
     "title": "update an event",
     "name": "update_an_event",
-    "group": "admin",
+    "group": "events",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -466,14 +346,14 @@
     },
     "version": "0.0.0",
     "filename": "./events/pkg/service/service.go",
-    "groupTitle": "admin"
+    "groupTitle": "events"
   },
   {
     "type": "post",
     "url": "/create-attendee",
     "title": "create an attendee",
     "name": "create_an_attendee",
-    "group": "all",
+    "group": "participants",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -536,6 +416,161 @@
     },
     "version": "0.0.0",
     "filename": "./participants/pkg/service/service.go",
-    "groupTitle": "all"
+    "groupTitle": "participants"
+  },
+  {
+    "type": "post",
+    "url": "/delete-attendee",
+    "title": "delete an attendee",
+    "name": "delete_an_attendee",
+    "group": "participants",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "key",
+            "description": "<p>key to query the attendee by</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "value",
+            "description": "<p>value of the key</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"query\":{\n\t\t\"key\":\"name\",\n\t\t\"Value\":\"dhruv sharma\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": \"\",\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./participants/pkg/service/service.go",
+    "groupTitle": "participants"
+  },
+  {
+    "type": "post",
+    "url": "/read-attendee",
+    "title": "read an attendee",
+    "name": "read_an_attendee",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "group": "participants",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "key",
+            "description": "<p>key to query the attendee by</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "value",
+            "description": "<p>value of the key</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"query\":{\n\t\t\"key\":\"name\",\n\t\t\"Value\":\"angad sharma\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": [\n       {\n           \"name\": \"angad sharma\",\n           \"registrationNumber\": \"17BBE1010\",\n           \"email\": \"SDADAS@A.COM\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\",\n\t\t\t \"attended\":\"absent\"\n       }\n   ],\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./participants/pkg/service/service.go",
+    "groupTitle": "participants"
+  },
+  {
+    "type": "post",
+    "url": "/update-attendee",
+    "title": "update an attendee",
+    "name": "update_an_attendee",
+    "group": "participants",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "key",
+            "description": "<p>key to query the attendee by</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "value",
+            "description": "<p>value of the key</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "changeKey",
+            "description": "<p>key of the value which needs to be altered</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "changeValue",
+            "description": "<p>the new value</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"query\":{\n\t\t\"key\":\"name\",\n\t\t\"Value\":\"dhruv sharma\",\n\t\t\"changeKey\":\"name\",\n\t\t\"changeValue\":\"dhruv sharma\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "\n{\n   \"rs\": \"\",\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./participants/pkg/service/service.go",
+    "groupTitle": "participants"
   }
 ]
