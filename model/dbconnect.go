@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -22,12 +21,8 @@ func ConnectToDB() bolt.Conn {
 		log.Fatal("Error loading .env file")
 	}
 
-	URI := fmt.Sprintf("bolt://%s:%s@%s",
-		os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_ENDPOINT"))
-
 	driver := bolt.NewDriver()
-	conn, err := driver.OpenNeo(URI)
+	conn, err := driver.OpenNeo(os.Getenv("URI"))
 	if err != nil {
 		log.Fatalln("Error connecting to DB")
 	}
