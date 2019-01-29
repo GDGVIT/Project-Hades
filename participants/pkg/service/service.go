@@ -209,7 +209,3 @@ func New(middleware []Middleware) ParticipantsService {
 	}
 	return svc
 }
-
-// DB_USERNAME=sky_blue_spencer_center_sydnee
-// DB_PASSWORD=ykWHNv5UDJUMqAzzmDKjcSQEDQ6
-// DB_ENDPOINT=sky-blue-spencer-center-sydnee.graphstory.services:7687
