@@ -1,4 +1,4 @@
-# List of microservices for project omega
+# List of microservices for project hades
 
 
 <br />
@@ -11,29 +11,94 @@
 
 * Event classification
 
-* Check bookings
-
-* Permission generator
-
-* Auto update website
-
 * Copy from previous events
+
+* Add coordinators
+
+* If coordinators exist, draw a relation to the new event
+
+<br />
+
+#### Permission generator
+
+* Feed event details
+
+* Output HTML document
+
+<br />
+
+#### Auto update website
+
+* Timer on event completion
+
+* Take description and images in the beginning
+
+* Take website code in the beginning in a specific format
+
+* Append event in the HTML document 
 
 <br />
 
 #### Participant management
 
-* import/ export JSON/ CSV/ xlsx
 
-* Add registration CRUD
+* Registration CRUD
+
+* View participants of an event
+
+* If participant exists, draw a relation to the new event
+
+<br />
+
+#### Compound Participant analysis
+
+* Attendee - events - attendees
+
+* Attendee - events
+
+* Event - attendee - events 
+
+* Event - coordinators - events
+
+* coordinator - events - attendees
+
+* coordinator - events - coordinators
+
+* Event - coordinators - events
+
+<br />
+
+#### Attendance
+
+* import/ export JSON/ CSV/ xlsx
 
 * Attendance portal
 
 * Live stream attendance
 
-* QR code attendance
+* Token generation and life
 
-* Feedback
+<br />
+
+#### Super-admin
+
+* Manage admin CRUD
+
+* Admin analytics
+
+<br />
+
+#### Authenticator
+
+* 2 factor auth on signup
+
+* Store authenticated admins
+
+* Generate specific token
+
+* Assign levels of administration
+
+* Token expiry
 
 <br />
 

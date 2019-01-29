@@ -22,7 +22,7 @@ func ConnectToDB() bolt.Conn {
 	}
 
 	driver := bolt.NewDriver()
-	conn, err := driver.OpenNeo(os.Getenv("URI"))
+	conn, err := driver.OpenNeo(os.Getenv("PROD_URI"))
 	if err != nil {
 		log.Fatalln("Error connecting to DB")
 	}
