@@ -30,10 +30,9 @@ func ConnectToDB() bolt.Conn {
 		log.Fatalf("cmd.Run() failed with %s\n", err)
 	}
 
-	driver := bolt.NewDriver()
-	conn, err := driver.OpenNeo(os.Getenv("PROD_URI"))
+	conn, err := bolt.NewDriver().OpenNeo(os.Getenv("PROD_URI"))
 	if err != nil {
-		log.Println("Error connecting to DB")
+		log.Fatalln("Error connecting to DB")
 	}
 	return conn
 }

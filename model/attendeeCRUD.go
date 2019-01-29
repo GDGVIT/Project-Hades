@@ -9,7 +9,7 @@ import (
 func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.Mutex) {
 
 	mutex.Lock()
-	_, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
+	rss, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
 	CREATE (n:ATTENDEE {name:$name, registrationNumber:$registrationNumber,
 		email:$email, phoneNumber:$phoneNumber, gender: $gender, attended:$attended})<-[:ATTENDS]-(a) `, map[string]interface{}{
 		"EventName":          eventName,
@@ -24,6 +24,7 @@ func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.M
 		c <- err
 		return
 	}
+	log.Println(rss)
 	mutex.Unlock()
 	log.Printf("Created attendee node")
 	c <- nil

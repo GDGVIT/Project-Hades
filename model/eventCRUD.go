@@ -8,7 +8,8 @@ import (
 
 func CreateEvent(e Event, ce chan error) {
 	c := make(chan error)
-	//go createParticipant(e, "StudentCoordinator", c)
+	log.Println("\n\n\n")
+	log.Println(e)
 	result, err := con.ExecNeo(`CREATE (n:EVENT {name:$name, clubName:$clubName, toDate:$toDate, 
 		fromDate: $fromDate, toTime:$toTime, fromTime:$fromTime, budget:$budget, 
 		description:$description, category:$category, venue:$venue, attendance:$attendance, 
