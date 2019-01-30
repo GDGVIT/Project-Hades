@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"log"
 
 	"github.com/GDGVIT/Project-Hades/model"
 )
@@ -105,7 +104,6 @@ type basicEventsService struct{}
 func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event) (rs string, err error) {
 
 	ce := make(chan error)
-	log.Println(event)
 	go model.CreateEvent(event, ce)
 	if err := <-ce; err != nil {
 		return "some error occurred", err
