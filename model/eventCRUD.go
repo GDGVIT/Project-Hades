@@ -185,12 +185,9 @@ func UpdateEvent(q Query, c chan error) {
 
 // create a new node with given label and participant data struct (FOR COORDINATORS)
 func CreateParticipant(e Event, label string, c chan error, mutex *sync.Mutex) {
-	if e.GetField(label, "Email") == "" {
-		c <- nil
-		return
-	}
+
 	mutex.Lock()
-	result, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
+	_, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
 	CREATE (n:INCHARGE {name:$name, registrationNumber:$registrationNumber,
 		email:$email, phoneNumber:$phoneNumber, gender: $gender})<-[:`+label+`]-(a) `, map[string]interface{}{
 		"EventName":          e.Name,
@@ -205,7 +202,7 @@ func CreateParticipant(e Event, label string, c chan error, mutex *sync.Mutex) {
 		return
 	}
 	mutex.Unlock()
-	log.Println(result)
+
 	log.Printf("Created %s node", label)
 	c <- nil
 	return
@@ -217,8 +214,9 @@ func CreateGuest(e Event, c chan error, mutex *sync.Mutex) {
 		c <- nil
 		return
 	}
+
 	mutex.Lock()
-	result, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
+	_, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
 	CREATE (n:GUEST {name:$name, stake:$stake,
 	email:$email, phoneNumber:$phoneNumber, gender: $gender, locationOfStay:$locationOfStay
 	})<-[:GUEST]-(a) `, map[string]interface{}{
@@ -235,8 +233,6 @@ func CreateGuest(e Event, c chan error, mutex *sync.Mutex) {
 		return
 	}
 	mutex.Unlock()
-
-	log.Println(result)
 	log.Println("Created GUEST node")
 	c <- nil
 	return
