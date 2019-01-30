@@ -26,14 +26,13 @@ func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.M
 
 		rss, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
 		CREATE (n:ATTENDEE {name:$name, registrationNumber:$registrationNumber,
-			email:$email, phoneNumber:$phoneNumber, gender: $gender, attended:$attended})<-[:ATTENDS]-(a) `, map[string]interface{}{
+			email:$email, phoneNumber:$phoneNumber, gender: $gender})<-[:ATTENDS]-(a) `, map[string]interface{}{
 			"EventName":          eventName,
 			"name":               p.Name,
 			"registrationNumber": p.RegistrationNumber,
 			"email":              p.Email,
 			"phoneNumber":        p.PhoneNumber,
 			"gender":             p.Gender,
-			"attended":           "absent",
 		})
 		if err != nil {
 			c <- err
@@ -133,7 +132,6 @@ func ReadAttendee(q Query, c chan ParticipantReturn, mutex *sync.Mutex) {
 			Email:              data[i][2].(string),
 			PhoneNumber:        data[i][3].(string),
 			Gender:             data[i][4].(string),
-			Attended:           data[i][5].(string),
 		})
 	}
 	log.Printf("Found attendee node")

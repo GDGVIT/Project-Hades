@@ -1,48 +1,59 @@
 version: "3.2"
 services:
-
+  attendance:
+    build:
+      context: .
+      dockerfile: attendance/Dockerfile
+    container_name: attendance
+    depends_on:
+    - neo4j
+    networks:
+    - neo4j_go_net
+    ports:
+    - 8800:8081
+    volumes:
+    - .:/go/src/github.com/GDGVIT/Project-Hades
   events:
     build:
       context: .
       dockerfile: events/Dockerfile
     container_name: events
+    depends_on:
+    - neo4j
+    networks:
+    - neo4j_go_net
     ports:
     - 8800:8081
     volumes:
     - .:/go/src/github.com/GDGVIT/Project-Hades
-    depends_on:
-      - neo4j
-    networks:
-      - neo4j_go_net
-
   participants:
     build:
       context: .
       dockerfile: participants/Dockerfile
-    volumes:
-    - .:/go/src/github.com/GDGVIT/Project-Hades
     container_name: participants
+    depends_on:
+    - neo4j
+    networks:
+    - neo4j_go_net
     ports:
     - 8801:8081
-    depends_on:
-      - neo4j
-    networks:
-      - neo4j_go_net
-
-
-  neo4j:
-    image: neo4j:latest
-    container_name: 'neo4j'
     volumes:
-      - './db/data:/data/'
-      - './db/conf/:/conf/'
+    - .:/go/src/github.com/GDGVIT/Project-Hades
+  
+  neo4j:
+    container_name: neo4j
+    image: neo4j:latest
+    networks:
+    - neo4j_go_net
     ports:
-      - 7474:7474
-      - 7687:7687
+    - 7474:7474
+    - 7687:7687
     restart: on-failure
-    networks: 
-        - neo4j_go_net
+    volumes:
+    - ./db/data:/data/
+    - ./db/conf/:/conf/
     command: neo4j
+
 
 networks:
   neo4j_go_net:
