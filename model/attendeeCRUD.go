@@ -8,24 +8,56 @@ import (
 
 func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.Mutex) {
 
-	mutex.Lock()
-	rss, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
-	CREATE (n:ATTENDEE {name:$name, registrationNumber:$registrationNumber,
-		email:$email, phoneNumber:$phoneNumber, gender: $gender, attended:$attended})<-[:ATTENDS]-(a) `, map[string]interface{}{
-		"EventName":          eventName,
-		"name":               p.Name,
-		"registrationNumber": p.RegistrationNumber,
-		"email":              p.Email,
-		"phoneNumber":        p.PhoneNumber,
-		"gender":             p.Gender,
-		"attended":           "absent",
+	data, _, _, err := con.QueryNeoAll(`
+	MATCH(n:ATTENDEE)
+	WHERE n.registrationNumber=$rn
+	RETURN n.registrationNumber
+		`, map[string]interface{}{
+		"rn": p.RegistrationNumber,
 	})
+
 	if err != nil {
 		c <- err
 		return
 	}
-	log.Println(rss)
-	mutex.Unlock()
+
+	if len(data) < 1 {
+		mutex.Lock()
+
+		rss, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
+		CREATE (n:ATTENDEE {name:$name, registrationNumber:$registrationNumber,
+			email:$email, phoneNumber:$phoneNumber, gender: $gender, attended:$attended})<-[:ATTENDS]-(a) `, map[string]interface{}{
+			"EventName":          eventName,
+			"name":               p.Name,
+			"registrationNumber": p.RegistrationNumber,
+			"email":              p.Email,
+			"phoneNumber":        p.PhoneNumber,
+			"gender":             p.Gender,
+			"attended":           "absent",
+		})
+		if err != nil {
+			c <- err
+			return
+		}
+		log.Println(rss)
+		mutex.Unlock()
+	} else {
+		mutex.Lock()
+
+		rss, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
+		MATCH(b:ATTENDEE) WHERE b.registrationNumber=$rn
+		CREATE (b)<-[:ATTENDS]-(a) `, map[string]interface{}{
+			"EventName": eventName,
+			"rn":        p.RegistrationNumber,
+		})
+		if err != nil {
+			c <- err
+			return
+		}
+		log.Println(rss)
+		mutex.Unlock()
+	}
+
 	log.Printf("Created attendee node")
 	c <- nil
 	return
