@@ -76,7 +76,6 @@ docker-compose up
 	PhoneNumber        string `json:"phoneNumber"`
 	Gender             string `json:"gender"`
 	EventName          string `json:"eventName"`
-	Attended           string `json:"attended"`
 }
 ```
 
