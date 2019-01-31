@@ -68,6 +68,12 @@ type ParticipantReturn struct {
 	Err       error      `json:"err"`
 }
 
+// func HandleChanError(c chan error, err error) {
+// 	if err != nil {
+// 		c <- err
+// 		return
+// 	}
+// }
 func (v Event) GetField(field string, value string) string {
 	r := reflect.ValueOf(v)
 	f := reflect.Indirect(r).FieldByName(field)
