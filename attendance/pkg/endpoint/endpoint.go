@@ -4,6 +4,7 @@ import (
 	"context"
 
 	service "github.com/GDGVIT/Project-Hades/attendance/pkg/service"
+	"github.com/GDGVIT/Project-Hades/model"
 	endpoint "github.com/go-kit/kit/endpoint"
 )
 
@@ -12,7 +13,7 @@ type PostAttendanceRequest struct {
 	Reg       string `json:"reg"`
 	Coupons   int    `json:"coupons"`
 	EventName string `json:"event_name"`
-	Day       string `json:"day"`
+	Day       int    `json:"day"`
 }
 
 // PostAttendanceResponse collects the response parameters for the PostAttendance method.
@@ -125,6 +126,62 @@ func (r UnpostAttendanceResponse) Failed() error {
 	return r.Err
 }
 
+// ViewPresentRequest collects the request parameters for the ViewPresent method.
+type ViewPresentRequest struct {
+	EventName string `json:"event_name"`
+}
+
+// ViewPresentResponse collects the response parameters for the ViewPresent method.
+type ViewPresentResponse struct {
+	Rs  []model.Participant `json:"rs"`
+	Err error               `json:"err"`
+}
+
+// MakeViewPresentEndpoint returns an endpoint that invokes ViewPresent on the service.
+func MakeViewPresentEndpoint(s service.AttendanceService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(ViewPresentRequest)
+		rs, err := s.ViewPresent(ctx, req.EventName)
+		return ViewPresentResponse{
+			Err: err,
+			Rs:  rs,
+		}, nil
+	}
+}
+
+// Failed implements Failer.
+func (r ViewPresentResponse) Failed() error {
+	return r.Err
+}
+
+// ViewAbsentRequest collects the request parameters for the ViewAbsent method.
+type ViewAbsentRequest struct {
+	EventName string `json:"event_name"`
+}
+
+// ViewAbsentResponse collects the response parameters for the ViewAbsent method.
+type ViewAbsentResponse struct {
+	Rs  []model.Participant `json:"rs"`
+	Err error               `json:"err"`
+}
+
+// MakeViewAbsentEndpoint returns an endpoint that invokes ViewAbsent on the service.
+func MakeViewAbsentEndpoint(s service.AttendanceService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(ViewAbsentRequest)
+		rs, err := s.ViewAbsent(ctx, req.EventName)
+		return ViewAbsentResponse{
+			Err: err,
+			Rs:  rs,
+		}, nil
+	}
+}
+
+// Failed implements Failer.
+func (r ViewAbsentResponse) Failed() error {
+	return r.Err
+}
+
 // Failer is an interface that should be implemented by response types.
 // Response encoders can check if responses are Failer, and if so they've
 // failed, and if so encode them using a separate write path based on the error.
@@ -136,9 +193,9 @@ type Failure interface {
 func (e Endpoints) PostAttendance(ctx context.Context, reg string, coupons int, eventName string, day int) (rs string, err error) {
 	request := PostAttendanceRequest{
 		Coupons:   coupons,
+		Day:       day,
 		EventName: eventName,
 		Reg:       reg,
-		Day:       day,
 	}
 	response, err := e.PostAttendanceEndpoint(ctx, request)
 	if err != nil {
@@ -184,4 +241,24 @@ func (e Endpoints) UnpostAttendance(ctx context.Context, reg string, eventName s
 		return
 	}
 	return response.(UnpostAttendanceResponse).Rs, response.(UnpostAttendanceResponse).Err
+}
+
+// ViewPresent implements Service. Primarily useful in a client.
+func (e Endpoints) ViewPresent(ctx context.Context, eventName string) (rs []model.Participant, err error) {
+	request := ViewPresentRequest{EventName: eventName}
+	response, err := e.ViewPresentEndpoint(ctx, request)
+	if err != nil {
+		return
+	}
+	return response.(ViewPresentResponse).Rs, response.(ViewPresentResponse).Err
+}
+
+// ViewAbsent implements Service. Primarily useful in a client.
+func (e Endpoints) ViewAbsent(ctx context.Context, eventName string) (rs []model.Participant, err error) {
+	request := ViewAbsentRequest{EventName: eventName}
+	response, err := e.ViewAbsentEndpoint(ctx, request)
+	if err != nil {
+		return
+	}
+	return response.(ViewAbsentResponse).Rs, response.(ViewAbsentResponse).Err
 }

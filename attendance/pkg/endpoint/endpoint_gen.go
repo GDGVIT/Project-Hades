@@ -14,6 +14,8 @@ type Endpoints struct {
 	PostCouponEndpoint       endpoint.Endpoint
 	DeleteCouponEndpoint     endpoint.Endpoint
 	UnpostAttendanceEndpoint endpoint.Endpoint
+	ViewPresentEndpoint      endpoint.Endpoint
+	ViewAbsentEndpoint       endpoint.Endpoint
 }
 
 // New returns a Endpoints struct that wraps the provided service, and wires in all of the
@@ -24,6 +26,8 @@ func New(s service.AttendanceService, mdw map[string][]endpoint.Middleware) Endp
 		PostAttendanceEndpoint:   MakePostAttendanceEndpoint(s),
 		PostCouponEndpoint:       MakePostCouponEndpoint(s),
 		UnpostAttendanceEndpoint: MakeUnpostAttendanceEndpoint(s),
+		ViewAbsentEndpoint:       MakeViewAbsentEndpoint(s),
+		ViewPresentEndpoint:      MakeViewPresentEndpoint(s),
 	}
 	for _, m := range mdw["PostAttendance"] {
 		eps.PostAttendanceEndpoint = m(eps.PostAttendanceEndpoint)
@@ -36,6 +40,12 @@ func New(s service.AttendanceService, mdw map[string][]endpoint.Middleware) Endp
 	}
 	for _, m := range mdw["UnpostAttendance"] {
 		eps.UnpostAttendanceEndpoint = m(eps.UnpostAttendanceEndpoint)
+	}
+	for _, m := range mdw["ViewPresent"] {
+		eps.ViewPresentEndpoint = m(eps.ViewPresentEndpoint)
+	}
+	for _, m := range mdw["ViewAbsent"] {
+		eps.ViewAbsentEndpoint = m(eps.ViewAbsentEndpoint)
 	}
 	return eps
 }

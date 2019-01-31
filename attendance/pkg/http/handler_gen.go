@@ -15,5 +15,7 @@ func NewHTTPHandler(endpoints endpoint.Endpoints, options map[string][]http.Serv
 	makePostCouponHandler(m, endpoints, options["PostCoupon"])
 	makeDeleteCouponHandler(m, endpoints, options["DeleteCoupon"])
 	makeUnpostAttendanceHandler(m, endpoints, options["UnpostAttendance"])
+	makeViewPresentHandler(m, endpoints, options["ViewPresent"])
+	makeViewAbsentHandler(m, endpoints, options["ViewAbsent"])
 	return m
 }
