@@ -19,7 +19,7 @@ type AttendanceService interface {
 type basicAttendanceService struct{}
 
 /**
-*@api {post} /post-attendance
+*@api {post} /post-attendance mark attendance
 *@apiName mark attendance
 *@apiGroup attendance
 *@apiPermission admin
