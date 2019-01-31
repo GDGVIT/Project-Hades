@@ -29,6 +29,67 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/post-attendance",
+    "title": "",
+    "name": "mark_attendance",
+    "group": "attendance",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "eventName",
+            "description": "<p>name of the event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "registrationNumber",
+            "description": "<p>registration number of the participant</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "day",
+            "description": "<p>day of the event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "coupons",
+            "description": "<p>number of coupons for that day</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\n{\n\n\t\"details\":{\n\t\t\"eventName\":\"DEVFEST\",\n\t\t\"day\":2,\n\t\t\"coupons\":5,\n\t\t\"email\":\"angad.sharma2017@vitstudent.ac.in\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": \"done\",\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./attendance/pkg/service/service.go",
+    "groupTitle": "attendance"
+  },
+  {
+    "type": "post",
     "url": "/create-event",
     "title": "create a new event",
     "name": "create_a_new_event",

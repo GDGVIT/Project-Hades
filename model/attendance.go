@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -58,7 +59,7 @@ func MarkPresent(eventName string, email string, coupons int, day int, c chan er
 			MATCH(n:EVENT)-[:ATTENDS]->(b)
 			WHERE n.name=$name AND b.email=$rn
 			CREATE (n)-[:PRESENT`+strconv.Itoa(day)+`]->(b) 
-			CREATE (b)-[:COUPON]->(c:COUPONS {coupons:$cps})
+			CREATE (b)-[:COUPON_`+strings.Replace(eventName, " ", "", -1)+`]->(c:COUPONS {coupons:$cps})
 		`, map[string]interface{}{
 		"name": eventName,
 		"rn":   email,
