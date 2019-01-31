@@ -2,6 +2,7 @@ package endpoint
 
 import (
 	"context"
+
 	service "github.com/GDGVIT/Project-Hades/attendance/pkg/service"
 	endpoint "github.com/go-kit/kit/endpoint"
 )
@@ -9,8 +10,9 @@ import (
 // PostAttendanceRequest collects the request parameters for the PostAttendance method.
 type PostAttendanceRequest struct {
 	Reg       string `json:"reg"`
-	Coupons   uint8  `json:"coupons"`
+	Coupons   int    `json:"coupons"`
 	EventName string `json:"event_name"`
+	Day       string `json:"day"`
 }
 
 // PostAttendanceResponse collects the response parameters for the PostAttendance method.
@@ -23,7 +25,7 @@ type PostAttendanceResponse struct {
 func MakePostAttendanceEndpoint(s service.AttendanceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(PostAttendanceRequest)
-		rs, err := s.PostAttendance(ctx, req.Reg, req.Coupons, req.EventName)
+		rs, err := s.PostAttendance(ctx, req.Reg, req.Coupons, req.EventName, req.Day)
 		return PostAttendanceResponse{
 			Err: err,
 			Rs:  rs,
@@ -131,11 +133,12 @@ type Failure interface {
 }
 
 // PostAttendance implements Service. Primarily useful in a client.
-func (e Endpoints) PostAttendance(ctx context.Context, reg string, coupons uint8, eventName string) (rs string, err error) {
+func (e Endpoints) PostAttendance(ctx context.Context, reg string, coupons int, eventName string, day int) (rs string, err error) {
 	request := PostAttendanceRequest{
 		Coupons:   coupons,
 		EventName: eventName,
 		Reg:       reg,
+		Day:       day,
 	}
 	response, err := e.PostAttendanceEndpoint(ctx, request)
 	if err != nil {

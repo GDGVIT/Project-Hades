@@ -2,11 +2,13 @@ package service
 
 import (
 	"context"
+
+	"github.com/GDGVIT/Project-Hades/model"
 )
 
 // AttendanceService describes the service.
 type AttendanceService interface {
-	PostAttendance(ctx context.Context, reg string, coupons uint8, eventName string) (rs string, err error)
+	PostAttendance(ctx context.Context, reg string, coupons int, eventName string, day int) (rs string, err error)
 	PostCoupon(ctx context.Context, reg string, coupon string) (rs string, err error)
 	DeleteCoupon(ctx context.Context, reg string, eventName string) (rs string, err error)
 	UnpostAttendance(ctx context.Context, reg string, eventName string) (rs string, err error)
@@ -16,9 +18,13 @@ type AttendanceService interface {
 
 type basicAttendanceService struct{}
 
-func (b *basicAttendanceService) PostAttendance(ctx context.Context, reg string, coupons uint8, eventName string) (rs string, err error) {
-	// TODO implement the business logic of PostAttendance
-	return rs, err
+func (b *basicAttendanceService) PostAttendance(ctx context.Context, reg string, coupons int, eventName string, day int) (rs string, err error) {
+	c := make(chan error)
+	go model.MarkPresent(eventName, reg, coupons, day, c)
+	if err := <-c; err != nil {
+		return "Error dealing with PostAttendance", err
+	}
+	return "Attendance posted", err
 }
 func (b *basicAttendanceService) PostCoupon(ctx context.Context, reg string, coupon string) (rs string, err error) {
 	// TODO implement the business logic of PostCoupon
