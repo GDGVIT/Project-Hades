@@ -13,7 +13,7 @@ func MarkPresent(eventName string, reg string, coupons int, day int, c chan erro
 
 	// check if already given attendance
 	data, _, _, err := con.QueryNeoAll(`
-		MATCH(n:EVENT)-[r:ATTENDS]->(b)
+		MATCH(n:EVENT)-[r:PRESENT`+strconv.Itoa(day)+`]->(b)
 		WHERE n.name=$name AND b.registrationNumber=$rn
 		RETURN b.registrationNumber
 	`, map[string]interface{}{
