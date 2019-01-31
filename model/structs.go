@@ -69,10 +69,10 @@ type ParticipantReturn struct {
 }
 
 type Attendance struct {
-	EventName          string `json:"eventName"`
-	RegistrationNumber string `json:"registrationNumber"`
-	Day                int    `json:"day"`
-	Coupons            int    `json:"coupons"`
+	EventName string `json:"eventName"`
+	Email     string `json:"email"`
+	Day       int    `json:"day"`
+	Coupons   int    `json:"coupons"`
 }
 
 // func HandleChanError(c chan error, err error) {
