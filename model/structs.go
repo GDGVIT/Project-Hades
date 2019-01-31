@@ -68,6 +68,13 @@ type ParticipantReturn struct {
 	Err       error      `json:"err"`
 }
 
+type Attendance struct {
+	EventName          string `json:"eventName"`
+	RegistrationNumber string `json:"registrationNumber"`
+	Day                int    `json:"day"`
+	Coupons            int    `json:"coupons"`
+}
+
 // func HandleChanError(c chan error, err error) {
 // 	if err != nil {
 // 		c <- err

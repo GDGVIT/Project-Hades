@@ -10,10 +10,7 @@ import (
 
 // PostAttendanceRequest collects the request parameters for the PostAttendance method.
 type PostAttendanceRequest struct {
-	Reg       string `json:"reg"`
-	Coupons   int    `json:"coupons"`
-	EventName string `json:"event_name"`
-	Day       int    `json:"day"`
+	Details model.Attendance `json:"details"`
 }
 
 // PostAttendanceResponse collects the response parameters for the PostAttendance method.
@@ -26,7 +23,7 @@ type PostAttendanceResponse struct {
 func MakePostAttendanceEndpoint(s service.AttendanceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(PostAttendanceRequest)
-		rs, err := s.PostAttendance(ctx, req.Reg, req.Coupons, req.EventName, req.Day)
+		rs, err := s.PostAttendance(ctx, req.Details)
 		return PostAttendanceResponse{
 			Err: err,
 			Rs:  rs,
@@ -70,8 +67,8 @@ func (r PostCouponResponse) Failed() error {
 
 // DeleteCouponRequest collects the request parameters for the DeleteCoupon method.
 type DeleteCouponRequest struct {
-	Reg       string `json:"reg"`
-	EventName string `json:"event_name"`
+	Reg   string `json:"reg"`
+	Event string `json:"event_name"`
 }
 
 // DeleteCouponResponse collects the response parameters for the DeleteCoupon method.
@@ -84,7 +81,7 @@ type DeleteCouponResponse struct {
 func MakeDeleteCouponEndpoint(s service.AttendanceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(DeleteCouponRequest)
-		rs, err := s.DeleteCoupon(ctx, req.Reg, req.EventName)
+		rs, err := s.DeleteCoupon(ctx, req.Reg, req.Event)
 		return DeleteCouponResponse{
 			Err: err,
 			Rs:  rs,
@@ -99,8 +96,8 @@ func (r DeleteCouponResponse) Failed() error {
 
 // UnpostAttendanceRequest collects the request parameters for the UnpostAttendance method.
 type UnpostAttendanceRequest struct {
-	Reg       string `json:"reg"`
-	EventName string `json:"event_name"`
+	Reg   string `json:"reg"`
+	Event string `json:"event_name"`
 }
 
 // UnpostAttendanceResponse collects the response parameters for the UnpostAttendance method.
@@ -113,7 +110,7 @@ type UnpostAttendanceResponse struct {
 func MakeUnpostAttendanceEndpoint(s service.AttendanceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(UnpostAttendanceRequest)
-		rs, err := s.UnpostAttendance(ctx, req.Reg, req.EventName)
+		rs, err := s.UnpostAttendance(ctx, req.Reg, req.Event)
 		return UnpostAttendanceResponse{
 			Err: err,
 			Rs:  rs,
@@ -128,7 +125,7 @@ func (r UnpostAttendanceResponse) Failed() error {
 
 // ViewPresentRequest collects the request parameters for the ViewPresent method.
 type ViewPresentRequest struct {
-	EventName string `json:"event_name"`
+	Event string `json:"event_name"`
 }
 
 // ViewPresentResponse collects the response parameters for the ViewPresent method.
@@ -141,7 +138,7 @@ type ViewPresentResponse struct {
 func MakeViewPresentEndpoint(s service.AttendanceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(ViewPresentRequest)
-		rs, err := s.ViewPresent(ctx, req.EventName)
+		rs, err := s.ViewPresent(ctx, req.Event)
 		return ViewPresentResponse{
 			Err: err,
 			Rs:  rs,
@@ -156,7 +153,7 @@ func (r ViewPresentResponse) Failed() error {
 
 // ViewAbsentRequest collects the request parameters for the ViewAbsent method.
 type ViewAbsentRequest struct {
-	EventName string `json:"event_name"`
+	Event string `json:"event_name"`
 }
 
 // ViewAbsentResponse collects the response parameters for the ViewAbsent method.
@@ -169,7 +166,7 @@ type ViewAbsentResponse struct {
 func MakeViewAbsentEndpoint(s service.AttendanceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(ViewAbsentRequest)
-		rs, err := s.ViewAbsent(ctx, req.EventName)
+		rs, err := s.ViewAbsent(ctx, req.Event)
 		return ViewAbsentResponse{
 			Err: err,
 			Rs:  rs,
@@ -190,12 +187,9 @@ type Failure interface {
 }
 
 // PostAttendance implements Service. Primarily useful in a client.
-func (e Endpoints) PostAttendance(ctx context.Context, reg string, coupons int, eventName string, day int) (rs string, err error) {
+func (e Endpoints) PostAttendance(ctx context.Context, details model.Attendance) (rs string, err error) {
 	request := PostAttendanceRequest{
-		Coupons:   coupons,
-		Day:       day,
-		EventName: eventName,
-		Reg:       reg,
+		Details: details,
 	}
 	response, err := e.PostAttendanceEndpoint(ctx, request)
 	if err != nil {
@@ -218,10 +212,10 @@ func (e Endpoints) PostCoupon(ctx context.Context, reg string, coupon string) (r
 }
 
 // DeleteCoupon implements Service. Primarily useful in a client.
-func (e Endpoints) DeleteCoupon(ctx context.Context, reg string, eventName string) (rs string, err error) {
+func (e Endpoints) DeleteCoupon(ctx context.Context, reg string, event string) (rs string, err error) {
 	request := DeleteCouponRequest{
-		EventName: eventName,
-		Reg:       reg,
+		Event: event,
+		Reg:   reg,
 	}
 	response, err := e.DeleteCouponEndpoint(ctx, request)
 	if err != nil {
@@ -231,10 +225,10 @@ func (e Endpoints) DeleteCoupon(ctx context.Context, reg string, eventName strin
 }
 
 // UnpostAttendance implements Service. Primarily useful in a client.
-func (e Endpoints) UnpostAttendance(ctx context.Context, reg string, eventName string) (rs string, err error) {
+func (e Endpoints) UnpostAttendance(ctx context.Context, reg string, event string) (rs string, err error) {
 	request := UnpostAttendanceRequest{
-		EventName: eventName,
-		Reg:       reg,
+		Event: event,
+		Reg:   reg,
 	}
 	response, err := e.UnpostAttendanceEndpoint(ctx, request)
 	if err != nil {
@@ -244,8 +238,8 @@ func (e Endpoints) UnpostAttendance(ctx context.Context, reg string, eventName s
 }
 
 // ViewPresent implements Service. Primarily useful in a client.
-func (e Endpoints) ViewPresent(ctx context.Context, eventName string) (rs []model.Participant, err error) {
-	request := ViewPresentRequest{EventName: eventName}
+func (e Endpoints) ViewPresent(ctx context.Context, Event string) (rs []model.Participant, err error) {
+	request := ViewPresentRequest{Event: Event}
 	response, err := e.ViewPresentEndpoint(ctx, request)
 	if err != nil {
 		return
@@ -254,8 +248,8 @@ func (e Endpoints) ViewPresent(ctx context.Context, eventName string) (rs []mode
 }
 
 // ViewAbsent implements Service. Primarily useful in a client.
-func (e Endpoints) ViewAbsent(ctx context.Context, eventName string) (rs []model.Participant, err error) {
-	request := ViewAbsentRequest{EventName: eventName}
+func (e Endpoints) ViewAbsent(ctx context.Context, Event string) (rs []model.Participant, err error) {
+	request := ViewAbsentRequest{Event: Event}
 	response, err := e.ViewAbsentEndpoint(ctx, request)
 	if err != nil {
 		return
