@@ -10,7 +10,7 @@ services:
     networks:
     - neo4j_go_net
     ports:
-    - 8800:8081
+    - 8802:8081
     volumes:
     - .:/go/src/github.com/GDGVIT/Project-Hades
   events:

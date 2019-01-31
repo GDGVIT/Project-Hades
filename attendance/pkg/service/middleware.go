@@ -46,15 +46,3 @@ func (l loggingMiddleware) UnpostAttendance(ctx context.Context, reg string, eve
 	}()
 	return l.next.UnpostAttendance(ctx, reg, eventName)
 }
-func (l loggingMiddleware) ViewPresent(ctx context.Context, eventName string) (rs []model.Participant, err error) {
-	defer func() {
-		l.logger.Log("method", "ViewPresent", "eventName", eventName, "rs", rs, "err", err)
-	}()
-	return l.next.ViewPresent(ctx, eventName)
-}
-func (l loggingMiddleware) ViewAbsent(ctx context.Context, eventName string) (rs []model.Participant, err error) {
-	defer func() {
-		l.logger.Log("method", "ViewAbsent", "eventName", eventName, "rs", rs, "err", err)
-	}()
-	return l.next.ViewAbsent(ctx, eventName)
-}
