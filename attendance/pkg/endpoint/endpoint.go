@@ -38,7 +38,7 @@ func (r PostAttendanceResponse) Failed() error {
 
 // PostCouponRequest collects the request parameters for the PostCoupon method.
 type PostCouponRequest struct {
-	Reg    string `json:"reg"`
+	Email  string `json:"email"`
 	Coupon string `json:"coupon"`
 }
 
@@ -52,7 +52,7 @@ type PostCouponResponse struct {
 func MakePostCouponEndpoint(s service.AttendanceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(PostCouponRequest)
-		rs, err := s.PostCoupon(ctx, req.Reg, req.Coupon)
+		rs, err := s.PostCoupon(ctx, req.Email, req.Coupon)
 		return PostCouponResponse{
 			Err: err,
 			Rs:  rs,
@@ -67,7 +67,7 @@ func (r PostCouponResponse) Failed() error {
 
 // DeleteCouponRequest collects the request parameters for the DeleteCoupon method.
 type DeleteCouponRequest struct {
-	Reg   string `json:"reg"`
+	Email string `json:"email"`
 	Event string `json:"event_name"`
 }
 
@@ -81,7 +81,7 @@ type DeleteCouponResponse struct {
 func MakeDeleteCouponEndpoint(s service.AttendanceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(DeleteCouponRequest)
-		rs, err := s.DeleteCoupon(ctx, req.Reg, req.Event)
+		rs, err := s.DeleteCoupon(ctx, req.Email, req.Event)
 		return DeleteCouponResponse{
 			Err: err,
 			Rs:  rs,
@@ -96,7 +96,7 @@ func (r DeleteCouponResponse) Failed() error {
 
 // UnpostAttendanceRequest collects the request parameters for the UnpostAttendance method.
 type UnpostAttendanceRequest struct {
-	Reg   string `json:"reg"`
+	Email string `json:"email"`
 	Event string `json:"event_name"`
 }
 
@@ -110,7 +110,7 @@ type UnpostAttendanceResponse struct {
 func MakeUnpostAttendanceEndpoint(s service.AttendanceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(UnpostAttendanceRequest)
-		rs, err := s.UnpostAttendance(ctx, req.Reg, req.Event)
+		rs, err := s.UnpostAttendance(ctx, req.Email, req.Event)
 		return UnpostAttendanceResponse{
 			Err: err,
 			Rs:  rs,
@@ -199,10 +199,10 @@ func (e Endpoints) PostAttendance(ctx context.Context, details model.Attendance)
 }
 
 // PostCoupon implements Service. Primarily useful in a client.
-func (e Endpoints) PostCoupon(ctx context.Context, reg string, coupon string) (rs string, err error) {
+func (e Endpoints) PostCoupon(ctx context.Context, email string, coupon string) (rs string, err error) {
 	request := PostCouponRequest{
 		Coupon: coupon,
-		Reg:    reg,
+		Email:  email,
 	}
 	response, err := e.PostCouponEndpoint(ctx, request)
 	if err != nil {
@@ -212,10 +212,10 @@ func (e Endpoints) PostCoupon(ctx context.Context, reg string, coupon string) (r
 }
 
 // DeleteCoupon implements Service. Primarily useful in a client.
-func (e Endpoints) DeleteCoupon(ctx context.Context, reg string, event string) (rs string, err error) {
+func (e Endpoints) DeleteCoupon(ctx context.Context, email string, event string) (rs string, err error) {
 	request := DeleteCouponRequest{
 		Event: event,
-		Reg:   reg,
+		Email: email,
 	}
 	response, err := e.DeleteCouponEndpoint(ctx, request)
 	if err != nil {
@@ -225,10 +225,10 @@ func (e Endpoints) DeleteCoupon(ctx context.Context, reg string, event string) (
 }
 
 // UnpostAttendance implements Service. Primarily useful in a client.
-func (e Endpoints) UnpostAttendance(ctx context.Context, reg string, event string) (rs string, err error) {
+func (e Endpoints) UnpostAttendance(ctx context.Context, email string, event string) (rs string, err error) {
 	request := UnpostAttendanceRequest{
 		Event: event,
-		Reg:   reg,
+		Email: email,
 	}
 	response, err := e.UnpostAttendanceEndpoint(ctx, request)
 	if err != nil {

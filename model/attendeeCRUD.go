@@ -10,10 +10,10 @@ func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.M
 
 	data, _, _, err := con.QueryNeoAll(`
 	MATCH(n:ATTENDEE)
-	WHERE n.registrationNumber=$rn
-	RETURN n.registrationNumber
+	WHERE n.email=$rn
+	RETURN n.email
 		`, map[string]interface{}{
-		"rn": p.RegistrationNumber,
+		"rn": p.Email,
 	})
 
 	if err != nil {
@@ -44,10 +44,10 @@ func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.M
 		mutex.Lock()
 
 		rss, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
-		MATCH(b:ATTENDEE) WHERE b.registrationNumber=$rn
+		MATCH(b:ATTENDEE) WHERE b.email=$rn
 		CREATE (b)<-[:ATTENDS]-(a) `, map[string]interface{}{
 			"EventName": eventName,
-			"rn":        p.RegistrationNumber,
+			"rn":        p.Email,
 		})
 		if err != nil {
 			c <- err
