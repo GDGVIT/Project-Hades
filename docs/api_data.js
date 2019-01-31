@@ -30,7 +30,7 @@ define({ "api": [
   {
     "type": "post",
     "url": "/post-attendance",
-    "title": "",
+    "title": "mark attendance",
     "name": "mark_attendance",
     "group": "attendance",
     "permission": [
