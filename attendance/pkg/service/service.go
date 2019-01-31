@@ -2,8 +2,6 @@ package service
 
 import (
 	"context"
-
-	"github.com/GDGVIT/Project-Hades/model"
 )
 
 // AttendanceService describes the service.
@@ -12,8 +10,8 @@ type AttendanceService interface {
 	PostCoupon(ctx context.Context, reg string, coupon string) (rs string, err error)
 	DeleteCoupon(ctx context.Context, reg string, eventName string) (rs string, err error)
 	UnpostAttendance(ctx context.Context, reg string, eventName string) (rs string, err error)
-	ViewPresent(ctx context.Context, eventName string) (rs []model.Participant, err error)
-	ViewAbsent(ctx context.Context, eventName string) (rs []model.Participant, err error)
+	// ViewPresent(ctx context.Context, eventName string) (rs []model.Participant, err error)
+	// ViewAbsent(ctx context.Context, eventName string) (rs []model.Participant, err error)
 }
 
 type basicAttendanceService struct{}
@@ -32,14 +30,6 @@ func (b *basicAttendanceService) DeleteCoupon(ctx context.Context, reg string, e
 }
 func (b *basicAttendanceService) UnpostAttendance(ctx context.Context, reg string, eventName string) (rs string, err error) {
 	// TODO implement the business logic of UnpostAttendance
-	return rs, err
-}
-func (b *basicAttendanceService) ViewPresent(ctx context.Context, eventName string) (rs []model.Participant, err error) {
-	// TODO implement the business logic of ViewPresent
-	return rs, err
-}
-func (b *basicAttendanceService) ViewAbsent(ctx context.Context, eventName string) (rs []model.Participant, err error) {
-	// TODO implement the business logic of ViewAbsent
 	return rs, err
 }
 
