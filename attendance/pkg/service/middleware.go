@@ -2,8 +2,7 @@ package service
 
 import (
 	"context"
-
-	"github.com/GDGVIT/Project-Hades/model"
+	model "github.com/GDGVIT/Project-Hades/model"
 	log "github.com/go-kit/kit/log"
 )
 
@@ -24,39 +23,33 @@ func LoggingMiddleware(logger log.Logger) Middleware {
 
 }
 
-func (l loggingMiddleware) PostAttendance(ctx context.Context, details model.Attendance) (rs string, err error) {
+func (l loggingMiddleware) PostAttendance(ctx context.Context, query model.Attendance) (rs string, err error) {
 	defer func() {
-		l.logger.Log("method", "PostAttendance", "details", details, "rs", rs, "err", err)
+		l.logger.Log("method", "PostAttendance", "query", query, "rs", rs, "err", err)
 	}()
-	return l.next.PostAttendance(ctx, details)
+	return l.next.PostAttendance(ctx, query)
 }
-func (l loggingMiddleware) PostCoupon(ctx context.Context, reg string, coupon string) (rs string, err error) {
+func (l loggingMiddleware) PostCoupon(ctx context.Context, coupon string, query model.Attendance) (rs string, err error) {
 	defer func() {
-		l.logger.Log("method", "PostCoupon", "reg", reg, "coupon", coupon, "rs", rs, "err", err)
+		l.logger.Log("method", "PostCoupon", "coupon", coupon, "query", query, "rs", rs, "err", err)
 	}()
-	return l.next.PostCoupon(ctx, reg, coupon)
+	return l.next.PostCoupon(ctx, coupon, query)
 }
-func (l loggingMiddleware) DeleteCoupon(ctx context.Context, reg string, event string) (rs string, err error) {
+func (l loggingMiddleware) DeleteAllCoupons(ctx context.Context, query model.Attendance) (rs string, err error) {
 	defer func() {
-		l.logger.Log("method", "DeleteCoupon", "reg", reg, "event", event, "rs", rs, "err", err)
+		l.logger.Log("method", "DeleteAllCoupons", "query", query, "rs", rs, "err", err)
 	}()
-	return l.next.DeleteCoupon(ctx, reg, event)
+	return l.next.DeleteAllCoupons(ctx, query)
 }
-func (l loggingMiddleware) UnpostAttendance(ctx context.Context, reg string, event string) (rs string, err error) {
+func (l loggingMiddleware) UnpostAttendance(ctx context.Context, query model.Attendance) (rs string, err error) {
 	defer func() {
-		l.logger.Log("method", "UnpostAttendance", "reg", reg, "event", event, "rs", rs, "err", err)
+		l.logger.Log("method", "UnpostAttendance", "query", query, "rs", rs, "err", err)
 	}()
-	return l.next.UnpostAttendance(ctx, reg, event)
+	return l.next.UnpostAttendance(ctx, query)
 }
-func (l loggingMiddleware) ViewPresent(ctx context.Context, event string) (rs []model.Participant, err error) {
+func (l loggingMiddleware) ViewCoupons(ctx context.Context, query model.Attendance) (rs []string, err error) {
 	defer func() {
-		l.logger.Log("method", "ViewPresent", "event", event, "rs", rs, "err", err)
+		l.logger.Log("method", "ViewCoupons", "query", query, "rs", rs, "err", err)
 	}()
-	return l.next.ViewPresent(ctx, event)
-}
-func (l loggingMiddleware) ViewAbsent(ctx context.Context, event string) (rs []model.Participant, err error) {
-	defer func() {
-		l.logger.Log("method", "ViewAbsent", "event", event, "rs", rs, "err", err)
-	}()
-	return l.next.ViewAbsent(ctx, event)
+	return l.next.ViewCoupons(ctx, query)
 }

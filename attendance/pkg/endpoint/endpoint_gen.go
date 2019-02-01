@@ -12,22 +12,20 @@ import (
 type Endpoints struct {
 	PostAttendanceEndpoint   endpoint.Endpoint
 	PostCouponEndpoint       endpoint.Endpoint
-	DeleteCouponEndpoint     endpoint.Endpoint
+	DeleteAllCouponsEndpoint endpoint.Endpoint
 	UnpostAttendanceEndpoint endpoint.Endpoint
-	ViewPresentEndpoint      endpoint.Endpoint
-	ViewAbsentEndpoint       endpoint.Endpoint
+	ViewCouponsEndpoint      endpoint.Endpoint
 }
 
 // New returns a Endpoints struct that wraps the provided service, and wires in all of the
 // expected endpoint middlewares
 func New(s service.AttendanceService, mdw map[string][]endpoint.Middleware) Endpoints {
 	eps := Endpoints{
-		DeleteCouponEndpoint:     MakeDeleteCouponEndpoint(s),
+		DeleteAllCouponsEndpoint: MakeDeleteAllCouponsEndpoint(s),
 		PostAttendanceEndpoint:   MakePostAttendanceEndpoint(s),
 		PostCouponEndpoint:       MakePostCouponEndpoint(s),
 		UnpostAttendanceEndpoint: MakeUnpostAttendanceEndpoint(s),
-		ViewAbsentEndpoint:       MakeViewAbsentEndpoint(s),
-		ViewPresentEndpoint:      MakeViewPresentEndpoint(s),
+		ViewCouponsEndpoint:      MakeViewCouponsEndpoint(s),
 	}
 	for _, m := range mdw["PostAttendance"] {
 		eps.PostAttendanceEndpoint = m(eps.PostAttendanceEndpoint)
@@ -35,17 +33,14 @@ func New(s service.AttendanceService, mdw map[string][]endpoint.Middleware) Endp
 	for _, m := range mdw["PostCoupon"] {
 		eps.PostCouponEndpoint = m(eps.PostCouponEndpoint)
 	}
-	for _, m := range mdw["DeleteCoupon"] {
-		eps.DeleteCouponEndpoint = m(eps.DeleteCouponEndpoint)
+	for _, m := range mdw["DeleteAllCoupons"] {
+		eps.DeleteAllCouponsEndpoint = m(eps.DeleteAllCouponsEndpoint)
 	}
 	for _, m := range mdw["UnpostAttendance"] {
 		eps.UnpostAttendanceEndpoint = m(eps.UnpostAttendanceEndpoint)
 	}
-	for _, m := range mdw["ViewPresent"] {
-		eps.ViewPresentEndpoint = m(eps.ViewPresentEndpoint)
-	}
-	for _, m := range mdw["ViewAbsent"] {
-		eps.ViewAbsentEndpoint = m(eps.ViewAbsentEndpoint)
+	for _, m := range mdw["ViewCoupons"] {
+		eps.ViewCouponsEndpoint = m(eps.ViewCouponsEndpoint)
 	}
 	return eps
 }

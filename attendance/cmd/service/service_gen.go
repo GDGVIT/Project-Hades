@@ -21,28 +21,26 @@ func createService(endpoints endpoint.Endpoints) (g *group.Group) {
 }
 func defaultHttpOptions(logger log.Logger, tracer opentracinggo.Tracer) map[string][]http.ServerOption {
 	options := map[string][]http.ServerOption{
-		"DeleteCoupon":     {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "DeleteCoupon", logger))},
+		"DeleteAllCoupons": {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "DeleteAllCoupons", logger))},
 		"PostAttendance":   {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "PostAttendance", logger))},
 		"PostCoupon":       {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "PostCoupon", logger))},
 		"UnpostAttendance": {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "UnpostAttendance", logger))},
-		"ViewAbsent":       {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "ViewAbsent", logger))},
-		"ViewPresent":      {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "ViewPresent", logger))},
+		"ViewCoupons":      {http.ServerErrorEncoder(http1.ErrorEncoder), http.ServerErrorLogger(logger), http.ServerBefore(opentracing.HTTPToContext(tracer, "ViewCoupons", logger))},
 	}
 	return options
 }
 func addDefaultEndpointMiddleware(logger log.Logger, duration *prometheus.Summary, mw map[string][]endpoint1.Middleware) {
 	mw["PostAttendance"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "PostAttendance")), endpoint.InstrumentingMiddleware(duration.With("method", "PostAttendance"))}
 	mw["PostCoupon"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "PostCoupon")), endpoint.InstrumentingMiddleware(duration.With("method", "PostCoupon"))}
-	mw["DeleteCoupon"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "DeleteCoupon")), endpoint.InstrumentingMiddleware(duration.With("method", "DeleteCoupon"))}
+	mw["DeleteAllCoupons"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "DeleteAllCoupons")), endpoint.InstrumentingMiddleware(duration.With("method", "DeleteAllCoupons"))}
 	mw["UnpostAttendance"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "UnpostAttendance")), endpoint.InstrumentingMiddleware(duration.With("method", "UnpostAttendance"))}
-	mw["ViewPresent"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "ViewPresent")), endpoint.InstrumentingMiddleware(duration.With("method", "ViewPresent"))}
-	mw["ViewAbsent"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "ViewAbsent")), endpoint.InstrumentingMiddleware(duration.With("method", "ViewAbsent"))}
+	mw["ViewCoupons"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "ViewCoupons")), endpoint.InstrumentingMiddleware(duration.With("method", "ViewCoupons"))}
 }
 func addDefaultServiceMiddleware(logger log.Logger, mw []service.Middleware) []service.Middleware {
 	return append(mw, service.LoggingMiddleware(logger))
 }
 func addEndpointMiddlewareToAllMethods(mw map[string][]endpoint1.Middleware, m endpoint1.Middleware) {
-	methods := []string{"PostAttendance", "PostCoupon", "DeleteCoupon", "UnpostAttendance", "ViewPresent", "ViewAbsent"}
+	methods := []string{"PostAttendance", "PostCoupon", "DeleteAllCoupons", "UnpostAttendance", "ViewCoupons"}
 	for _, v := range methods {
 		mw[v] = append(mw[v], m)
 	}

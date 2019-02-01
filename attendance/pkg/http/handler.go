@@ -59,22 +59,22 @@ func encodePostCouponResponse(ctx context.Context, w http.ResponseWriter, respon
 	return
 }
 
-// makeDeleteCouponHandler creates the handler logic
-func makeDeleteCouponHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/delete-coupon", http1.NewServer(endpoints.DeleteCouponEndpoint, decodeDeleteCouponRequest, encodeDeleteCouponResponse, options...))
+// makeDeleteAllCouponsHandler creates the handler logic
+func makeDeleteAllCouponsHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
+	m.Handle("/delete-all-coupons", http1.NewServer(endpoints.DeleteAllCouponsEndpoint, decodeDeleteAllCouponsRequest, encodeDeleteAllCouponsResponse, options...))
 }
 
-// decodeDeleteCouponResponse  is a transport/http.DecodeRequestFunc that decodes a
+// decodeDeleteAllCouponsResponse  is a transport/http.DecodeRequestFunc that decodes a
 // JSON-encoded request from the HTTP request body.
-func decodeDeleteCouponRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	req := endpoint.DeleteCouponRequest{}
+func decodeDeleteAllCouponsRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	req := endpoint.DeleteAllCouponsRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	return req, err
 }
 
-// encodeDeleteCouponResponse is a transport/http.EncodeResponseFunc that encodes
+// encodeDeleteAllCouponsResponse is a transport/http.EncodeResponseFunc that encodes
 // the response as JSON to the response writer
-func encodeDeleteCouponResponse(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
+func encodeDeleteAllCouponsResponse(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
 	if f, ok := response.(endpoint.Failure); ok && f.Failed() != nil {
 		ErrorEncoder(ctx, f.Failed(), w)
 		return nil
@@ -109,47 +109,22 @@ func encodeUnpostAttendanceResponse(ctx context.Context, w http.ResponseWriter, 
 	return
 }
 
-// makeViewPresentHandler creates the handler logic
-func makeViewPresentHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/view-present", http1.NewServer(endpoints.ViewPresentEndpoint, decodeViewPresentRequest, encodeViewPresentResponse, options...))
+// makeViewCouponsHandler creates the handler logic
+func makeViewCouponsHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
+	m.Handle("/view-coupons", http1.NewServer(endpoints.ViewCouponsEndpoint, decodeViewCouponsRequest, encodeViewCouponsResponse, options...))
 }
 
-// decodeViewPresentResponse  is a transport/http.DecodeRequestFunc that decodes a
+// decodeViewCouponsResponse  is a transport/http.DecodeRequestFunc that decodes a
 // JSON-encoded request from the HTTP request body.
-func decodeViewPresentRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	req := endpoint.ViewPresentRequest{}
+func decodeViewCouponsRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	req := endpoint.ViewCouponsRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	return req, err
 }
 
-// encodeViewPresentResponse is a transport/http.EncodeResponseFunc that encodes
+// encodeViewCouponsResponse is a transport/http.EncodeResponseFunc that encodes
 // the response as JSON to the response writer
-func encodeViewPresentResponse(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
-	if f, ok := response.(endpoint.Failure); ok && f.Failed() != nil {
-		ErrorEncoder(ctx, f.Failed(), w)
-		return nil
-	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	err = json.NewEncoder(w).Encode(response)
-	return
-}
-
-// makeViewAbsentHandler creates the handler logic
-func makeViewAbsentHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/view-absent", http1.NewServer(endpoints.ViewAbsentEndpoint, decodeViewAbsentRequest, encodeViewAbsentResponse, options...))
-}
-
-// decodeViewAbsentResponse  is a transport/http.DecodeRequestFunc that decodes a
-// JSON-encoded request from the HTTP request body.
-func decodeViewAbsentRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	req := endpoint.ViewAbsentRequest{}
-	err := json.NewDecoder(r.Body).Decode(&req)
-	return req, err
-}
-
-// encodeViewAbsentResponse is a transport/http.EncodeResponseFunc that encodes
-// the response as JSON to the response writer
-func encodeViewAbsentResponse(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
+func encodeViewCouponsResponse(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
 	if f, ok := response.(endpoint.Failure); ok && f.Failed() != nil {
 		ErrorEncoder(ctx, f.Failed(), w)
 		return nil

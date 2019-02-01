@@ -13,9 +13,8 @@ func NewHTTPHandler(endpoints endpoint.Endpoints, options map[string][]http.Serv
 	m := http1.NewServeMux()
 	makePostAttendanceHandler(m, endpoints, options["PostAttendance"])
 	makePostCouponHandler(m, endpoints, options["PostCoupon"])
-	makeDeleteCouponHandler(m, endpoints, options["DeleteCoupon"])
+	makeDeleteAllCouponsHandler(m, endpoints, options["DeleteAllCoupons"])
 	makeUnpostAttendanceHandler(m, endpoints, options["UnpostAttendance"])
-	makeViewPresentHandler(m, endpoints, options["ViewPresent"])
-	makeViewAbsentHandler(m, endpoints, options["ViewAbsent"])
+	makeViewCouponsHandler(m, endpoints, options["ViewCoupons"])
 	return m
 }
