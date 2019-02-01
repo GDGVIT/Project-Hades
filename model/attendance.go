@@ -59,7 +59,7 @@ func MarkPresent(eventName string, email string, coupons int, day int, c chan er
 			MATCH(n:EVENT)-[:ATTENDS]->(b)
 			WHERE n.name=$name AND b.email=$rn
 			CREATE (n)-[:PRESENT`+strconv.Itoa(day)+`]->(b) 
-			CREATE (b)-[:COUPON_`+strings.Replace(eventName, " ", "", -1)+`]->(c:COUPONS {coupons:$cps})
+			CREATE (b)-[:COUPON_`+strings.Replace(eventName, " ", "", -1)+strconv.Itoa(day)+`]->(c:COUPONS {coupons:$cps})
 		`, map[string]interface{}{
 		"name": eventName,
 		"rn":   email,
@@ -89,4 +89,32 @@ func couponGen(eventName string, email string, coupons int, cc chan []string) {
 	}
 	cc <- couponArr
 	return
+}
+
+func ViewCoupon(query Attendance) []string {
+
+	data, _, _, err := con.QueryNeoAll(`
+		MATCH(n:EVENT)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(b)
+		WHERE n.name=$en AND b.email=$rn
+		MATCH (b)-[:COUPON_`+strings.Replace(query.EventName, " ", "", -1)+strconv.Itoa(query.Day)+`]->(c)
+		RETURN c.coupons`, map[string]interface{}{
+
+		"en": query.EventName,
+		"rn": query.Email,
+	})
+	if err != nil {
+		log.Println(err)
+		var arr []string
+		return arr
+	}
+	if len(data) < 1 {
+		var arr []string
+		return arr
+	}
+
+	str := fmt.Sprintf("%v", data[0][0])
+	str = strings.Replace(str, "[", "", -1)
+	str = strings.Replace(str, "]", "", -1)
+	return strings.Split(str, " ")
+
 }

@@ -2,15 +2,14 @@ package endpoint
 
 import (
 	"context"
-
 	service "github.com/GDGVIT/Project-Hades/attendance/pkg/service"
-	"github.com/GDGVIT/Project-Hades/model"
+	model "github.com/GDGVIT/Project-Hades/model"
 	endpoint "github.com/go-kit/kit/endpoint"
 )
 
 // PostAttendanceRequest collects the request parameters for the PostAttendance method.
 type PostAttendanceRequest struct {
-	Details model.Attendance `json:"details"`
+	Query model.Attendance `json:"query"`
 }
 
 // PostAttendanceResponse collects the response parameters for the PostAttendance method.
@@ -23,7 +22,7 @@ type PostAttendanceResponse struct {
 func MakePostAttendanceEndpoint(s service.AttendanceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(PostAttendanceRequest)
-		rs, err := s.PostAttendance(ctx, req.Details)
+		rs, err := s.PostAttendance(ctx, req.Query)
 		return PostAttendanceResponse{
 			Err: err,
 			Rs:  rs,
@@ -38,8 +37,8 @@ func (r PostAttendanceResponse) Failed() error {
 
 // PostCouponRequest collects the request parameters for the PostCoupon method.
 type PostCouponRequest struct {
-	Email  string `json:"email"`
-	Coupon string `json:"coupon"`
+	Coupon string           `json:"coupon"`
+	Query  model.Attendance `json:"query"`
 }
 
 // PostCouponResponse collects the response parameters for the PostCoupon method.
@@ -52,7 +51,7 @@ type PostCouponResponse struct {
 func MakePostCouponEndpoint(s service.AttendanceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(PostCouponRequest)
-		rs, err := s.PostCoupon(ctx, req.Email, req.Coupon)
+		rs, err := s.PostCoupon(ctx, req.Coupon, req.Query)
 		return PostCouponResponse{
 			Err: err,
 			Rs:  rs,
@@ -65,24 +64,23 @@ func (r PostCouponResponse) Failed() error {
 	return r.Err
 }
 
-// DeleteCouponRequest collects the request parameters for the DeleteCoupon method.
-type DeleteCouponRequest struct {
-	Email string `json:"email"`
-	Event string `json:"event_name"`
+// DeleteAllCouponsRequest collects the request parameters for the DeleteAllCoupons method.
+type DeleteAllCouponsRequest struct {
+	Query model.Attendance `json:"query"`
 }
 
-// DeleteCouponResponse collects the response parameters for the DeleteCoupon method.
-type DeleteCouponResponse struct {
+// DeleteAllCouponsResponse collects the response parameters for the DeleteAllCoupons method.
+type DeleteAllCouponsResponse struct {
 	Rs  string `json:"rs"`
 	Err error  `json:"err"`
 }
 
-// MakeDeleteCouponEndpoint returns an endpoint that invokes DeleteCoupon on the service.
-func MakeDeleteCouponEndpoint(s service.AttendanceService) endpoint.Endpoint {
+// MakeDeleteAllCouponsEndpoint returns an endpoint that invokes DeleteAllCoupons on the service.
+func MakeDeleteAllCouponsEndpoint(s service.AttendanceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(DeleteCouponRequest)
-		rs, err := s.DeleteCoupon(ctx, req.Email, req.Event)
-		return DeleteCouponResponse{
+		req := request.(DeleteAllCouponsRequest)
+		rs, err := s.DeleteAllCoupons(ctx, req.Query)
+		return DeleteAllCouponsResponse{
 			Err: err,
 			Rs:  rs,
 		}, nil
@@ -90,14 +88,13 @@ func MakeDeleteCouponEndpoint(s service.AttendanceService) endpoint.Endpoint {
 }
 
 // Failed implements Failer.
-func (r DeleteCouponResponse) Failed() error {
+func (r DeleteAllCouponsResponse) Failed() error {
 	return r.Err
 }
 
 // UnpostAttendanceRequest collects the request parameters for the UnpostAttendance method.
 type UnpostAttendanceRequest struct {
-	Email string `json:"email"`
-	Event string `json:"event_name"`
+	Query model.Attendance `json:"query"`
 }
 
 // UnpostAttendanceResponse collects the response parameters for the UnpostAttendance method.
@@ -110,7 +107,7 @@ type UnpostAttendanceResponse struct {
 func MakeUnpostAttendanceEndpoint(s service.AttendanceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(UnpostAttendanceRequest)
-		rs, err := s.UnpostAttendance(ctx, req.Email, req.Event)
+		rs, err := s.UnpostAttendance(ctx, req.Query)
 		return UnpostAttendanceResponse{
 			Err: err,
 			Rs:  rs,
@@ -123,23 +120,23 @@ func (r UnpostAttendanceResponse) Failed() error {
 	return r.Err
 }
 
-// ViewPresentRequest collects the request parameters for the ViewPresent method.
-type ViewPresentRequest struct {
-	Event string `json:"event_name"`
+// ViewCouponsRequest collects the request parameters for the ViewCoupons method.
+type ViewCouponsRequest struct {
+	Query model.Attendance `json:"query"`
 }
 
-// ViewPresentResponse collects the response parameters for the ViewPresent method.
-type ViewPresentResponse struct {
-	Rs  []model.Participant `json:"rs"`
-	Err error               `json:"err"`
+// ViewCouponsResponse collects the response parameters for the ViewCoupons method.
+type ViewCouponsResponse struct {
+	Rs  []string `json:"rs"`
+	Err error    `json:"err"`
 }
 
-// MakeViewPresentEndpoint returns an endpoint that invokes ViewPresent on the service.
-func MakeViewPresentEndpoint(s service.AttendanceService) endpoint.Endpoint {
+// MakeViewCouponsEndpoint returns an endpoint that invokes ViewCoupons on the service.
+func MakeViewCouponsEndpoint(s service.AttendanceService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(ViewPresentRequest)
-		rs, err := s.ViewPresent(ctx, req.Event)
-		return ViewPresentResponse{
+		req := request.(ViewCouponsRequest)
+		rs, err := s.ViewCoupons(ctx, req.Query)
+		return ViewCouponsResponse{
 			Err: err,
 			Rs:  rs,
 		}, nil
@@ -147,35 +144,7 @@ func MakeViewPresentEndpoint(s service.AttendanceService) endpoint.Endpoint {
 }
 
 // Failed implements Failer.
-func (r ViewPresentResponse) Failed() error {
-	return r.Err
-}
-
-// ViewAbsentRequest collects the request parameters for the ViewAbsent method.
-type ViewAbsentRequest struct {
-	Event string `json:"event_name"`
-}
-
-// ViewAbsentResponse collects the response parameters for the ViewAbsent method.
-type ViewAbsentResponse struct {
-	Rs  []model.Participant `json:"rs"`
-	Err error               `json:"err"`
-}
-
-// MakeViewAbsentEndpoint returns an endpoint that invokes ViewAbsent on the service.
-func MakeViewAbsentEndpoint(s service.AttendanceService) endpoint.Endpoint {
-	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(ViewAbsentRequest)
-		rs, err := s.ViewAbsent(ctx, req.Event)
-		return ViewAbsentResponse{
-			Err: err,
-			Rs:  rs,
-		}, nil
-	}
-}
-
-// Failed implements Failer.
-func (r ViewAbsentResponse) Failed() error {
+func (r ViewCouponsResponse) Failed() error {
 	return r.Err
 }
 
@@ -187,10 +156,8 @@ type Failure interface {
 }
 
 // PostAttendance implements Service. Primarily useful in a client.
-func (e Endpoints) PostAttendance(ctx context.Context, details model.Attendance) (rs string, err error) {
-	request := PostAttendanceRequest{
-		Details: details,
-	}
+func (e Endpoints) PostAttendance(ctx context.Context, query model.Attendance) (rs string, err error) {
+	request := PostAttendanceRequest{Query: query}
 	response, err := e.PostAttendanceEndpoint(ctx, request)
 	if err != nil {
 		return
@@ -199,10 +166,10 @@ func (e Endpoints) PostAttendance(ctx context.Context, details model.Attendance)
 }
 
 // PostCoupon implements Service. Primarily useful in a client.
-func (e Endpoints) PostCoupon(ctx context.Context, email string, coupon string) (rs string, err error) {
+func (e Endpoints) PostCoupon(ctx context.Context, coupon string, query model.Attendance) (rs string, err error) {
 	request := PostCouponRequest{
 		Coupon: coupon,
-		Email:  email,
+		Query:  query,
 	}
 	response, err := e.PostCouponEndpoint(ctx, request)
 	if err != nil {
@@ -211,25 +178,19 @@ func (e Endpoints) PostCoupon(ctx context.Context, email string, coupon string) 
 	return response.(PostCouponResponse).Rs, response.(PostCouponResponse).Err
 }
 
-// DeleteCoupon implements Service. Primarily useful in a client.
-func (e Endpoints) DeleteCoupon(ctx context.Context, email string, event string) (rs string, err error) {
-	request := DeleteCouponRequest{
-		Event: event,
-		Email: email,
-	}
-	response, err := e.DeleteCouponEndpoint(ctx, request)
+// DeleteAllCoupons implements Service. Primarily useful in a client.
+func (e Endpoints) DeleteAllCoupons(ctx context.Context, query model.Attendance) (rs string, err error) {
+	request := DeleteAllCouponsRequest{Query: query}
+	response, err := e.DeleteAllCouponsEndpoint(ctx, request)
 	if err != nil {
 		return
 	}
-	return response.(DeleteCouponResponse).Rs, response.(DeleteCouponResponse).Err
+	return response.(DeleteAllCouponsResponse).Rs, response.(DeleteAllCouponsResponse).Err
 }
 
 // UnpostAttendance implements Service. Primarily useful in a client.
-func (e Endpoints) UnpostAttendance(ctx context.Context, email string, event string) (rs string, err error) {
-	request := UnpostAttendanceRequest{
-		Event: event,
-		Email: email,
-	}
+func (e Endpoints) UnpostAttendance(ctx context.Context, query model.Attendance) (rs string, err error) {
+	request := UnpostAttendanceRequest{Query: query}
 	response, err := e.UnpostAttendanceEndpoint(ctx, request)
 	if err != nil {
 		return
@@ -237,22 +198,12 @@ func (e Endpoints) UnpostAttendance(ctx context.Context, email string, event str
 	return response.(UnpostAttendanceResponse).Rs, response.(UnpostAttendanceResponse).Err
 }
 
-// ViewPresent implements Service. Primarily useful in a client.
-func (e Endpoints) ViewPresent(ctx context.Context, Event string) (rs []model.Participant, err error) {
-	request := ViewPresentRequest{Event: Event}
-	response, err := e.ViewPresentEndpoint(ctx, request)
+// ViewCoupons implements Service. Primarily useful in a client.
+func (e Endpoints) ViewCoupons(ctx context.Context, query model.Attendance) (rs []string, err error) {
+	request := ViewCouponsRequest{Query: query}
+	response, err := e.ViewCouponsEndpoint(ctx, request)
 	if err != nil {
 		return
 	}
-	return response.(ViewPresentResponse).Rs, response.(ViewPresentResponse).Err
-}
-
-// ViewAbsent implements Service. Primarily useful in a client.
-func (e Endpoints) ViewAbsent(ctx context.Context, Event string) (rs []model.Participant, err error) {
-	request := ViewAbsentRequest{Event: Event}
-	response, err := e.ViewAbsentEndpoint(ctx, request)
-	if err != nil {
-		return
-	}
-	return response.(ViewAbsentResponse).Rs, response.(ViewAbsentResponse).Err
+	return response.(ViewCouponsResponse).Rs, response.(ViewCouponsResponse).Err
 }
