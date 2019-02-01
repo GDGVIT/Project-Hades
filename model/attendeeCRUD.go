@@ -8,6 +8,7 @@ import (
 
 func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.Mutex) {
 
+	// check if user exists
 	data, _, _, err := con.QueryNeoAll(`
 	MATCH(n:ATTENDEE)
 	WHERE n.email=$rn
@@ -21,6 +22,7 @@ func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.M
 		return
 	}
 
+	// if not, rceate user
 	if len(data) < 1 {
 		mutex.Lock()
 
@@ -41,20 +43,47 @@ func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.M
 		log.Println(rss)
 		mutex.Unlock()
 	} else {
-		mutex.Lock()
 
-		rss, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
-		MATCH(b:ATTENDEE) WHERE b.email=$rn
-		CREATE (b)<-[:ATTENDS]-(a) `, map[string]interface{}{
-			"EventName": eventName,
-			"rn":        p.Email,
+		// if yes, check if relation exists
+
+		data, _, _, err := con.QueryNeoAll(`
+		MATCH(n:EVENT)-[r:ATTENDS]->(b)
+		WHERE b.email=$rn and n.name=$ev
+		RETURN r
+			`, map[string]interface{}{
+			"rn": p.Email,
+			"ev": eventName,
 		})
+
+		rel := fmt.Sprintf("USER: %v \n\n\n\n", data)
+
 		if err != nil {
 			c <- err
 			return
 		}
-		log.Println(rss)
-		mutex.Unlock()
+
+		if rel == "" {
+
+			// if doesnt exist then create relation
+			mutex.Lock()
+
+			rss, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
+			MATCH(b:ATTENDEE) WHERE b.email=$rn
+			CREATE (b)<-[:ATTENDS]-(a) `, map[string]interface{}{
+				"EventName": eventName,
+				"rn":        p.Email,
+			})
+			if err != nil {
+				c <- err
+				return
+			}
+			log.Println(rss)
+
+			mutex.Unlock()
+		} else {
+			c <- fmt.Errorf("User has already registered")
+			return
+		}
 	}
 
 	log.Printf("Created attendee node")

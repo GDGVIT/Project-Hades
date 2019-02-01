@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/GDGVIT/Project-Hades/model"
 )
@@ -27,7 +28,7 @@ type basicAttendanceService struct{}
 *@apiPermission admin
 *
 *@apiParam {string} eventName name of the event
-*@apiParam {string} registrationNumber registration number of the participant
+*@apiParam {string} email email of the participant
 *@apiParam {int} day day of the event
 *@apiParam {int} coupons number of coupons for that day
 *
@@ -35,11 +36,52 @@ type basicAttendanceService struct{}
 *
 *{
 *
-*	"details":{
+*	"query":{
 *		"eventName":"DEVFEST",
 *		"day":2,
 *		"coupons":5,
 *		"email":"angad.sharma2017@vitstudent.ac.in"
+*	}
+*}
+*
+*@apiParamExample {json} response-example
+*{
+*    "rs": "Successfully marked present for the day",
+*    "err": null
+*}
+*
+**/
+func (b *basicAttendanceService) PostAttendance(ctx context.Context, query model.Attendance) (rs string, err error) {
+	c := make(chan model.MessageReturn)
+	log.Println(query)
+	go model.MarkPresent(query, c)
+
+	ret := <-c
+	if err := ret.Err; err != nil {
+		return ret.Message, err
+	}
+	return ret.Message, ret.Err
+}
+
+/**
+*@api {post} /post-coupon redeem a coupon
+*@apiName redeem a coupon
+*@apiGroup attendance
+*@apiPermission admin
+*
+*@apiParam {string} eventName name of the event
+*@apiParam {string} email email of the participant
+*@apiParam {int} day day of the event
+*@apiParam {int} coupon the coupon that waas redeemed
+*
+*@apiParamExample {json} request-example
+*
+*{
+*	"coupon":"$2a$05$uFMPHxzB3IuOYJCZf2TlWutbZWBjLG650ieEbNls4iFBFOYYi.RQK",
+*	"query":{
+*		"eventName":"DEVFEST 2019",
+*		"day":2,
+*		"email": "a@a.com"
 *	}
 *}
 *
@@ -50,17 +92,15 @@ type basicAttendanceService struct{}
 *}
 *
 **/
-func (b *basicAttendanceService) PostAttendance(ctx context.Context, query model.Attendance) (rs string, err error) {
-	c := make(chan error)
-	go model.MarkPresent(query.EventName, query.Email, query.Coupons, query.Day, c)
-	if err := <-c; err != nil {
-		return "Error marking present.", err
-	}
-	return rs, err
-}
 func (b *basicAttendanceService) PostCoupon(ctx context.Context, coupon string, query model.Attendance) (rs string, err error) {
-	// TODO implement the business logic of PostCoupon
-	return rs, err
+	c := make(chan model.MessageReturn)
+	go model.PostCoupon(coupon, query, c)
+
+	ret := <-c
+	if err := ret.Err; err != nil {
+		return ret.Message, err
+	}
+	return ret.Message, ret.Err
 }
 func (b *basicAttendanceService) DeleteAllCoupons(ctx context.Context, query model.Attendance) (rs string, err error) {
 	// TODO implement the business logic of DeleteAllCoupons
@@ -78,7 +118,7 @@ func (b *basicAttendanceService) UnpostAttendance(ctx context.Context, query mod
 *@apiPermission admin
 *
 *@apiParam {string} eventName name of the event
-*@apiParam {string} registrationNumber registration number of the participant
+*@apiParam {string} email email of the participant
 *@apiParam {int} day day of the event
 *
 *@apiParamExample {json} request-example

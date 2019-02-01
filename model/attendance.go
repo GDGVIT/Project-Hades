@@ -10,66 +10,66 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func MarkPresent(eventName string, email string, coupons int, day int, c chan error) {
+func MarkPresent(query Attendance, c chan MessageReturn) {
 
 	// check if user exists or not
 	// check if already given attendance
 	data, _, _, err := con.QueryNeoAll(`
-		MATCH(n:EVENT)-[r:PRESENT`+strconv.Itoa(day)+`]->(b)
+		MATCH(n:EVENT)-[r:PRESENT`+strconv.Itoa(query.Day)+`]->(b)
 		WHERE n.name=$name AND b.email=$rn
 		RETURN b.email
 	`, map[string]interface{}{
-		"name": eventName,
-		"rn":   email,
+		"name": query.EventName,
+		"rn":   query.Email,
 	})
 	if err != nil {
-		c <- err
+		c <- MessageReturn{"Error marking attendance", err}
 		return
 	}
 	if len(data) > 0 {
-		c <- fmt.Errorf("Already marked present")
+		c <- MessageReturn{"Already marked present", nil}
 		return
 	}
 
 	// if number of coupons = 0 just create a PRESENT relation
-	if coupons == 0 {
+	if query.Coupons == 0 {
 		_, err := con.ExecNeo(`
 			MATCH(n:EVENT)-[:ATTENDS]->(b)
 			WHERE n.name=$name AND b.email=$rn
-			CREATE (n)-[:PRESENT`+strconv.Itoa(day)+`]->(b) 
+			CREATE (n)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(b) 
 		`, map[string]interface{}{
-			"name": eventName,
-			"rn":   email,
+			"name": query.EventName,
+			"rn":   query.Email,
 		})
 		if err != nil {
-			c <- err
+			c <- MessageReturn{"Error creating present relation", err}
 			return
 		}
-		c <- nil
+		c <- MessageReturn{"Successfully marked present for the day", nil}
 		return
 	}
 
 	// goroutine for generating coupon hashes
 	cc := make(chan []string)
-	go couponGen(eventName, email, coupons, cc)
+	go couponGen(query.EventName, query.Email, query.Coupons, cc)
 
 	// generate a hashed array of coupons, mark user present and add coupons in the relation
 	couponArr := <-cc
 	_, err = con.ExecNeo(`
 			MATCH(n:EVENT)-[:ATTENDS]->(b)
 			WHERE n.name=$name AND b.email=$rn
-			CREATE (n)-[:PRESENT`+strconv.Itoa(day)+`]->(b) 
-			CREATE (b)-[:COUPON_`+strings.Replace(eventName, " ", "", -1)+strconv.Itoa(day)+`]->(c:COUPONS {coupons:$cps})
+			CREATE (n)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(b) 
+			CREATE (b)-[:COUPON_`+strings.Replace(query.EventName, " ", "", -1)+strconv.Itoa(query.Day)+`]->(c:COUPONS {coupons:$cps})
 		`, map[string]interface{}{
-		"name": eventName,
-		"rn":   email,
+		"name": query.EventName,
+		"rn":   query.Email,
 		"cps":  couponArr,
 	})
 	if err != nil {
-		c <- err
+		c <- MessageReturn{"Error creating coupon node", err}
 		return
 	}
-	c <- nil
+	c <- MessageReturn{"Successfully marked present for the day", nil}
 	return
 
 }
@@ -94,12 +94,9 @@ func couponGen(eventName string, email string, coupons int, cc chan []string) {
 func ViewCoupon(query Attendance) []string {
 
 	data, _, _, err := con.QueryNeoAll(`
-		MATCH(n:EVENT)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(b)
-		WHERE n.name=$en AND b.email=$rn
-		MATCH (b)-[:COUPON_`+strings.Replace(query.EventName, " ", "", -1)+strconv.Itoa(query.Day)+`]->(c)
+		MATCH(n:EVENT)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(b)-[:COUPON_`+strings.Replace(query.EventName, " ", "", -1)+strconv.Itoa(query.Day)+`]->(c)
+		WHERE b.email=$rn
 		RETURN c.coupons`, map[string]interface{}{
-
-		"en": query.EventName,
 		"rn": query.Email,
 	})
 	if err != nil {
@@ -117,4 +114,101 @@ func ViewCoupon(query Attendance) []string {
 	str = strings.Replace(str, "]", "", -1)
 	return strings.Split(str, " ")
 
+}
+
+func PostCoupon(coupon string, query Attendance, c chan MessageReturn) {
+
+	// check if coupon exists
+	data, _, _, err := con.QueryNeoAll(`
+	MATCH (n:EVENT)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(a)-[:COUPON_`+strings.Replace(query.EventName, " ", "", -1)+strconv.Itoa(query.Day)+`]->(c)
+	WHERE a.email=$email
+	RETURN [x IN c.coupons WHERE x = $coupon];
+	`, map[string]interface{}{
+		"email":  query.Email,
+		"coupon": coupon,
+	})
+
+	if err != nil {
+		c <- MessageReturn{"Error checking if coupon exists", err}
+		return
+	}
+
+	str := fmt.Sprintf("%v", data)
+
+	if str == "[[[]]]" || str == "[]" {
+		c <- MessageReturn{"No match found for this coupon", nil}
+		return
+	}
+
+	// check if empty coupon node
+	cp := ViewCoupon(query)
+	if len(cp) < 1 || cp[0] == "" {
+		ce := make(chan MessageReturn)
+		go DeleteCoupons(query, ce)
+
+		msg := <-ce
+		if err = msg.Err; err != nil {
+			c <- msg
+			return
+		}
+
+		c <- MessageReturn{"No more coupons exist for this user", nil}
+		return
+
+	}
+
+	// remove from array
+	_, err = con.ExecNeo(`
+		MATCH (n:EVENT)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(a)-[:COUPON_`+strings.Replace(query.EventName, " ", "", -1)+strconv.Itoa(query.Day)+`]->(c)
+		WHERE a.email=$email
+		SET c.coupons=[x IN c.coupons WHERE x <> $coupon];
+		`, map[string]interface{}{
+		"eventName": query.EventName,
+		"email":     query.Email,
+		"coupon":    coupon,
+	})
+
+	if err != nil {
+		c <- MessageReturn{"Some error occurred", err}
+		return
+	}
+
+	// check if empty node
+	cp = ViewCoupon(query)
+	if cp[0] == "" {
+		ce := make(chan MessageReturn)
+		go DeleteCoupons(query, ce)
+
+		msg := <-ce
+		if err := msg.Err; err != nil {
+			c <- msg
+			return
+		}
+
+		c <- MessageReturn{"No more coupons exist for this user", nil}
+		return
+
+	}
+
+	c <- MessageReturn{"Successfully posted coupon", nil}
+	return
+
+}
+
+func DeleteCoupons(query Attendance, c chan MessageReturn) {
+	_, err := con.ExecNeo(`
+	MATCH (n:EVENT)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(a)-[:COUPON_`+strings.Replace(query.EventName, " ", "", -1)+strconv.Itoa(query.Day)+`]->(c)
+	WHERE a.email=$email
+	DETACH DELETE c
+	`, map[string]interface{}{
+		"email": query.Email,
+	})
+
+	if err != nil {
+		c <- MessageReturn{"Some error occurred while deleting node", err}
+		return
+	}
+
+	c <- MessageReturn{"Successfully deleted coupon node", nil}
+	return
 }
