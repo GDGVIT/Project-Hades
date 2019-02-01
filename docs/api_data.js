@@ -90,6 +90,80 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/post-attendance",
+    "title": "view coupons",
+    "name": "view_coupons",
+    "group": "attendance",
+    "permission": [
+      {
+        "name": "admin"
+      },
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "eventName",
+            "description": "<p>name of the event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "registrationNumber",
+            "description": "<p>registration number of the participant</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "day",
+            "description": "<p>day of the event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "coupons",
+            "description": "<p>number of coupons for that day</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\n{\n\n\t\"details\":{\n\t\t\"eventName\":\"DEVFEST\",\n\t\t\"day\":2,\n\t\t\"coupons\":5,\n\t\t\"email\":\"angad.sharma2017@vitstudent.ac.in\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "/**",
+          "type": "json"
+        },
+        {
+          "title": "request-example",
+          "content": "\n{\n\n\t\"query\":{\n\t\t\"eventName\":\"DEVFEST\",\n\t\t\"day\":2,\n\t\t\"email\":\"angad.sharma2017@vitstudent.ac.in\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": [\n       \"$2a$05$Q6p2bV07hR2Kp02jPbo9UOUtV.FZhRfpQDHApdN.xp/5XmSYS0PGC\",\n       \"$2a$05$MPED5ZYA4Q9QwK.mZCaskew/hmM/HOvuN2Vx042QIENEoaUAFS6zW\",\n       \"$2a$05$/iDvNw/11F/xCWMbbRjgMOWWZ1ICJB7crmW2mr0BNI5vElXqPHQL6\",\n       \"$2a$05$IhZM3URq0VMCT1KO/OBeJOPJiG/XZ5y.AW9nLZVgpewGCuBSap/zC\",\n       \"$2a$05$YN95rNFZB9Y7o0UOyQHUlu.7iJ6nZSFf0SNWrHjtboQB3LgHkHcLa\",\n       \"$2a$05$5rAbmkgHkO0VVrcgT8LuwOpty0STOKaTKaEuSYbQtu.YqyM/5jOsa\",\n       \"$2a$05$KmGC/i4VnZFb9h5789dIcu0jz/v6.HKUXPKlUgBKD7HzpUtsLkgD.\",\n       \"$2a$05$4QxBr9uahOE6bW6JMHeXBuuF4P3uRIZJCIebaB91oaj9mjjVGdmIW\",\n       \"$2a$05$IHWoPSkldlbC9YafMTY2w..jw5uCY1zpGCxbMQPFRh/vM4gHCMoFC\",\n       \"$2a$05$QY6oN1pXcRjU.7XIwcgi/u9/D3iz/RXI2od/oqy5zzNY16tNDvN3W\"\n   ],\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./attendance/pkg/service/service.go",
+    "groupTitle": "attendance"
+  },
+  {
+    "type": "post",
     "url": "/create-event",
     "title": "create a new event",
     "name": "create_a_new_event",
