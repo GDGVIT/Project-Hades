@@ -53,6 +53,19 @@ services:
     - ./db/data:/data/
     - ./db/conf/:/conf/
     command: neo4j
+  # nginx:
+  #   container_name: nginx
+  #   build: 
+  #     context: .
+  #     dockerfile: Web/Dockerfile
+  #   ports:
+  #   - 80:80
+  #   volumes:
+  #   - ./Web/nginx.conf:/etc/nginx/nginx.conf
+  #   links:
+  #   - events:events
+  #   - participants:participants
+  #   - attendance:attendance
 
 
 networks:
