@@ -29,6 +29,60 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/delete-all-coupons",
+    "title": "delete all coupons of a particular day",
+    "name": "delete_all_coupons_of_a_particular_day",
+    "group": "attendance",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "eventName",
+            "description": "<p>name of the event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "email",
+            "description": "<p>email of the participant</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "day",
+            "description": "<p>day of the event</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\n{\n\n\t\"query\":{\n\t\t\"eventName\":\"DEVFEST 2019\",\n\t\t\"day\":1,\n\t\t\"email\":\"x@x.com\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": \"Successfully deleted coupon node\",\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./attendance/pkg/service/service.go",
+    "groupTitle": "attendance"
+  },
+  {
+    "type": "post",
     "url": "/post-attendance",
     "title": "mark attendance",
     "name": "mark_attendance",
@@ -151,7 +205,61 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/post-attendance",
+    "url": "/unpost-attendance",
+    "title": "unpost attendance",
+    "name": "unpost_attendance",
+    "group": "attendance",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "eventName",
+            "description": "<p>name of the event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "email",
+            "description": "<p>email of the participant</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "day",
+            "description": "<p>day of the event</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\n{\n\n\t\"query\":{\n\t\t\"eventName\":\"DEVFEST 2019\",\n\t\t\"day\":1,\n\t\t\"email\":\"x@x.com\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": \"Successfully deleted presence\",\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./attendance/pkg/service/service.go",
+    "groupTitle": "attendance"
+  },
+  {
+    "type": "post",
+    "url": "/view-coupons",
     "title": "view coupons",
     "name": "view_coupons",
     "group": "attendance",

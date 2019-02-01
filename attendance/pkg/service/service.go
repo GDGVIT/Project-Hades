@@ -102,17 +102,88 @@ func (b *basicAttendanceService) PostCoupon(ctx context.Context, coupon string, 
 	}
 	return ret.Message, ret.Err
 }
+
+/**
+*@api {post} /delete-all-coupons delete all coupons of a particular day
+*@apiName delete all coupons of a particular day
+*@apiGroup attendance
+*@apiPermission admin
+*
+*@apiParam {string} eventName name of the event
+*@apiParam {string} email email of the participant
+*@apiParam {int} day day of the event
+*
+*@apiParamExample {json} request-example
+*
+*{
+*
+*	"query":{
+*		"eventName":"DEVFEST 2019",
+*		"day":1,
+*		"email":"x@x.com"
+*	}
+*}
+*
+*@apiParamExample {json} response-example
+*{
+*    "rs": "Successfully deleted coupon node",
+*    "err": null
+*}
+*
+**/
 func (b *basicAttendanceService) DeleteAllCoupons(ctx context.Context, query model.Attendance) (rs string, err error) {
-	// TODO implement the business logic of DeleteAllCoupons
-	return rs, err
-}
-func (b *basicAttendanceService) UnpostAttendance(ctx context.Context, query model.Attendance) (rs string, err error) {
-	// TODO implement the business logic of UnpostAttendance
-	return rs, err
+	c := make(chan model.MessageReturn)
+	go model.DeleteAllCoupons(query, c)
+
+	ret := <-c
+	if err := ret.Err; err != nil {
+		return ret.Message, err
+	}
+	return ret.Message, ret.Err
 }
 
 /**
-*@api {post} /post-attendance view coupons
+*@api {post} /unpost-attendance unpost attendance
+*@apiName unpost attendance
+*@apiGroup attendance
+*@apiPermission admin
+*
+*@apiParam {string} eventName name of the event
+*@apiParam {string} email email of the participant
+*@apiParam {int} day day of the event
+*
+*@apiParamExample {json} request-example
+*
+*{
+*
+*	"query":{
+*		"eventName":"DEVFEST 2019",
+*		"day":1,
+*		"email":"x@x.com"
+*	}
+*}
+*
+*@apiParamExample {json} response-example
+*{
+*    "rs": "Successfully deleted presence",
+*    "err": null
+*}
+*
+**/
+func (b *basicAttendanceService) UnpostAttendance(ctx context.Context, query model.Attendance) (rs string, err error) {
+
+	c := make(chan model.MessageReturn)
+	go model.UnpostAttendance(query, c)
+
+	ret := <-c
+	if err := ret.Err; err != nil {
+		return ret.Message, err
+	}
+	return ret.Message, ret.Err
+}
+
+/**
+*@api {post} /view-coupons view coupons
 *@apiName view coupons
 *@apiGroup attendance
 *@apiPermission admin
