@@ -52,8 +52,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "registrationNumber",
-            "description": "<p>registration number of the participant</p>"
+            "field": "email",
+            "description": "<p>email of the participant</p>"
           },
           {
             "group": "Parameter",
@@ -74,7 +74,68 @@ define({ "api": [
       "examples": [
         {
           "title": "request-example",
-          "content": "\n{\n\n\t\"details\":{\n\t\t\"eventName\":\"DEVFEST\",\n\t\t\"day\":2,\n\t\t\"coupons\":5,\n\t\t\"email\":\"angad.sharma2017@vitstudent.ac.in\"\n\t}\n}",
+          "content": "\n{\n\n\t\"query\":{\n\t\t\"eventName\":\"DEVFEST\",\n\t\t\"day\":2,\n\t\t\"coupons\":5,\n\t\t\"email\":\"angad.sharma2017@vitstudent.ac.in\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": \"Successfully marked present for the day\",\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./attendance/pkg/service/service.go",
+    "groupTitle": "attendance"
+  },
+  {
+    "type": "post",
+    "url": "/post-coupon",
+    "title": "redeem a coupon",
+    "name": "redeem_a_coupon",
+    "group": "attendance",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "eventName",
+            "description": "<p>name of the event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "email",
+            "description": "<p>email of the participant</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "day",
+            "description": "<p>day of the event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "coupon",
+            "description": "<p>the coupon that waas redeemed</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\n{\n\t\"coupon\":\"$2a$05$uFMPHxzB3IuOYJCZf2TlWutbZWBjLG650ieEbNls4iFBFOYYi.RQK\",\n\t\"query\":{\n\t\t\"eventName\":\"DEVFEST 2019\",\n\t\t\"day\":2,\n\t\t\"email\": \"a@a.com\"\n\t}\n}",
           "type": "json"
         },
         {
@@ -113,8 +174,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "registrationNumber",
-            "description": "<p>registration number of the participant</p>"
+            "field": "email",
+            "description": "<p>email of the participant</p>"
           },
           {
             "group": "Parameter",

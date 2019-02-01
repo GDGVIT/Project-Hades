@@ -75,6 +75,11 @@ type Attendance struct {
 	Coupons   int    `json:"coupons"`
 }
 
+type MessageReturn struct {
+	Message string
+	Err     error
+}
+
 // func HandleChanError(c chan error, err error) {
 // 	if err != nil {
 // 		c <- err
