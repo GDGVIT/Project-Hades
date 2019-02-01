@@ -97,9 +97,6 @@ define({ "api": [
     "permission": [
       {
         "name": "admin"
-      },
-      {
-        "name": "admin"
       }
     ],
     "parameter": {
@@ -125,27 +122,10 @@ define({ "api": [
             "optional": false,
             "field": "day",
             "description": "<p>day of the event</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "int",
-            "optional": false,
-            "field": "coupons",
-            "description": "<p>number of coupons for that day</p>"
           }
         ]
       },
       "examples": [
-        {
-          "title": "request-example",
-          "content": "\n{\n\n\t\"details\":{\n\t\t\"eventName\":\"DEVFEST\",\n\t\t\"day\":2,\n\t\t\"coupons\":5,\n\t\t\"email\":\"angad.sharma2017@vitstudent.ac.in\"\n\t}\n}",
-          "type": "json"
-        },
-        {
-          "title": "response-example",
-          "content": "/**",
-          "type": "json"
-        },
         {
           "title": "request-example",
           "content": "\n{\n\n\t\"query\":{\n\t\t\"eventName\":\"DEVFEST\",\n\t\t\"day\":2,\n\t\t\"email\":\"angad.sharma2017@vitstudent.ac.in\"\n\t}\n}",

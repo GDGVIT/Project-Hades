@@ -72,30 +72,6 @@ func (b *basicAttendanceService) UnpostAttendance(ctx context.Context, query mod
 }
 
 /**
-*@api {post} /post-attendance mark attendance
-*@apiName mark attendance
-*@apiGroup attendance
-*@apiPermission admin
-*
-*@apiParam {string} eventName name of the event
-*@apiParam {string} registrationNumber registration number of the participant
-*@apiParam {int} day day of the event
-*@apiParam {int} coupons number of coupons for that day
-*
-*@apiParamExample {json} request-example
-*
-*{
-*
-*	"details":{
-*		"eventName":"DEVFEST",
-*		"day":2,
-*		"coupons":5,
-*		"email":"angad.sharma2017@vitstudent.ac.in"
-*	}
-*}
-*
-*@apiParamExample {json} response-example
-/**
 *@api {post} /post-attendance view coupons
 *@apiName view coupons
 *@apiGroup attendance
