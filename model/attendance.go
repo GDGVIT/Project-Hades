@@ -13,8 +13,26 @@ import (
 func MarkPresent(query Attendance, c chan MessageReturn) {
 
 	// check if user exists or not
-	// check if already given attendance
 	data, _, _, err := con.QueryNeoAll(`
+		MATCH(n:EVENT)-[:ATTENDS]->(b)
+		WHERE n.name=$name AND b.email=$rn
+		RETURN b.email
+	`, map[string]interface{}{
+		"name": query.EventName,
+		"rn":   query.Email,
+	})
+	if err != nil {
+		c <- MessageReturn{"Error marking attendance", err}
+		return
+	}
+
+	if len(data) < 1 {
+		c <- MessageReturn{"No participant found", nil}
+		return
+	}
+
+	// check if already given attendance
+	data, _, _, err = con.QueryNeoAll(`
 		MATCH(n:EVENT)-[r:PRESENT`+strconv.Itoa(query.Day)+`]->(b)
 		WHERE n.name=$name AND b.email=$rn
 		RETURN b.email
@@ -210,5 +228,43 @@ func DeleteCoupons(query Attendance, c chan MessageReturn) {
 	}
 
 	c <- MessageReturn{"Successfully deleted coupon node", nil}
+	return
+}
+
+func DeleteAllCoupons(query Attendance, c chan MessageReturn) {
+	_, err := con.ExecNeo(`
+	MATCH (n:EVENT)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(b)-[r]->(c)
+	WHERE b.email=$email and n.name=$ev
+	DETACH DELETE c
+	`, map[string]interface{}{
+		"email": query.Email,
+		"ev":    query.EventName,
+	})
+
+	if err != nil {
+		c <- MessageReturn{"Some error occurred while deleting node", err}
+		return
+	}
+
+	c <- MessageReturn{"Successfully deleted coupon node", nil}
+	return
+}
+
+func UnpostAttendance(query Attendance, c chan MessageReturn) {
+	_, err := con.ExecNeo(`
+	MATCH (n:EVENT)-[r:PRESENT`+strconv.Itoa(query.Day)+`]->(b)
+	WHERE b.email=$email and n.name=$ev
+	DELETE r
+	`, map[string]interface{}{
+		"email": query.Email,
+		"ev":    query.EventName,
+	})
+
+	if err != nil {
+		c <- MessageReturn{"Some error occurred while marking un-present", err}
+		return
+	}
+
+	c <- MessageReturn{"Successfully deleted presence", nil}
 	return
 }
