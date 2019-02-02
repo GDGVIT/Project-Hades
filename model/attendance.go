@@ -76,8 +76,7 @@ func MarkPresent(query Attendance, c chan MessageReturn) {
 	_, err = con.ExecNeo(`
 			MATCH(n:EVENT)-[:ATTENDS]->(b)
 			WHERE n.name=$name AND b.email=$rn
-			CREATE (n)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(b) 
-			CREATE (b)-[:COUPON_`+strings.Replace(query.EventName, " ", "", -1)+strconv.Itoa(query.Day)+`]->(c:COUPONS {coupons:$cps})
+			CREATE (n)-[:PRESENT`+strconv.Itoa(query.Day)+`{coupons:$cps}]->(b) 
 		`, map[string]interface{}{
 		"name": query.EventName,
 		"rn":   query.Email,
@@ -112,9 +111,9 @@ func couponGen(eventName string, email string, coupons int, cc chan []string) {
 func ViewCoupon(query Attendance) []string {
 
 	data, _, _, err := con.QueryNeoAll(`
-		MATCH(n:EVENT)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(b)-[:COUPON_`+strings.Replace(query.EventName, " ", "", -1)+strconv.Itoa(query.Day)+`]->(c)
+		MATCH(n:EVENT)-[r:PRESENT`+strconv.Itoa(query.Day)+`]->(b)
 		WHERE b.email=$rn
-		RETURN c.coupons`, map[string]interface{}{
+		RETURN r.coupons`, map[string]interface{}{
 		"rn": query.Email,
 	})
 	if err != nil {
@@ -138,9 +137,9 @@ func PostCoupon(coupon string, query Attendance, c chan MessageReturn) {
 
 	// check if coupon exists
 	data, _, _, err := con.QueryNeoAll(`
-	MATCH (n:EVENT)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(a)-[:COUPON_`+strings.Replace(query.EventName, " ", "", -1)+strconv.Itoa(query.Day)+`]->(c)
+	MATCH (n:EVENT)-[r:PRESENT`+strconv.Itoa(query.Day)+`]->(a)
 	WHERE a.email=$email
-	RETURN [x IN c.coupons WHERE x = $coupon];
+	RETURN [x IN r.coupons WHERE x = $coupon];
 	`, map[string]interface{}{
 		"email":  query.Email,
 		"coupon": coupon,
@@ -177,8 +176,8 @@ func PostCoupon(coupon string, query Attendance, c chan MessageReturn) {
 
 	// remove from array
 	_, err = con.ExecNeo(`
-		MATCH (n:EVENT)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(a)-[:COUPON_`+strings.Replace(query.EventName, " ", "", -1)+strconv.Itoa(query.Day)+`]->(c)
-		WHERE a.email=$email
+		MATCH (n:EVENT)-[c:PRESENT`+strconv.Itoa(query.Day)+`]->(a)
+		WHERE a.email=$email AND n.name=$eventName
 		SET c.coupons=[x IN c.coupons WHERE x <> $coupon];
 		`, map[string]interface{}{
 		"eventName": query.EventName,
@@ -215,7 +214,7 @@ func PostCoupon(coupon string, query Attendance, c chan MessageReturn) {
 
 func DeleteCoupons(query Attendance, c chan MessageReturn) {
 	_, err := con.ExecNeo(`
-	MATCH (n:EVENT)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(a)-[:COUPON_`+strings.Replace(query.EventName, " ", "", -1)+strconv.Itoa(query.Day)+`]->(c)
+	MATCH (n:EVENT)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(a)
 	WHERE a.email=$email
 	DETACH DELETE c
 	`, map[string]interface{}{
@@ -233,9 +232,9 @@ func DeleteCoupons(query Attendance, c chan MessageReturn) {
 
 func DeleteAllCoupons(query Attendance, c chan MessageReturn) {
 	_, err := con.ExecNeo(`
-	MATCH (n:EVENT)-[:PRESENT`+strconv.Itoa(query.Day)+`]->(b)-[r]->(c)
+	MATCH (n:EVENT)-[r:PRESENT`+strconv.Itoa(query.Day)+`]->(b)
 	WHERE b.email=$email and n.name=$ev
-	DETACH DELETE c
+	SET r.coupons=[x IN r.coupons WHERE x="REMOVE"]
 	`, map[string]interface{}{
 		"email": query.Email,
 		"ev":    query.EventName,
