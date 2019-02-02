@@ -3,7 +3,6 @@ package model
 import (
 	"log"
 	"os"
-	"os/exec"
 
 	bolt "github.com/johnnadratowski/golang-neo4j-bolt-driver"
 	"github.com/joho/godotenv"
@@ -22,13 +21,13 @@ func ConnectToDB() bolt.Conn {
 		log.Fatal("Error loading .env file")
 	}
 
-	cmd := exec.Command("sleep", "10")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	err = cmd.Run()
-	if err != nil {
-		log.Fatalf("cmd.Run() failed with %s\n", err)
-	}
+	// cmd := exec.Command("sleep", "10")
+	// cmd.Stdout = os.Stdout
+	// cmd.Stderr = os.Stderr
+	// err = cmd.Run()
+	// if err != nil {
+	// 	log.Fatalf("cmd.Run() failed with %s\n", err)
+	// }
 
 	conn, err := bolt.NewDriver().OpenNeo(os.Getenv("PROD_URI"))
 	if err != nil {
