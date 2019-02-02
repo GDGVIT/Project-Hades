@@ -39,6 +39,19 @@ services:
     - 8801:8081
     volumes:
     - .:/go/src/github.com/GDGVIT/Project-Hades
+  simple_projection:
+    build:
+      context: .
+      dockerfile: simple_projection/Dockerfile
+    container_name: simple_projection
+    depends_on:
+    - neo4j
+    networks:
+    - neo4j_go_net
+    ports:
+    - 8803:8081
+    volumes:
+    - .:/go/src/github.com/GDGVIT/Project-Hades
   
   neo4j:
     container_name: neo4j
@@ -66,6 +79,7 @@ services:
   #   - events:events
   #   - participants:participants
   #   - attendance:attendance
+  #   - simple_projection:simple_projection
 
 
 networks:
