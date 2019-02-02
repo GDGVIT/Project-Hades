@@ -15,8 +15,6 @@ type AttendanceService interface {
 	DeleteAllCoupons(ctx context.Context, query model.Attendance) (rs string, err error)
 	UnpostAttendance(ctx context.Context, query model.Attendance) (rs string, err error)
 	ViewCoupons(ctx context.Context, query model.Attendance) (rs []string, err error)
-	// ViewPresent(ctx context.Context, query model.Attendance) (rs []model.Participant, err error)
-	// ViewAbsent(ctx context.Context, query model.Attendance) (rs []model.Participant, err error)
 }
 
 type basicAttendanceService struct{}

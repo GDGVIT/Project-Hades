@@ -861,5 +861,69 @@
     "version": "0.0.0",
     "filename": "./participants/pkg/service/service.go",
     "groupTitle": "participants"
+  },
+  {
+    "type": "post",
+    "url": "/project-all",
+    "title": "show participants of an event",
+    "name": "show_participants_of_an_event",
+    "group": "simple_projection",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "key",
+            "description": "<p>key to query the event by</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "value",
+            "description": "<p>value of the key</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "event",
+            "description": "<p>event name</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"event\":\"DEVFEST 2019\",\n\t\"query\":{\n\t\t\"key\":\"gender\",\n\t\t\"value\":\"F\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n    \"rs\": [\n        {\n            \"name\": \"das\",\n            \"registrationNumber\": \"17BCE2009\",\n            \"email\": \"x@axd.com\",\n            \"phoneNumber\": \"919191991911\",\n            \"gender\": \"F\"\n        }\n    ],\n    \"err\": null\n}",
+          "type": "json"
+        },
+        {
+          "title": "request-example-all",
+          "content": "{\n\t\"event\":\"DEVFEST 2019\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example-all",
+          "content": "{\n    \"rs\": [\n        {\n            \"name\": \"das\",\n            \"registrationNumber\": \"17BCE2009\",\n            \"email\": \"x@axd.com\",\n            \"phoneNumber\": \"919191991911\",\n            \"gender\": \"F\"\n        },\n        {\n            \"name\": \"das\",\n            \"registrationNumber\": \"17BCE2009\",\n            \"email\": \"x@ax.com\",\n            \"phoneNumber\": \"919191991911\",\n            \"gender\": \"M\"\n        },\n        {\n            \"name\": \"das\",\n            \"registrationNumber\": \"17BCE2009\",\n            \"email\": \"x@x.com\",\n            \"phoneNumber\": \"919191991911\",\n            \"gender\": \"M\"\n        }\n    ],\n    \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./simple_projection/pkg/service/service.go",
+    "groupTitle": "simple_projection"
   }
 ]

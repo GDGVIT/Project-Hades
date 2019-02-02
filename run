@@ -11,5 +11,5 @@ res=`curl -s -I http://localhost:7474 | grep HTTP/1.1 | awk {'print $2'}`
 done
 
 if [[ $res -eq 200 ]]; then
-  docker-compose up events participants attendance
+  docker-compose up events participants attendance simple_projection
 fi

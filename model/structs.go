@@ -67,6 +67,10 @@ type ParticipantReturn struct {
 	Attendees []Attendee `json:"attendee"`
 	Err       error      `json:"err"`
 }
+type SafeParticipantReturn struct {
+	Participants []Participant `json:"participants"`
+	Err          error         `json:"err"`
+}
 
 type Attendance struct {
 	EventName string `json:"eventName"`
