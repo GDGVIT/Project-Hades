@@ -864,6 +864,67 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/project-absent",
+    "title": "show absent participants",
+    "name": "show_absent_participants",
+    "group": "simple_projection",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "key",
+            "description": "<p>key to query the event by</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "value",
+            "description": "<p>value of the key</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "event",
+            "description": "<p>event name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "day",
+            "description": "<p>day of the event</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"event\":\"DEVFEST 2019\",\n\t\"day\":2,\n\t\"query\":{\n\t\t\"key\":\"gender\",\n\t\t\"value\":\"F\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": [\n       {\n           \"name\": \"das\",\n           \"registrationNumber\": \"17BCE2009\",\n           \"email\": \"x@axd.com\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"F\"\n       }\n   ],\n   \"err\": null\n}\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./simple_projection/pkg/service/service.go",
+    "groupTitle": "simple_projection"
+  },
+  {
+    "type": "post",
     "url": "/project-all",
     "title": "show participants of an event",
     "name": "show_participants_of_an_event",
@@ -907,7 +968,7 @@ define({ "api": [
         },
         {
           "title": "response-example",
-          "content": "{\n    \"rs\": [\n        {\n            \"name\": \"das\",\n            \"registrationNumber\": \"17BCE2009\",\n            \"email\": \"x@axd.com\",\n            \"phoneNumber\": \"919191991911\",\n            \"gender\": \"F\"\n        }\n    ],\n    \"err\": null\n}",
+          "content": "{\n   \"rs\": [\n       {\n           \"name\": \"das\",\n           \"registrationNumber\": \"17BCE2009\",\n           \"email\": \"x@axd.com\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"F\"\n       }\n   ],\n   \"err\": null\n}",
           "type": "json"
         },
         {
@@ -917,7 +978,78 @@ define({ "api": [
         },
         {
           "title": "response-example-all",
-          "content": "{\n    \"rs\": [\n        {\n            \"name\": \"das\",\n            \"registrationNumber\": \"17BCE2009\",\n            \"email\": \"x@axd.com\",\n            \"phoneNumber\": \"919191991911\",\n            \"gender\": \"F\"\n        },\n        {\n            \"name\": \"das\",\n            \"registrationNumber\": \"17BCE2009\",\n            \"email\": \"x@ax.com\",\n            \"phoneNumber\": \"919191991911\",\n            \"gender\": \"M\"\n        },\n        {\n            \"name\": \"das\",\n            \"registrationNumber\": \"17BCE2009\",\n            \"email\": \"x@x.com\",\n            \"phoneNumber\": \"919191991911\",\n            \"gender\": \"M\"\n        }\n    ],\n    \"err\": null\n}",
+          "content": "{\n   \"rs\": [\n       {\n           \"name\": \"das\",\n           \"registrationNumber\": \"17BCE2009\",\n           \"email\": \"x@axd.com\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"F\"\n       },\n       {\n           \"name\": \"das\",\n           \"registrationNumber\": \"17BCE2009\",\n           \"email\": \"x@ax.com\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       },\n       {\n           \"name\": \"das\",\n           \"registrationNumber\": \"17BCE2009\",\n           \"email\": \"x@x.com\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       }\n   ],\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./simple_projection/pkg/service/service.go",
+    "groupTitle": "simple_projection"
+  },
+  {
+    "type": "post",
+    "url": "/project-present",
+    "title": "show present participants",
+    "name": "show_present_participants",
+    "group": "simple_projection",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "key",
+            "description": "<p>key to query the event by</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "value",
+            "description": "<p>value of the key</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "event",
+            "description": "<p>event name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "day",
+            "description": "<p>day of the event</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"event\":\"DEVFEST 2019\",\n\t\"day\":2,\n\t\"query\":{\n\t\t\"key\":\"gender\",\n\t\t\"value\":\"F\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": [\n       {\n           \"name\": \"das\",\n           \"registrationNumber\": \"17BCE2009\",\n           \"email\": \"x@axd.com\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"F\"\n       }\n   ],\n   \"err\": null\n}",
+          "type": "json"
+        },
+        {
+          "title": "request-example-all",
+          "content": "{\n\t\"event\":\"DEVFEST 2019\",\n\t\"day\":2\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example-all",
+          "content": "{\n   \"rs\": [\n       {\n           \"name\": \"das\",\n           \"registrationNumber\": \"17BCE2009\",\n           \"email\": \"x@axd.com\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"F\"\n       },\n       {\n           \"name\": \"das\",\n           \"registrationNumber\": \"17BCE2009\",\n           \"email\": \"x@ax.com\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       },\n       {\n           \"name\": \"das\",\n           \"registrationNumber\": \"17BCE2009\",\n           \"email\": \"x@x.com\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       }\n   ],\n   \"err\": null\n}",
           "type": "json"
         }
       ]
