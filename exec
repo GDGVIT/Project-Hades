@@ -11,21 +11,16 @@ docker-compose down
 exit
 fi 
 
+if [ "$1" == "start" ]; then
 
 if [[ "$res" -eq 200 ]]; then
 echo "Database already running"
 docker-compose up event participants attendance simple_projection nginx
 exit
-fi
 
-if [ "$1" == "stop" ]; then
-docker-compose down
-exit
-fi
+else
 
 docker-compose up -d neo4j
-
-
 
 while [[ "$res" -ne 200 ]]
 do
@@ -35,4 +30,11 @@ done
 
 if [[ $res -eq 200 ]]; then
   docker-compose up event participants attendance simple_projection nginx
+fi
+
+fi
+
+else
+
+echo "usage ./exec [start / stop --all / stop --leave-db]"
 fi

@@ -118,6 +118,7 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 *@apiPermission admin
 *@apiParam {String} key key to query the event by
 *@apiParam {String} value value of the key
+*@apiParam {String} [specific] search by name of the event
 *@apiParamExample {json} request-example
 *    {"query":{
 *		"key":"clubName",
