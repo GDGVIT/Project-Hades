@@ -4,14 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/http"
+
 	endpoint "github.com/GDGVIT/Project-Hades/participants/pkg/endpoint"
 	http1 "github.com/go-kit/kit/transport/http"
-	"net/http"
 )
 
 // makeCreateAttendeeHandler creates the handler logic
 func makeCreateAttendeeHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/create-attendee", http1.NewServer(endpoints.CreateAttendeeEndpoint, decodeCreateAttendeeRequest, encodeCreateAttendeeResponse, options...))
+	m.Handle("/api/v1/participants/create-attendee", http1.NewServer(endpoints.CreateAttendeeEndpoint, decodeCreateAttendeeRequest, encodeCreateAttendeeResponse, options...))
 }
 
 // decodeCreateAttendeeResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -36,7 +37,7 @@ func encodeCreateAttendeeResponse(ctx context.Context, w http.ResponseWriter, re
 
 // makeReadAttendeeHandler creates the handler logic
 func makeReadAttendeeHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/read-attendee", http1.NewServer(endpoints.ReadAttendeeEndpoint, decodeReadAttendeeRequest, encodeReadAttendeeResponse, options...))
+	m.Handle("/api/v1/participants/read-attendee", http1.NewServer(endpoints.ReadAttendeeEndpoint, decodeReadAttendeeRequest, encodeReadAttendeeResponse, options...))
 }
 
 // decodeReadAttendeeResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -61,7 +62,7 @@ func encodeReadAttendeeResponse(ctx context.Context, w http.ResponseWriter, resp
 
 // makeUpdateAttendeeHandler creates the handler logic
 func makeUpdateAttendeeHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/update-attendee", http1.NewServer(endpoints.UpdateAttendeeEndpoint, decodeUpdateAttendeeRequest, encodeUpdateAttendeeResponse, options...))
+	m.Handle("/api/v1/participants/update-attendee", http1.NewServer(endpoints.UpdateAttendeeEndpoint, decodeUpdateAttendeeRequest, encodeUpdateAttendeeResponse, options...))
 }
 
 // decodeUpdateAttendeeResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -86,7 +87,7 @@ func encodeUpdateAttendeeResponse(ctx context.Context, w http.ResponseWriter, re
 
 // makeDeleteAttendeeHandler creates the handler logic
 func makeDeleteAttendeeHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/delete-attendee", http1.NewServer(endpoints.DeleteAttendeeEndpoint, decodeDeleteAttendeeRequest, encodeDeleteAttendeeResponse, options...))
+	m.Handle("/api/v1/participants/delete-attendee", http1.NewServer(endpoints.DeleteAttendeeEndpoint, decodeDeleteAttendeeRequest, encodeDeleteAttendeeResponse, options...))
 }
 
 // decodeDeleteAttendeeResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -111,7 +112,7 @@ func encodeDeleteAttendeeResponse(ctx context.Context, w http.ResponseWriter, re
 
 // makeDeleteAllAttendeeHandler creates the handler logic
 func makeDeleteAllAttendeeHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/delete-all-attendee", http1.NewServer(endpoints.DeleteAllAttendeeEndpoint, decodeDeleteAllAttendeeRequest, encodeDeleteAllAttendeeResponse, options...))
+	m.Handle("/api/v1/participants/delete-all-attendee", http1.NewServer(endpoints.DeleteAllAttendeeEndpoint, decodeDeleteAllAttendeeRequest, encodeDeleteAllAttendeeResponse, options...))
 }
 
 // decodeDeleteAllAttendeeResponse  is a transport/http.DecodeRequestFunc that decodes a

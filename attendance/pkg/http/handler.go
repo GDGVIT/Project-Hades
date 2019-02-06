@@ -4,14 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/http"
+
 	endpoint "github.com/GDGVIT/Project-Hades/attendance/pkg/endpoint"
 	http1 "github.com/go-kit/kit/transport/http"
-	"net/http"
 )
 
 // makePostAttendanceHandler creates the handler logic
 func makePostAttendanceHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/post-attendance", http1.NewServer(endpoints.PostAttendanceEndpoint, decodePostAttendanceRequest, encodePostAttendanceResponse, options...))
+	m.Handle("/api/v1/attendance/post-attendance", http1.NewServer(endpoints.PostAttendanceEndpoint, decodePostAttendanceRequest, encodePostAttendanceResponse, options...))
 }
 
 // decodePostAttendanceResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -36,7 +37,7 @@ func encodePostAttendanceResponse(ctx context.Context, w http.ResponseWriter, re
 
 // makePostCouponHandler creates the handler logic
 func makePostCouponHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/post-coupon", http1.NewServer(endpoints.PostCouponEndpoint, decodePostCouponRequest, encodePostCouponResponse, options...))
+	m.Handle("/api/v1/attendance/post-coupon", http1.NewServer(endpoints.PostCouponEndpoint, decodePostCouponRequest, encodePostCouponResponse, options...))
 }
 
 // decodePostCouponResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -61,7 +62,7 @@ func encodePostCouponResponse(ctx context.Context, w http.ResponseWriter, respon
 
 // makeDeleteAllCouponsHandler creates the handler logic
 func makeDeleteAllCouponsHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/delete-all-coupons", http1.NewServer(endpoints.DeleteAllCouponsEndpoint, decodeDeleteAllCouponsRequest, encodeDeleteAllCouponsResponse, options...))
+	m.Handle("/api/v1/attendance/delete-all-coupons", http1.NewServer(endpoints.DeleteAllCouponsEndpoint, decodeDeleteAllCouponsRequest, encodeDeleteAllCouponsResponse, options...))
 }
 
 // decodeDeleteAllCouponsResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -86,7 +87,7 @@ func encodeDeleteAllCouponsResponse(ctx context.Context, w http.ResponseWriter, 
 
 // makeUnpostAttendanceHandler creates the handler logic
 func makeUnpostAttendanceHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/unpost-attendance", http1.NewServer(endpoints.UnpostAttendanceEndpoint, decodeUnpostAttendanceRequest, encodeUnpostAttendanceResponse, options...))
+	m.Handle("/api/v1/attendance/unpost-attendance", http1.NewServer(endpoints.UnpostAttendanceEndpoint, decodeUnpostAttendanceRequest, encodeUnpostAttendanceResponse, options...))
 }
 
 // decodeUnpostAttendanceResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -111,7 +112,7 @@ func encodeUnpostAttendanceResponse(ctx context.Context, w http.ResponseWriter, 
 
 // makeViewCouponsHandler creates the handler logic
 func makeViewCouponsHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/view-coupons", http1.NewServer(endpoints.ViewCouponsEndpoint, decodeViewCouponsRequest, encodeViewCouponsResponse, options...))
+	m.Handle("/api/v1/attendance/view-coupons", http1.NewServer(endpoints.ViewCouponsEndpoint, decodeViewCouponsRequest, encodeViewCouponsResponse, options...))
 }
 
 // decodeViewCouponsResponse  is a transport/http.DecodeRequestFunc that decodes a

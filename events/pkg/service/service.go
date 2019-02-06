@@ -9,7 +9,7 @@ import (
 // EventsService describes the service.
 type EventsService interface {
 	CreateEvent(ctx context.Context, event model.Event) (rs string, err error)
-	ReadEvent(ctx context.Context, query model.Query) (rs model.Event, err error)
+	ReadEvent(ctx context.Context, query model.Query) (rs []model.Event, err error)
 	UpdateEvent(ctx context.Context, query model.Query) (rs string, err error)
 	DeleteEvent(ctx context.Context, query model.Query) (rs string, err error)
 }
@@ -17,7 +17,7 @@ type EventsService interface {
 type basicEventsService struct{}
 
 /**
-* @api {post} /create-event create a new event
+* @api {post} /api/v1/event/create-event create a new event
 * @apiName create a new event
 * @apiGroup events
 * @apiPermission admin
@@ -112,21 +112,22 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 }
 
 /**
-*@api {post} /read-event read an event
+*@api {post} /api/v1/event/read-event read an event
 *@apiName read an event
 *@apiGroup events
 *@apiPermission admin
 *@apiParam {String} key key to query the event by
 *@apiParam {String} value value of the key
 *@apiParamExample {json} request-example
-*    "query":{
+*    {"query":{
 *		"key":"clubName",
-*		"value":"GDG"
-*	}
+*		"value":"GDG",
+*		"specific":"DEVFEST 2019"
+*	}}
 *
 *@apiParamExample {json} response-example
 *{
-*    "rs": {
+*    "rs": [{
 *        "clubName": "GDG",
 *        "name": "DEVRELCONF",
 *        "toDate": "10TH OCTOBER",
@@ -172,11 +173,12 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 *            "gender": ""
 *        },
 *        "status": "false"
-*    },
+*
+*    }],
 *    "err": null
 *}
 **/
-func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (rs model.Event, err error) {
+func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (rs []model.Event, err error) {
 
 	ce := make(chan model.EventReturn)
 
@@ -190,7 +192,7 @@ func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (
 }
 
 /**
-*@api {post} /update-event update an event
+*@api {post} /api/v1/event/update-event update an event
 *@apiName update an event
 *@apiGroup events
 *@apiPermission admin
@@ -226,7 +228,7 @@ func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query)
 }
 
 /**
-*@api {post} /delete-event delete an event
+*@api {post} /api/v1/event/delete-event delete an event
 *@apiName delete an event
 *@apiGroup events
 *@apiPermission admin

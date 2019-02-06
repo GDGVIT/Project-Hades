@@ -4,14 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/http"
+
 	endpoint "github.com/GDGVIT/Project-Hades/simple_projection/pkg/endpoint"
 	http1 "github.com/go-kit/kit/transport/http"
-	"net/http"
 )
 
 // makeProjectAllHandler creates the handler logic
 func makeProjectAllHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/project-all", http1.NewServer(endpoints.ProjectAllEndpoint, decodeProjectAllRequest, encodeProjectAllResponse, options...))
+	m.Handle("/api/v1/simple-projection/project-all", http1.NewServer(endpoints.ProjectAllEndpoint, decodeProjectAllRequest, encodeProjectAllResponse, options...))
 }
 
 // decodeProjectAllResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -36,7 +37,7 @@ func encodeProjectAllResponse(ctx context.Context, w http.ResponseWriter, respon
 
 // makeProjectPresentHandler creates the handler logic
 func makeProjectPresentHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/project-present", http1.NewServer(endpoints.ProjectPresentEndpoint, decodeProjectPresentRequest, encodeProjectPresentResponse, options...))
+	m.Handle("/api/v1/simple-projection/project-present", http1.NewServer(endpoints.ProjectPresentEndpoint, decodeProjectPresentRequest, encodeProjectPresentResponse, options...))
 }
 
 // decodeProjectPresentResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -61,7 +62,7 @@ func encodeProjectPresentResponse(ctx context.Context, w http.ResponseWriter, re
 
 // makeProjectAbsentHandler creates the handler logic
 func makeProjectAbsentHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/project-absent", http1.NewServer(endpoints.ProjectAbsentEndpoint, decodeProjectAbsentRequest, encodeProjectAbsentResponse, options...))
+	m.Handle("/api/v1/simple-projection/project-absent", http1.NewServer(endpoints.ProjectAbsentEndpoint, decodeProjectAbsentRequest, encodeProjectAbsentResponse, options...))
 }
 
 // decodeProjectAbsentResponse  is a transport/http.DecodeRequestFunc that decodes a

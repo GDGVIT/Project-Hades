@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	model "github.com/GDGVIT/Project-Hades/model"
 	log "github.com/go-kit/kit/log"
 )
@@ -29,7 +30,7 @@ func (l loggingMiddleware) CreateEvent(ctx context.Context, event model.Event) (
 	}()
 	return l.next.CreateEvent(ctx, event)
 }
-func (l loggingMiddleware) ReadEvent(ctx context.Context, query model.Query) (rs model.Event, err error) {
+func (l loggingMiddleware) ReadEvent(ctx context.Context, query model.Query) (rs []model.Event, err error) {
 	defer func() {
 		l.logger.Log("method", "ReadEvent", "query", query, "rs", rs, "err", err)
 	}()

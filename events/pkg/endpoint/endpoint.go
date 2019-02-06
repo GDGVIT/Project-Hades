@@ -2,6 +2,7 @@ package endpoint
 
 import (
 	"context"
+
 	service "github.com/GDGVIT/Project-Hades/events/pkg/service"
 	model "github.com/GDGVIT/Project-Hades/model"
 	endpoint "github.com/go-kit/kit/endpoint"
@@ -42,8 +43,8 @@ type ReadEventRequest struct {
 
 // ReadEventResponse collects the response parameters for the ReadEvent method.
 type ReadEventResponse struct {
-	Rs  model.Event `json:"rs"`
-	Err error       `json:"err"`
+	Rs  []model.Event `json:"rs"`
+	Err error         `json:"err"`
 }
 
 // MakeReadEventEndpoint returns an endpoint that invokes ReadEvent on the service.
@@ -137,7 +138,7 @@ func (e Endpoints) CreateEvent(ctx context.Context, event model.Event) (rs strin
 }
 
 // ReadEvent implements Service. Primarily useful in a client.
-func (e Endpoints) ReadEvent(ctx context.Context, query model.Query) (rs model.Event, err error) {
+func (e Endpoints) ReadEvent(ctx context.Context, query model.Query) (rs []model.Event, err error) {
 	request := ReadEventRequest{Query: query}
 	response, err := e.ReadEventEndpoint(ctx, request)
 	if err != nil {
