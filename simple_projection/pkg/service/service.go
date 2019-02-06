@@ -17,7 +17,7 @@ type SimpleProjectionService interface {
 type basicSimpleProjectionService struct{}
 
 /**
-*@api {post} /project-all show participants of an event
+*@api {post} /api/v1/simple-projection/project-all show participants of an event
 *@apiName show participants of an event
 *@apiGroup simple_projection
 *@apiPermission admin
@@ -95,7 +95,7 @@ func (b *basicSimpleProjectionService) ProjectAll(ctx context.Context, event str
 }
 
 /**
-*@api {post} /project-present show present participants
+*@api {post} /api/v1/simple-projection/project-present show present participants
 *@apiName show present participants
 *@apiGroup simple_projection
 *@apiPermission admin
@@ -176,7 +176,7 @@ func (b *basicSimpleProjectionService) ProjectPresent(ctx context.Context, event
 }
 
 /**
-*@api {post} /project-absent show absent participants
+*@api {post} /api/v1/simple-projection/project-absent show absent participants
 *@apiName show absent participants
 *@apiGroup simple_projection
 *@apiPermission admin

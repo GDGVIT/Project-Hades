@@ -4,14 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/http"
+
 	endpoint "github.com/GDGVIT/Project-Hades/events/pkg/endpoint"
 	http1 "github.com/go-kit/kit/transport/http"
-	"net/http"
 )
 
 // makeCreateEventHandler creates the handler logic
 func makeCreateEventHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/create-event", http1.NewServer(endpoints.CreateEventEndpoint, decodeCreateEventRequest, encodeCreateEventResponse, options...))
+	m.Handle("/api/v1/event/create-event", http1.NewServer(endpoints.CreateEventEndpoint, decodeCreateEventRequest, encodeCreateEventResponse, options...))
 }
 
 // decodeCreateEventResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -36,7 +37,7 @@ func encodeCreateEventResponse(ctx context.Context, w http.ResponseWriter, respo
 
 // makeReadEventHandler creates the handler logic
 func makeReadEventHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/read-event", http1.NewServer(endpoints.ReadEventEndpoint, decodeReadEventRequest, encodeReadEventResponse, options...))
+	m.Handle("/api/v1/event/read-event", http1.NewServer(endpoints.ReadEventEndpoint, decodeReadEventRequest, encodeReadEventResponse, options...))
 }
 
 // decodeReadEventResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -61,7 +62,7 @@ func encodeReadEventResponse(ctx context.Context, w http.ResponseWriter, respons
 
 // makeUpdateEventHandler creates the handler logic
 func makeUpdateEventHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/update-event", http1.NewServer(endpoints.UpdateEventEndpoint, decodeUpdateEventRequest, encodeUpdateEventResponse, options...))
+	m.Handle("/api/v1/event/update-event", http1.NewServer(endpoints.UpdateEventEndpoint, decodeUpdateEventRequest, encodeUpdateEventResponse, options...))
 }
 
 // decodeUpdateEventResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -86,7 +87,7 @@ func encodeUpdateEventResponse(ctx context.Context, w http.ResponseWriter, respo
 
 // makeDeleteEventHandler creates the handler logic
 func makeDeleteEventHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/delete-event", http1.NewServer(endpoints.DeleteEventEndpoint, decodeDeleteEventRequest, encodeDeleteEventResponse, options...))
+	m.Handle("/api/v1/event/delete-event", http1.NewServer(endpoints.DeleteEventEndpoint, decodeDeleteEventRequest, encodeDeleteEventResponse, options...))
 }
 
 // decodeDeleteEventResponse  is a transport/http.DecodeRequestFunc that decodes a

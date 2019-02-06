@@ -56,11 +56,12 @@ type Query struct {
 	Value       string `json:"value"`
 	ChangeKey   string `json:"changeKey"`
 	ChangeValue string `json:"changeValue"`
+	Specific    string `json:"specific"`
 }
 
 type EventReturn struct {
-	Event Event `json:"event"`
-	Err   error `json:"err"`
+	Event []Event `json:"event"`
+	Err   error   `json:"err"`
 }
 
 type ParticipantReturn struct {

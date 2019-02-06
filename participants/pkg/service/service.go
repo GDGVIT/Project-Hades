@@ -20,7 +20,7 @@ type ParticipantsService interface {
 type basicParticipantsService struct{}
 
 /**
-*@api {post} /create-attendee create an attendee
+*@api {post} /api/v1/participants/create-attendee create an attendee
 *@apiName create an attendee
 *@apiGroup participants
 *@apiParam {String} name name of the participant
@@ -71,7 +71,7 @@ func (b *basicParticipantsService) CreateAttendee(ctx context.Context, details m
 }
 
 /**
-*@api {post} /read-attendee read an attendee
+*@api {post} /api/v1/participants/read-attendee read an attendee
 *@apiName read an attendee
 *@apiPermission admin
 *@apiGroup participants
@@ -118,7 +118,7 @@ func (b *basicParticipantsService) ReadAttendee(ctx context.Context, query model
 }
 
 /**
-*@api {post} /update-attendee update an attendee
+*@api {post} /api/v1/participants/update-attendee update an attendee
 *@apiName update an attendee
 *@apiGroup participants
 *@apiPermission admin
@@ -158,7 +158,7 @@ func (b *basicParticipantsService) UpdateAttendee(ctx context.Context, query mod
 }
 
 /**
-*@api {post} /delete-attendee delete an attendee
+*@api {post} /api/v1/participants/delete-attendee delete an attendee
 *@apiName delete an attendee
 *@apiGroup participants
 *@apiPermission admin

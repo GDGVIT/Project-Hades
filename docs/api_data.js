@@ -29,7 +29,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/delete-all-coupons",
+    "url": "/api/v1/attendance/delete-all-coupons",
     "title": "delete all coupons of a particular day",
     "name": "delete_all_coupons_of_a_particular_day",
     "group": "attendance",
@@ -83,7 +83,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/post-attendance",
+    "url": "/api/v1/attendance/post-attendance",
     "title": "mark attendance",
     "name": "mark_attendance",
     "group": "attendance",
@@ -144,7 +144,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/post-coupon",
+    "url": "/api/v1/attendance/post-coupon",
     "title": "redeem a coupon",
     "name": "redeem_a_coupon",
     "group": "attendance",
@@ -205,7 +205,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/unpost-attendance",
+    "url": "/api/v1/attendance/unpost-attendance",
     "title": "unpost attendance",
     "name": "unpost_attendance",
     "group": "attendance",
@@ -259,7 +259,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/view-coupons",
+    "url": "/api/v1/attendance/view-coupons",
     "title": "view coupons",
     "name": "view_coupons",
     "group": "attendance",
@@ -313,7 +313,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/create-event",
+    "url": "/api/v1/event/create-event",
     "title": "create a new event",
     "name": "create_a_new_event",
     "group": "events",
@@ -484,7 +484,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/delete-event",
+    "url": "/api/v1/event/delete-event",
     "title": "delete an event",
     "name": "delete_an_event",
     "group": "events",
@@ -531,7 +531,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/read-event",
+    "url": "/api/v1/event/read-event",
     "title": "read an event",
     "name": "read_an_event",
     "group": "events",
@@ -562,12 +562,12 @@ define({ "api": [
       "examples": [
         {
           "title": "request-example",
-          "content": "   \"query\":{\n\t\t\"key\":\"clubName\",\n\t\t\"value\":\"GDG\"\n\t}",
+          "content": "   {\"query\":{\n\t\t\"key\":\"clubName\",\n\t\t\"value\":\"GDG\",\n\t\t\"specific\":\"DEVFEST 2019\"\n\t}}",
           "type": "json"
         },
         {
           "title": "response-example",
-          "content": "{\n   \"rs\": {\n       \"clubName\": \"GDG\",\n       \"name\": \"DEVRELCONF\",\n       \"toDate\": \"10TH OCTOBER\",\n       \"fromDate\": \"8TH OCTOBER\",\n       \"toTime\": \"10 PM\",\n       \"fromTime\": \"11 AM\",\n       \"budget\": \"200000\",\n       \"description\": \"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\",\n       \"category\": \"TECHNICAL\",\n       \"venue\": \"ANNA AUDI\",\n       \"attendance\": \"4000\",\n       \"expectedParticipants\": \"4000\",\n       \"facultyCoordinator\": {\n           \"name\": \"NOORU MAA\",\n           \"registrationNumber\": \"17BBE1010\",\n           \"email\": \"SDADAS@A.COM\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       },\n       \"studentCoordinator\": {\n           \"name\": \"NOORU BAAP\",\n           \"registrationNumber\": \"17BBE1010\",\n           \"email\": \"SDADAS@A.COM\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       },\n       \"guest\": {\n           \"name\": \"ALLAHH DAAS\",\n           \"email\": \"ASDSAD#ASD.COM\",\n           \"phoneNumber\": \"11111111111\",\n           \"gender\": \"F\",\n           \"stake\": \"SOME MONAYYYY\",\n           \"locationOfStay\": \"TERA GHAR\"\n       },\n       \"PROrequest\": \"SAJDOOSIJANDFSAKFDSAFD\",\n       \"campusEngineerRequest\": \"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\",\n       \"duration\": \"16 hours\",\n       \"mainSponsor\": {\n           \"name\": \"\",\n           \"registrationNumber\": \"\",\n           \"email\": \"\",\n           \"phoneNumber\": \"\",\n           \"gender\": \"\"\n       },\n       \"status\": \"false\"\n   },\n   \"err\": null\n}",
+          "content": "{\n   \"rs\": [{\n       \"clubName\": \"GDG\",\n       \"name\": \"DEVRELCONF\",\n       \"toDate\": \"10TH OCTOBER\",\n       \"fromDate\": \"8TH OCTOBER\",\n       \"toTime\": \"10 PM\",\n       \"fromTime\": \"11 AM\",\n       \"budget\": \"200000\",\n       \"description\": \"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\",\n       \"category\": \"TECHNICAL\",\n       \"venue\": \"ANNA AUDI\",\n       \"attendance\": \"4000\",\n       \"expectedParticipants\": \"4000\",\n       \"facultyCoordinator\": {\n           \"name\": \"NOORU MAA\",\n           \"registrationNumber\": \"17BBE1010\",\n           \"email\": \"SDADAS@A.COM\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       },\n       \"studentCoordinator\": {\n           \"name\": \"NOORU BAAP\",\n           \"registrationNumber\": \"17BBE1010\",\n           \"email\": \"SDADAS@A.COM\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       },\n       \"guest\": {\n           \"name\": \"ALLAHH DAAS\",\n           \"email\": \"ASDSAD#ASD.COM\",\n           \"phoneNumber\": \"11111111111\",\n           \"gender\": \"F\",\n           \"stake\": \"SOME MONAYYYY\",\n           \"locationOfStay\": \"TERA GHAR\"\n       },\n       \"PROrequest\": \"SAJDOOSIJANDFSAKFDSAFD\",\n       \"campusEngineerRequest\": \"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\",\n       \"duration\": \"16 hours\",\n       \"mainSponsor\": {\n           \"name\": \"\",\n           \"registrationNumber\": \"\",\n           \"email\": \"\",\n           \"phoneNumber\": \"\",\n           \"gender\": \"\"\n       },\n       \"status\": \"false\"\n\n   }],\n   \"err\": null\n}",
           "type": "json"
         }
       ]
@@ -578,7 +578,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/update-event",
+    "url": "/api/v1/event/update-event",
     "title": "update an event",
     "name": "update_an_event",
     "group": "events",
@@ -639,7 +639,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/create-attendee",
+    "url": "/api/v1/participants/create-attendee",
     "title": "create an attendee",
     "name": "create_an_attendee",
     "group": "participants",
@@ -709,7 +709,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/delete-attendee",
+    "url": "/api/v1/participants/delete-attendee",
     "title": "delete an attendee",
     "name": "delete_an_attendee",
     "group": "participants",
@@ -756,7 +756,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/read-attendee",
+    "url": "/api/v1/participants/read-attendee",
     "title": "read an attendee",
     "name": "read_an_attendee",
     "permission": [
@@ -803,7 +803,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/update-attendee",
+    "url": "/api/v1/participants/update-attendee",
     "title": "update an attendee",
     "name": "update_an_attendee",
     "group": "participants",
@@ -864,7 +864,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/project-absent",
+    "url": "/api/v1/simple-projection/project-absent",
     "title": "show absent participants",
     "name": "show_absent_participants",
     "group": "simple_projection",
@@ -925,7 +925,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/project-all",
+    "url": "/api/v1/simple-projection/project-all",
     "title": "show participants of an event",
     "name": "show_participants_of_an_event",
     "group": "simple_projection",
@@ -989,7 +989,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/project-present",
+    "url": "/api/v1/simple-projection/project-present",
     "title": "show present participants",
     "name": "show_present_participants",
     "group": "simple_projection",

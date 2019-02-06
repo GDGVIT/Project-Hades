@@ -8,8 +8,19 @@ import (
 
 func CreateEvent(e Event, ce chan error) {
 	c := make(chan error)
-	log.Println("\n\n\n")
-	log.Println(e)
+
+	// check if event with same name exists
+	data, _, _, err := con.QueryNeoAll(
+		`MATCH(n:EVENT) WHERE n.name=$name RETURN n.clubName`,
+		map[string]interface{}{
+			"name": e.Name,
+		})
+
+	if len(data) > 0 {
+		ce <- fmt.Errorf("An event with this name already exists")
+		return
+	}
+
 	result, err := con.ExecNeo(`CREATE (n:EVENT {name:$name, clubName:$clubName, toDate:$toDate, 
 		fromDate: $fromDate, toTime:$toTime, fromTime:$fromTime, budget:$budget, 
 		description:$description, category:$category, venue:$venue, attendance:$attendance, 
@@ -70,70 +81,95 @@ func CreateEvent(e Event, ce chan error) {
 }
 
 func ShowEventData(q Query, c chan EventReturn) {
-	data, _, _, err := con.QueryNeoAll(`
-	MATCH (n:EVENT)-[:StudentCoordinator]->(a)
-	MATCH (n:EVENT)-[:FacultyCoordinator]->(b)
-	MATCH (n:EVENT)-[:GUEST]->(c)
-	WHERE n.`+q.Key+`=$val 
-	RETURN n.clubName, n.name, n.toDate, n.fromDate, n.toTime, n.fromTime, n.budget, n.description, n.category,
-	n.venue, n.attendance, n.expectedParticipants, n.PROrequest, n.campusEngineerRequest, n.duration, a.name, 
-	a.registrationNumber, a.email, a.phoneNumber, a.gender, b.name, b.registrationNumber, b.email, 
-	b.phoneNumber, b.gender, c.name, c.email, c.phoneNumber, c.gender, c.stake, c.locationOfStay, n.status
-	`, map[string]interface{}{
-		"val": q.Value,
-	})
-
-	if err != nil {
-		c <- EventReturn{Event{}, err}
+	var ev []Event
+	if q.Key == "" || q.Value == "" {
+		c <- EventReturn{ev, fmt.Errorf("Wrong request format")}
 		return
 	}
+	var str string
 
-	var ev Event
+	if q.Specific == "" {
+		str = `
+		MATCH (n:EVENT)-[:StudentCoordinator]->(a)
+		MATCH (n:EVENT)-[:FacultyCoordinator]->(b)
+		MATCH (n:EVENT)-[:GUEST]->(c)
+		WHERE n.` + q.Key + `=$val 
+		RETURN n.clubName, n.name, n.toDate, n.fromDate, n.toTime, n.fromTime, n.budget, n.description, n.category,
+		n.venue, n.attendance, n.expectedParticipants, n.PROrequest, n.campusEngineerRequest, n.duration, a.name, 
+		a.registrationNumber, a.email, a.phoneNumber, a.gender, b.name, b.registrationNumber, b.email, 
+		b.phoneNumber, b.gender, c.name, c.email, c.phoneNumber, c.gender, c.stake, c.locationOfStay, n.status
+		`
+	} else {
+		str = `
+		MATCH (n:EVENT)-[:StudentCoordinator]->(a)
+		MATCH (n:EVENT)-[:FacultyCoordinator]->(b)
+		MATCH (n:EVENT)-[:GUEST]->(c)
+		WHERE n.` + q.Key + `=$val 
+		RETURN n.clubName, n.name, n.toDate, n.fromDate, n.toTime, n.fromTime, n.budget, n.description, n.category,
+		n.venue, n.attendance, n.expectedParticipants, n.PROrequest, n.campusEngineerRequest, n.duration, a.name, 
+		a.registrationNumber, a.email, a.phoneNumber, a.gender, b.name, b.registrationNumber, b.email, 
+		b.phoneNumber, b.gender, c.name, c.email, c.phoneNumber, c.gender, c.stake, c.locationOfStay, n.status
+		`
+	}
+
+	data, _, _, err := con.QueryNeoAll(str, map[string]interface{}{
+		"val":      q.Value,
+		"specific": q.Specific,
+	})
+
+	log.Println(data)
+
+	if err != nil {
+		c <- EventReturn{[]Event{}, err}
+		return
+	}
 
 	if len(data) < 1 {
 		c <- EventReturn{ev, fmt.Errorf("No Event found")}
 		return
 	}
 
-	ev = Event{
-		ClubName:              data[0][0].(string),
-		Name:                  data[0][1].(string),
-		ToDate:                data[0][2].(string),
-		FromDate:              data[0][3].(string),
-		ToTime:                data[0][4].(string),
-		FromTime:              data[0][5].(string),
-		Budget:                data[0][6].(string),
-		Description:           data[0][7].(string),
-		Category:              data[0][8].(string),
-		Venue:                 data[0][9].(string),
-		Attendance:            data[0][10].(string),
-		ExpectedParticipants:  data[0][11].(string),
-		PROrequest:            data[0][12].(string),
-		CampusEngineerRequest: data[0][13].(string),
-		Duration:              data[0][14].(string),
-		StudentCoordinator: Participant{
-			data[0][15].(string),
-			data[0][16].(string),
-			data[0][17].(string),
-			data[0][18].(string),
-			data[0][19].(string),
-		},
-		FacultyCoordinator: Participant{
-			data[0][20].(string),
-			data[0][21].(string),
-			data[0][22].(string),
-			data[0][23].(string),
-			data[0][24].(string),
-		},
-		GuestDetails: Guest{
-			data[0][25].(string),
-			data[0][26].(string),
-			data[0][27].(string),
-			data[0][28].(string),
-			data[0][29].(string),
-			data[0][30].(string),
-		},
-		Status: data[0][31].(string),
+	for i, _ := range data {
+		ev = append(ev, Event{
+			ClubName:              data[i][i].(string),
+			Name:                  data[i][1].(string),
+			ToDate:                data[i][2].(string),
+			FromDate:              data[i][3].(string),
+			ToTime:                data[i][4].(string),
+			FromTime:              data[i][5].(string),
+			Budget:                data[i][6].(string),
+			Description:           data[i][7].(string),
+			Category:              data[i][8].(string),
+			Venue:                 data[i][9].(string),
+			Attendance:            data[i][10].(string),
+			ExpectedParticipants:  data[i][11].(string),
+			PROrequest:            data[i][12].(string),
+			CampusEngineerRequest: data[i][13].(string),
+			Duration:              data[i][14].(string),
+			StudentCoordinator: Participant{
+				data[i][15].(string),
+				data[i][16].(string),
+				data[i][17].(string),
+				data[i][18].(string),
+				data[i][19].(string),
+			},
+			FacultyCoordinator: Participant{
+				data[i][20].(string),
+				data[i][21].(string),
+				data[i][22].(string),
+				data[i][23].(string),
+				data[i][24].(string),
+			},
+			GuestDetails: Guest{
+				data[i][25].(string),
+				data[i][26].(string),
+				data[i][27].(string),
+				data[i][28].(string),
+				data[i][29].(string),
+				data[i][30].(string),
+			},
+			Status: data[i][31].(string),
+		})
 	}
 
 	c <- EventReturn{ev, nil}
