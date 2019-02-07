@@ -12,6 +12,9 @@ services:
     volumes:
     - .:/go/src/github.com/GDGVIT/Project-Hades
     restart: on-failure
+    environment:
+      PROD_URI: "${PROD_URI}"
+      SALT: "${SALT}"
   event:
     build:
       context: .
@@ -24,6 +27,8 @@ services:
     volumes:
     - .:/go/src/github.com/GDGVIT/Project-Hades
     restart: on-failure
+    environment:
+      PROD_URI: "${PROD_URI}"
   participants:
     build:
       context: .
@@ -36,6 +41,9 @@ services:
     volumes:
     - .:/go/src/github.com/GDGVIT/Project-Hades
     restart: on-failure
+    environment:
+      PROD_URI: "${PROD_URI}"
+    
   simple_projection:
     build:
       context: .
@@ -48,6 +56,25 @@ services:
     volumes:
     - .:/go/src/github.com/GDGVIT/Project-Hades
     restart: on-failure
+    environment:
+      PROD_URI: "${PROD_URI}"
+  
+  # exporter:
+  #   build:
+  #     context: .
+  #     dockerfile: exporter/Dockerfile
+  #   container_name: exporter
+  #   # depends_on:
+  #   # - attendance
+  #   ports:
+  #   - 8804:8804
+  #   volumes:
+  #   - .:/go/src/github.com/GDGVIT/Project-Hades
+  #   restart: on-failure
+  #   environment:
+  #     PROD_URI: "${PROD_URI}"
+  #     SIMPLE_PROJECTION_URI: "${SIMPLE_PROJECTION_URI}"
+
   
   neo4j:
     container_name: neo4j
@@ -67,6 +94,7 @@ services:
       dockerfile: Web/Dockerfile
     ports:
     - 80:80
+    env_file: ./.env
     volumes:
     - ./Web/nginx.conf:/etc/nginx/nginx.conf
     # restart: on-failure
