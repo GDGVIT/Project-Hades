@@ -8,4 +8,6 @@ RUN go get  -t -v ./...
 RUN go get  github.com/canthefason/go-watcher
 RUN go install github.com/canthefason/go-watcher/cmd/watcher
 
+EXPOSE 8082
+
 ENTRYPOINT  watcher -run github.com/GDGVIT/Project-Hades/attendance/cmd  -watch github.com/GDGVIT/Project-Hades/attendance

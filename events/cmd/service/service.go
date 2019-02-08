@@ -3,6 +3,12 @@ package service
 import (
 	"flag"
 	"fmt"
+	"net"
+	http1 "net/http"
+	"os"
+	"os/signal"
+	"syscall"
+
 	endpoint "github.com/GDGVIT/Project-Hades/events/pkg/endpoint"
 	http "github.com/GDGVIT/Project-Hades/events/pkg/http"
 	service "github.com/GDGVIT/Project-Hades/events/pkg/service"
@@ -15,13 +21,8 @@ import (
 	zipkingoopentracing "github.com/openzipkin/zipkin-go-opentracing"
 	prometheus1 "github.com/prometheus/client_golang/prometheus"
 	promhttp "github.com/prometheus/client_golang/prometheus/promhttp"
-	"net"
-	http1 "net/http"
-	"os"
-	"os/signal"
 	appdash "sourcegraph.com/sourcegraph/appdash"
 	opentracing "sourcegraph.com/sourcegraph/appdash/opentracing"
-	"syscall"
 )
 
 var tracer opentracinggo.Tracer
@@ -30,10 +31,10 @@ var logger log.Logger
 // Define our flags. Your service probably won't need to bind listeners for
 // all* supported transports, but we do it here for demonstration purposes.
 var fs = flag.NewFlagSet("events", flag.ExitOnError)
-var debugAddr = fs.String("debug.addr", ":8080", "Debug and metrics listen address")
-var httpAddr = fs.String("http-addr", ":8081", "HTTP listen address")
-var grpcAddr = fs.String("grpc-addr", ":8082", "gRPC listen address")
-var thriftAddr = fs.String("thrift-addr", ":8083", "Thrift listen address")
+var debugAddr = fs.String("debug.addr", ":9002", "Debug and metrics listen address")
+var httpAddr = fs.String("http-addr", ":8080", "HTTP listen address")
+var grpcAddr = fs.String("grpc-addr", ":9000", "gRPC listen address")
+var thriftAddr = fs.String("thrift-addr", ":9001", "Thrift listen address")
 var thriftProtocol = fs.String("thrift-protocol", "binary", "binary, compact, json, simplejson")
 var thriftBuffer = fs.Int("thrift-buffer", 0, "0 for unbuffered")
 var thriftFramed = fs.Bool("thrift-framed", false, "true to enable framing")
