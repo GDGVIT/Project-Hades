@@ -45,7 +45,7 @@ type basicEventsService struct{}
 *
 * @apiParamExample {json} request-example
 *
-*"event":{
+*{"event":{
 *  "clubName":"GDG",
 *  "name":"DEVRELCONF",
 *  "toDate":"10TH OCTOBER",
@@ -93,6 +93,7 @@ type basicEventsService struct{}
 *     "stake":"SOME MONAYYYY",
 *     "locationOfStay":"GHAR2"
 *  }
+*}
 *
 *@apiParamExample {json} response-example
 *{
