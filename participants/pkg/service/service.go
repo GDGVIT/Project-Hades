@@ -133,8 +133,8 @@ func (b *basicParticipantsService) ReadAttendee(ctx context.Context, query model
 *	"query":{
 *		"key":"name",
 *		"Value":"dhruv sharma",
-*		"changeKey":"name",
-*		"changeValue":"dhruv sharma"
+*		"changeKey":"DSC VIT",
+*		"changeValue":"DEVFEST 2019"
 *	}
 *}
 *
@@ -162,7 +162,7 @@ func (b *basicParticipantsService) RmAttendee(ctx context.Context, query model.Q
 *@api {delete} /api/v1/participants/delete-attendee delete an attendee
 *@apiName delete an attendee
 *@apiGroup participants
-*@apiPermission admin
+*@apiPermission super-admin
 *@apiParam {String} key key to query the attendee by
 *@apiParam {String} value value of the key
 *
