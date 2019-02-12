@@ -727,7 +727,7 @@ define({ "api": [
     "group": "participants",
     "permission": [
       {
-        "name": "admin"
+        "name": "super-admin"
       }
     ],
     "parameter": {
@@ -860,7 +860,7 @@ define({ "api": [
       "examples": [
         {
           "title": "request-example",
-          "content": "{\n\t\"query\":{\n\t\t\"key\":\"name\",\n\t\t\"Value\":\"dhruv sharma\",\n\t\t\"changeKey\":\"name\",\n\t\t\"changeValue\":\"dhruv sharma\"\n\t}\n}",
+          "content": "{\n\t\"query\":{\n\t\t\"key\":\"name\",\n\t\t\"Value\":\"dhruv sharma\",\n\t\t\"changeKey\":\"DSC VIT\",\n\t\t\"changeValue\":\"DEVFEST 2019\"\n\t}\n}",
           "type": "json"
         },
         {
