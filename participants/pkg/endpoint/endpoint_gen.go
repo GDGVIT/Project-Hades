@@ -12,7 +12,7 @@ import (
 type Endpoints struct {
 	CreateAttendeeEndpoint    endpoint.Endpoint
 	ReadAttendeeEndpoint      endpoint.Endpoint
-	UpdateAttendeeEndpoint    endpoint.Endpoint
+	RmAttendeeEndpoint        endpoint.Endpoint
 	DeleteAttendeeEndpoint    endpoint.Endpoint
 	DeleteAllAttendeeEndpoint endpoint.Endpoint
 }
@@ -25,7 +25,7 @@ func New(s service.ParticipantsService, mdw map[string][]endpoint.Middleware) En
 		DeleteAllAttendeeEndpoint: MakeDeleteAllAttendeeEndpoint(s),
 		DeleteAttendeeEndpoint:    MakeDeleteAttendeeEndpoint(s),
 		ReadAttendeeEndpoint:      MakeReadAttendeeEndpoint(s),
-		UpdateAttendeeEndpoint:    MakeUpdateAttendeeEndpoint(s),
+		RmAttendeeEndpoint:        MakeRmAttendeeEndpoint(s),
 	}
 	for _, m := range mdw["CreateAttendee"] {
 		eps.CreateAttendeeEndpoint = m(eps.CreateAttendeeEndpoint)
@@ -33,8 +33,8 @@ func New(s service.ParticipantsService, mdw map[string][]endpoint.Middleware) En
 	for _, m := range mdw["ReadAttendee"] {
 		eps.ReadAttendeeEndpoint = m(eps.ReadAttendeeEndpoint)
 	}
-	for _, m := range mdw["UpdateAttendee"] {
-		eps.UpdateAttendeeEndpoint = m(eps.UpdateAttendeeEndpoint)
+	for _, m := range mdw["RmAttendee"] {
+		eps.RmAttendeeEndpoint = m(eps.RmAttendeeEndpoint)
 	}
 	for _, m := range mdw["DeleteAttendee"] {
 		eps.DeleteAttendeeEndpoint = m(eps.DeleteAttendeeEndpoint)

@@ -60,22 +60,22 @@ func encodeReadAttendeeResponse(ctx context.Context, w http.ResponseWriter, resp
 	return
 }
 
-// makeUpdateAttendeeHandler creates the handler logic
-func makeUpdateAttendeeHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/api/v1/participants/update-attendee", http1.NewServer(endpoints.UpdateAttendeeEndpoint, decodeUpdateAttendeeRequest, encodeUpdateAttendeeResponse, options...))
+// makeRmAttendeeHandler creates the handler logic
+func makeRmAttendeeHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
+	m.Handle("/api/v1/participants/rm-attendee", http1.NewServer(endpoints.RmAttendeeEndpoint, decodeRmAttendeeRequest, encodeRmAttendeeResponse, options...))
 }
 
-// decodeUpdateAttendeeResponse  is a transport/http.DecodeRequestFunc that decodes a
+// decodeRmAttendeeResponse  is a transport/http.DecodeRequestFunc that decodes a
 // JSON-encoded request from the HTTP request body.
-func decodeUpdateAttendeeRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	req := endpoint.UpdateAttendeeRequest{}
+func decodeRmAttendeeRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	req := endpoint.RmAttendeeRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	return req, err
 }
 
-// encodeUpdateAttendeeResponse is a transport/http.EncodeResponseFunc that encodes
+// encodeRmAttendeeResponse is a transport/http.EncodeResponseFunc that encodes
 // the response as JSON to the response writer
-func encodeUpdateAttendeeResponse(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
+func encodeRmAttendeeResponse(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
 	if f, ok := response.(endpoint.Failure); ok && f.Failed() != nil {
 		ErrorEncoder(ctx, f.Failed(), w)
 		return nil

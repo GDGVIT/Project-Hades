@@ -28,7 +28,7 @@ define({ "api": [
     "name": ""
   },
   {
-    "type": "post",
+    "type": "delete",
     "url": "/api/v1/attendance/delete-all-coupons",
     "title": "delete all coupons of a particular day",
     "name": "delete_all_coupons_of_a_particular_day",
@@ -204,7 +204,7 @@ define({ "api": [
     "groupTitle": "attendance"
   },
   {
-    "type": "post",
+    "type": "delete",
     "url": "/api/v1/attendance/unpost-attendance",
     "title": "unpost attendance",
     "name": "unpost_attendance",
@@ -258,7 +258,7 @@ define({ "api": [
     "groupTitle": "attendance"
   },
   {
-    "type": "post",
+    "type": "get",
     "url": "/api/v1/attendance/view-coupons",
     "title": "view coupons",
     "name": "view_coupons",
@@ -483,7 +483,7 @@ define({ "api": [
     "groupTitle": "events"
   },
   {
-    "type": "post",
+    "type": "delete",
     "url": "/api/v1/event/delete-event",
     "title": "delete an event",
     "name": "delete_an_event",
@@ -530,7 +530,7 @@ define({ "api": [
     "groupTitle": "events"
   },
   {
-    "type": "post",
+    "type": "get",
     "url": "/api/v1/event/read-event",
     "title": "read an event",
     "name": "read_an_event",
@@ -584,7 +584,7 @@ define({ "api": [
     "groupTitle": "events"
   },
   {
-    "type": "post",
+    "type": "put",
     "url": "/api/v1/event/update-event",
     "title": "update an event",
     "name": "update_an_event",
@@ -650,6 +650,11 @@ define({ "api": [
     "title": "create an attendee",
     "name": "create_an_attendee",
     "group": "participants",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -715,7 +720,7 @@ define({ "api": [
     "groupTitle": "participants"
   },
   {
-    "type": "post",
+    "type": "delete",
     "url": "/api/v1/participants/delete-attendee",
     "title": "delete an attendee",
     "name": "delete_an_attendee",
@@ -762,13 +767,13 @@ define({ "api": [
     "groupTitle": "participants"
   },
   {
-    "type": "post",
+    "type": "get",
     "url": "/api/v1/participants/read-attendee",
     "title": "read an attendee",
     "name": "read_an_attendee",
     "permission": [
       {
-        "name": "admin"
+        "name": "super-admin"
       }
     ],
     "group": "participants",
@@ -809,10 +814,10 @@ define({ "api": [
     "groupTitle": "participants"
   },
   {
-    "type": "post",
-    "url": "/api/v1/participants/update-attendee",
-    "title": "update an attendee",
-    "name": "update_an_attendee",
+    "type": "delete",
+    "url": "/api/v1/participants/rm-attendee",
+    "title": "remove attendee from an event",
+    "name": "remove_attendee_from_an_event",
     "group": "participants",
     "permission": [
       {
@@ -841,14 +846,14 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "changeKey",
-            "description": "<p>key of the value which needs to be altered</p>"
+            "description": "<p>Name of the club</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "changeValue",
-            "description": "<p>the new value</p>"
+            "description": "<p>Name of the event</p>"
           }
         ]
       },
@@ -870,7 +875,7 @@ define({ "api": [
     "groupTitle": "participants"
   },
   {
-    "type": "post",
+    "type": "get",
     "url": "/api/v1/simple-projection/project-absent",
     "title": "show absent participants",
     "name": "show_absent_participants",
@@ -931,7 +936,7 @@ define({ "api": [
     "groupTitle": "simple_projection"
   },
   {
-    "type": "post",
+    "type": "get",
     "url": "/api/v1/simple-projection/project-all",
     "title": "show participants of an event",
     "name": "show_participants_of_an_event",
@@ -995,7 +1000,7 @@ define({ "api": [
     "groupTitle": "simple_projection"
   },
   {
-    "type": "post",
+    "type": "get",
     "url": "/api/v1/simple-projection/project-present",
     "title": "show present participants",
     "name": "show_present_participants",
