@@ -12,7 +12,7 @@ import (
 type ParticipantsService interface {
 	CreateAttendee(ctx context.Context, details model.Attendee) (rs string, err error)
 	ReadAttendee(ctx context.Context, query model.Query) (rs []model.Attendee, err error)
-	UpdateAttendee(ctx context.Context, query model.Query) (rs string, err error)
+	RmAttendee(ctx context.Context, query model.Query) (rs string, err error)
 	DeleteAttendee(ctx context.Context, query model.Query) (rs string, err error)
 	DeleteAllAttendee(ctx context.Context, query model.Query) (rs string, err error)
 }
@@ -23,6 +23,7 @@ type basicParticipantsService struct{}
 *@api {post} /api/v1/participants/create-attendee create an attendee
 *@apiName create an attendee
 *@apiGroup participants
+*@apiPermission admin
 *@apiParam {String} name name of the participant
 *@apiParam {String} registrationNumber registration number of the participant
 *@apiParam {String} email email of the participant
@@ -71,9 +72,9 @@ func (b *basicParticipantsService) CreateAttendee(ctx context.Context, details m
 }
 
 /**
-*@api {post} /api/v1/participants/read-attendee read an attendee
+*@api {get} /api/v1/participants/read-attendee read an attendee
 *@apiName read an attendee
-*@apiPermission admin
+*@apiPermission super-admin
 *@apiGroup participants
 *@apiParam {String} key key to query the attendee by
 *@apiParam {String} value value of the key
@@ -118,14 +119,14 @@ func (b *basicParticipantsService) ReadAttendee(ctx context.Context, query model
 }
 
 /**
-*@api {post} /api/v1/participants/update-attendee update an attendee
-*@apiName update an attendee
+*@api {delete} /api/v1/participants/rm-attendee remove attendee from an event
+*@apiName remove attendee from an event
 *@apiGroup participants
 *@apiPermission admin
 *@apiParam {String} key key to query the attendee by
 *@apiParam {String} value value of the key
-*@apiParam {String} changeKey key of the value which needs to be altered
-*@apiParam {String} changeValue the new value
+*@apiParam {String} changeKey Name of the club
+*@apiParam {String} changeValue Name of the event
 *
 *@apiParamExample {json} request-example
 *{
@@ -144,10 +145,10 @@ func (b *basicParticipantsService) ReadAttendee(ctx context.Context, query model
 *    "err": null
 *}
 **/
-func (b *basicParticipantsService) UpdateAttendee(ctx context.Context, query model.Query) (rs string, err error) {
+func (b *basicParticipantsService) RmAttendee(ctx context.Context, query model.Query) (rs string, err error) {
 	c := make(chan error)
 
-	go model.UpdateAttendee(query, c)
+	go model.RmAttendee(query, c)
 
 	if err := <-c; err != nil {
 		log.Println("Error updating attendees")
@@ -158,7 +159,7 @@ func (b *basicParticipantsService) UpdateAttendee(ctx context.Context, query mod
 }
 
 /**
-*@api {post} /api/v1/participants/delete-attendee delete an attendee
+*@api {delete} /api/v1/participants/delete-attendee delete an attendee
 *@apiName delete an attendee
 *@apiGroup participants
 *@apiPermission admin

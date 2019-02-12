@@ -102,7 +102,7 @@ func (b *basicAttendanceService) PostCoupon(ctx context.Context, coupon string, 
 }
 
 /**
-*@api {post} /api/v1/attendance/delete-all-coupons delete all coupons of a particular day
+*@api {delete} /api/v1/attendance/delete-all-coupons delete all coupons of a particular day
 *@apiName delete all coupons of a particular day
 *@apiGroup attendance
 *@apiPermission admin
@@ -141,7 +141,7 @@ func (b *basicAttendanceService) DeleteAllCoupons(ctx context.Context, query mod
 }
 
 /**
-*@api {post} /api/v1/attendance/unpost-attendance unpost attendance
+*@api {delete} /api/v1/attendance/unpost-attendance unpost attendance
 *@apiName unpost attendance
 *@apiGroup attendance
 *@apiPermission admin
@@ -181,7 +181,7 @@ func (b *basicAttendanceService) UnpostAttendance(ctx context.Context, query mod
 }
 
 /**
-*@api {post} /api/v1/attendance/view-coupons view coupons
+*@api {get} /api/v1/attendance/view-coupons view coupons
 *@apiName view coupons
 *@apiGroup attendance
 *@apiPermission admin

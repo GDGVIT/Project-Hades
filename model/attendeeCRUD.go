@@ -55,14 +55,15 @@ func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.M
 			"ev": eventName,
 		})
 
-		rel := fmt.Sprintf("USER: %v \n\n\n\n", data)
-
+		rel := fmt.Sprintf("%v", data)
+		log.Println("HAGGA\n\n\n\n")
+		log.Println(rel)
 		if err != nil {
 			c <- err
 			return
 		}
 
-		if rel == "" {
+		if rel == "[]" || rel == "" {
 
 			// if doesnt exist then create relation
 			mutex.Lock()
@@ -166,5 +167,25 @@ func ReadAttendee(q Query, c chan ParticipantReturn, mutex *sync.Mutex) {
 	log.Printf("Found attendee node")
 	c <- ParticipantReturn{pt, nil}
 
+	return
+}
+
+func RmAttendee(q Query, c chan error) {
+	result, err := con.ExecNeo(`
+		MATCH(n:ATTENDEE)<-[r:ATTENDS]-(a:EVENT)
+		WHERE n.`+q.Key+`=$val AND a.clubName=$club AND a.name=$event
+		DELETE r
+	`, map[string]interface{}{
+		"val":   q.Value,
+		"club":  q.ChangeKey,
+		"event": q.ChangeValue,
+	})
+	if err != nil {
+		c <- err
+	}
+
+	log.Println(result)
+	log.Println("Relation to event removed")
+	c <- nil
 	return
 }

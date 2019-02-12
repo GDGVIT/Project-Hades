@@ -64,23 +64,23 @@ func (r ReadAttendeeResponse) Failed() error {
 	return r.Err
 }
 
-// UpdateAttendeeRequest collects the request parameters for the UpdateAttendee method.
-type UpdateAttendeeRequest struct {
+// RmAttendeeRequest collects the request parameters for the RmAttendee method.
+type RmAttendeeRequest struct {
 	Query model.Query `json:"query"`
 }
 
-// UpdateAttendeeResponse collects the response parameters for the UpdateAttendee method.
-type UpdateAttendeeResponse struct {
+// RmAttendeeResponse collects the response parameters for the RmAttendee method.
+type RmAttendeeResponse struct {
 	Rs  string `json:"rs"`
 	Err error  `json:"err"`
 }
 
-// MakeUpdateAttendeeEndpoint returns an endpoint that invokes UpdateAttendee on the service.
-func MakeUpdateAttendeeEndpoint(s service.ParticipantsService) endpoint.Endpoint {
+// MakeRmAttendeeEndpoint returns an endpoint that invokes RmAttendee on the service.
+func MakeRmAttendeeEndpoint(s service.ParticipantsService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(UpdateAttendeeRequest)
-		rs, err := s.UpdateAttendee(ctx, req.Query)
-		return UpdateAttendeeResponse{
+		req := request.(RmAttendeeRequest)
+		rs, err := s.RmAttendee(ctx, req.Query)
+		return RmAttendeeResponse{
 			Err: err,
 			Rs:  rs,
 		}, nil
@@ -88,7 +88,7 @@ func MakeUpdateAttendeeEndpoint(s service.ParticipantsService) endpoint.Endpoint
 }
 
 // Failed implements Failer.
-func (r UpdateAttendeeResponse) Failed() error {
+func (r RmAttendeeResponse) Failed() error {
 	return r.Err
 }
 
@@ -177,14 +177,14 @@ func (e Endpoints) ReadAttendee(ctx context.Context, query model.Query) (rs []mo
 	return response.(ReadAttendeeResponse).Rs, response.(ReadAttendeeResponse).Err
 }
 
-// UpdateAttendee implements Service. Primarily useful in a client.
-func (e Endpoints) UpdateAttendee(ctx context.Context, query model.Query) (rs string, err error) {
-	request := UpdateAttendeeRequest{Query: query}
-	response, err := e.UpdateAttendeeEndpoint(ctx, request)
+// RmAttendee implements Service. Primarily useful in a client.
+func (e Endpoints) RmAttendee(ctx context.Context, query model.Query) (rs string, err error) {
+	request := RmAttendeeRequest{Query: query}
+	response, err := e.RmAttendeeEndpoint(ctx, request)
 	if err != nil {
 		return
 	}
-	return response.(UpdateAttendeeResponse).Rs, response.(UpdateAttendeeResponse).Err
+	return response.(RmAttendeeResponse).Rs, response.(RmAttendeeResponse).Err
 }
 
 // DeleteAttendee implements Service. Primarily useful in a client.

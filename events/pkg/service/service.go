@@ -113,7 +113,7 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 }
 
 /**
-*@api {post} /api/v1/event/read-event read an event
+*@api {get} /api/v1/event/read-event read an event
 *@apiName read an event
 *@apiGroup events
 *@apiPermission admin
@@ -194,7 +194,7 @@ func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (
 }
 
 /**
-*@api {post} /api/v1/event/update-event update an event
+*@api {put} /api/v1/event/update-event update an event
 *@apiName update an event
 *@apiGroup events
 *@apiPermission admin
@@ -230,7 +230,7 @@ func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query)
 }
 
 /**
-*@api {post} /api/v1/event/delete-event delete an event
+*@api {delete} /api/v1/event/delete-event delete an event
 *@apiName delete an event
 *@apiGroup events
 *@apiPermission admin

@@ -2,9 +2,10 @@
 package http
 
 import (
+	http1 "net/http"
+
 	endpoint "github.com/GDGVIT/Project-Hades/participants/pkg/endpoint"
 	http "github.com/go-kit/kit/transport/http"
-	http1 "net/http"
 )
 
 //  NewHTTPHandler returns a handler that makes a set of endpoints available on
@@ -13,7 +14,7 @@ func NewHTTPHandler(endpoints endpoint.Endpoints, options map[string][]http.Serv
 	m := http1.NewServeMux()
 	makeCreateAttendeeHandler(m, endpoints, options["CreateAttendee"])
 	makeReadAttendeeHandler(m, endpoints, options["ReadAttendee"])
-	makeUpdateAttendeeHandler(m, endpoints, options["UpdateAttendee"])
+	makeRmAttendeeHandler(m, endpoints, options["RmAttendee"])
 	makeDeleteAttendeeHandler(m, endpoints, options["DeleteAttendee"])
 	makeDeleteAllAttendeeHandler(m, endpoints, options["DeleteAllAttendee"])
 	return m
