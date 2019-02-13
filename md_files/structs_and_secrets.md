@@ -86,9 +86,11 @@ docker-compose up
 Place .nv file with the following details in each of the microservice folders
 
 ```
-DB_USERNAME=DB_USERNAME
-DB_PASSWORD=DB_PASSWORD
-DB_ENDPOINT=DB_ENDPOINT
+URI=
+PROD_URI=
+GRAPHENE_URI=
+SALT=
+PROJECTION_URI=http://localhost/api/v1/simple-projection/
 ```
 
 <br />
