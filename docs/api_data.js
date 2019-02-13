@@ -711,6 +711,72 @@ define({ "api": [
     "groupTitle": "exporter"
   },
   {
+    "type": "get",
+    "url": "/api/v1/exporter/json",
+    "title": "export participants as json",
+    "name": "export_participants_as_json",
+    "group": "exporter",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "key",
+            "description": "<p>key to query the event by</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "value",
+            "description": "<p>value of the key</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "event",
+            "description": "<p>event name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "specific",
+            "description": "<p>types of participants to export i.e. present/absent/all</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example1",
+          "content": "{\n\t\"event\":\"DEVFEST 2019\",\n\t\"query\":{\n\t\t\"key\":\"gender\",\n\t\t\"value\":\"F\",\n\t\t\"specific\":\"project-all\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "request-example2",
+          "content": "{\n\t\"event\":\"DEVFEST 2019\",\n\t\"query\":{\n\t\t\"key\":\"gender\",\n\t\t\"value\":\"F\",\n\t\t\"specific\":\"project-present\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "request-example3",
+          "content": "{\n\t\"event\":\"DEVFEST 2019\",\n\t\"query\":{\n\t\t\"key\":\"gender\",\n\t\t\"value\":\"F\",\n\t\t\"specific\":\"project-absent\"\n\t}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./exporter/endpoints/controller/handlerfuncs.go",
+    "groupTitle": "exporter"
+  },
+  {
     "type": "post",
     "url": "/api/v1/participants/create-attendee",
     "title": "create an attendee",
