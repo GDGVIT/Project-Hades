@@ -59,21 +59,22 @@ services:
     environment:
       PROD_URI: "${PROD_URI}"
   
-  # exporter:
-  #   build:
-  #     context: .
-  #     dockerfile: exporter/Dockerfile
-  #   container_name: exporter
-  #   # depends_on:
-  #   # - attendance
-  #   ports:
-  #   - 8084:8084
-  #   volumes:
-  #   - .:/go/src/github.com/GDGVIT/Project-Hades
-  #   restart: on-failure
-  #   environment:
-  #     PROD_URI: "${PROD_URI}"
-  #     SIMPLE_PROJECTION_URI: "${SIMPLE_PROJECTION_URI}"
+  exporter:
+    build:
+      context: .
+      dockerfile: exporter/Dockerfile
+    container_name: exporter
+    ports:
+    - 8084:8084
+    volumes:
+    - .:/go/src/github.com/GDGVIT/Project-Hades
+    restart: on-failure
+    depends_on:
+      - simple_projection
+    env_file: ./.env
+    environment:
+      PROD_URI: "${PROD_URI}"
+      SIMPLE_PROJECTION_URI: "${SIMPLE_PROJECTION_URI}"
 
   
   neo4j:
