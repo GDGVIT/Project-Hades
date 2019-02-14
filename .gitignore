@@ -1,6 +1,4 @@
 .env
-creds.go
 push
 db
-test
 attendance.md
