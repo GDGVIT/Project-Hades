@@ -8,6 +8,6 @@ import (
 )
 
 func main() {
-	log.Println(os.Getenv("PROD_URI"))
+	log.Println(os.Getenv("PROJECTION_URI"))
 	controller.Startup()
 }

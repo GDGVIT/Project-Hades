@@ -90,7 +90,7 @@ URI=
 PROD_URI=
 GRAPHENE_URI=
 SALT=
-PROJECTION_URI=http://localhost/api/v1/simple-projection/
+PROJECTION_URI=http://<IP of machine>/api/v1/simple-projection/
 ```
 
 <br />
