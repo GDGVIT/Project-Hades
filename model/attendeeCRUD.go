@@ -185,6 +185,9 @@ func RmAttendee(q Query, c chan error) {
 	}
 
 	log.Println(result)
+
+	// TDO check if zombie attendee,, and remove them
+
 	log.Println("Relation to event removed")
 	c <- nil
 	return

@@ -81,12 +81,10 @@ func CreateEvent(e Event, ce chan error) {
 }
 
 func ShowEventData(q Query, c chan EventReturn) {
-	var ev []Event
-	if q.Key == "" || q.Value == "" {
-		c <- EventReturn{ev, fmt.Errorf("Wrong request format")}
-		return
-	}
-	var str string
+	var (
+		ev  []Event
+		str string
+	)
 
 	if q.Specific == "" {
 		str = `
@@ -116,8 +114,6 @@ func ShowEventData(q Query, c chan EventReturn) {
 		"val":      q.Value,
 		"specific": q.Specific,
 	})
-
-	log.Println(data)
 
 	if err != nil {
 		c <- EventReturn{[]Event{}, err}
