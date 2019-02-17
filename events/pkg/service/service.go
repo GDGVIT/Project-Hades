@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/GDGVIT/Project-Hades/model"
 )
@@ -109,6 +110,12 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 	if err := <-ce; err != nil {
 		return "some error occurred", err
 	}
+
+	data, err := json.Marshal(event)
+	if err != nil {
+		return "error occurred while unmarshaling json", err
+	}
+	go publishEvent("hades.event.CreateEvent", data)
 	return "created", err
 }
 
