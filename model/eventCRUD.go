@@ -15,8 +15,8 @@ func CreateEvent(e Event, ce chan error) {
 		map[string]interface{}{
 			"name": e.Name,
 		})
-
-	if len(data) > 0 {
+	str := fmt.Sprintf("%v", data)
+	if str != "[[]]" && str != "[]" {
 		ce <- fmt.Errorf("An event with this name already exists")
 		return
 	}
