@@ -3,8 +3,9 @@ package endpoints
 import (
 	"log"
 	"net/http"
+	"time"
 
-	"github.com/GDGVIT/Project-Hades/analytics/messenger"
+	"github.com/GDGVIT/Project-Hades/analytics/db"
 	nats "github.com/nats-io/go-nats"
 )
 
@@ -29,7 +30,7 @@ func (s *Server) eventSubscribe() (*nats.Conn, error) {
 	// subscribe to all Hades events
 	natsConn.Subscribe("hades.>", func(msg *nats.Msg) {
 		log.Printf("Got a hit on %s", msg.Subject)
-		go messenger.SendMessage(msg.Subject, msg.Data)
+		go db.CreateLogs(msg.Subject, time.Now().String(), msg.Data)
 	})
 	return natsConn, nil
 }
