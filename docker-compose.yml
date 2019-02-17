@@ -85,8 +85,12 @@ services:
     volumes:
     - .:/go/src/github.com/GDGVIT/Project-Hades
     restart: on-failure
+    env_file: ./.env
     environment:
-      PROD_URI: "${PROD_URI}"
+      MAIL_FROM: "${MAIL_FROM}"
+      MAIL_TO: "${MAIL_TO}"
+      MAIL_PASSWORD: "${MAIL_PASSWORD}"
+
 
   
   neo4j:

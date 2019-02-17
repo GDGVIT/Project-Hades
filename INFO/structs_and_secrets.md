@@ -91,6 +91,9 @@ PROD_URI=
 GRAPHENE_URI=
 SALT=
 PROJECTION_URI=http://<IP of machine>/api/v1/simple-projection/
+MAIL_FROM=
+MAIL_PASSWORD=
+MAIL_TO=
 ```
 
 <br />

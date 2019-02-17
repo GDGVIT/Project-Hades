@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/GDGVIT/Project-Hades/analytics/messenger"
 	nats "github.com/nats-io/go-nats"
 )
 
@@ -27,7 +28,8 @@ func (s *Server) eventSubscribe() (*nats.Conn, error) {
 
 	// subscribe to all Hades events
 	natsConn.Subscribe("hades.>", func(msg *nats.Msg) {
-		log.Println(msg.Data)
+		log.Printf("Got a hit on %s", msg.Subject)
+		go messenger.SendMessage(msg.Subject, msg.Data)
 	})
 	return natsConn, nil
 }
