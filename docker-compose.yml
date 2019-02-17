@@ -1,20 +1,20 @@
 version: "3.2"
 services:
-  # attendance:
-  #   build:
-  #     context: .
-  #     dockerfile: attendance/Dockerfile
-  #   container_name: attendance
-  #   depends_on:
-  #   - neo4j
-  #   ports:
-  #   - 8082:8082
-  #   volumes:
-  #   - .:/go/src/github.com/GDGVIT/Project-Hades
-  #   restart: on-failure
-  #   environment:
-  #     PROD_URI: "${PROD_URI}"
-  #     SALT: "${SALT}"
+  attendance:
+    build:
+      context: .
+      dockerfile: attendance/Dockerfile
+    container_name: attendance
+    depends_on:
+    - neo4j
+    ports:
+    - 8082:8082
+    volumes:
+    - .:/go/src/github.com/GDGVIT/Project-Hades
+    restart: on-failure
+    environment:
+      PROD_URI: "${PROD_URI}"
+      SALT: "${SALT}"
   event:
     build:
       context: .
@@ -29,52 +29,52 @@ services:
     restart: on-failure
     environment:
       PROD_URI: "${PROD_URI}"
-  # participants:
-  #   build:
-  #     context: .
-  #     dockerfile: participants/Dockerfile
-  #   container_name: participants
-  #   depends_on:
-  #   - neo4j
-  #   ports:
-  #   - 8081:8081
-  #   volumes:
-  #   - .:/go/src/github.com/GDGVIT/Project-Hades
-  #   restart: on-failure
-  #   environment:
-  #     PROD_URI: "${PROD_URI}"
+  participants:
+    build:
+      context: .
+      dockerfile: participants/Dockerfile
+    container_name: participants
+    depends_on:
+    - neo4j
+    ports:
+    - 8081:8081
+    volumes:
+    - .:/go/src/github.com/GDGVIT/Project-Hades
+    restart: on-failure
+    environment:
+      PROD_URI: "${PROD_URI}"
     
-  # simple_projection:
-  #   build:
-  #     context: .
-  #     dockerfile: simple_projection/Dockerfile
-  #   container_name: simple_projection
-  #   depends_on:
-  #   - neo4j
-  #   ports:
-  #   - 8083:8083
-  #   volumes:
-  #   - .:/go/src/github.com/GDGVIT/Project-Hades
-  #   restart: on-failure
-  #   environment:
-  #     PROD_URI: "${PROD_URI}"
+  simple_projection:
+    build:
+      context: .
+      dockerfile: simple_projection/Dockerfile
+    container_name: simple_projection
+    depends_on:
+    - neo4j
+    ports:
+    - 8083:8083
+    volumes:
+    - .:/go/src/github.com/GDGVIT/Project-Hades
+    restart: on-failure
+    environment:
+      PROD_URI: "${PROD_URI}"
   
-  # exporter:
-  #   build:
-  #     context: .
-  #     dockerfile: exporter/Dockerfile
-  #   container_name: exporter
-  #   ports:
-  #   - 8084:8084
-  #   volumes:
-  #   - .:/go/src/github.com/GDGVIT/Project-Hades
-  #   restart: on-failure
-  #   depends_on:
-  #     - simple_projection
-  #   env_file: ./.env
-  #   environment:
-  #     PROD_URI: "${PROD_URI}"
-  #     SIMPLE_PROJECTION_URI: "${SIMPLE_PROJECTION_URI}"
+  exporter:
+    build:
+      context: .
+      dockerfile: exporter/Dockerfile
+    container_name: exporter
+    ports:
+    - 8084:8084
+    volumes:
+    - .:/go/src/github.com/GDGVIT/Project-Hades
+    restart: on-failure
+    depends_on:
+      - simple_projection
+    env_file: ./.env
+    environment:
+      PROD_URI: "${PROD_URI}"
+      SIMPLE_PROJECTION_URI: "${SIMPLE_PROJECTION_URI}"
   analytics:
     build:
       context: .
@@ -104,22 +104,22 @@ services:
     - ./db/data:/data/
     - ./db/conf/:/conf/
     command: neo4j
-  # nginx:
-  #   container_name: nginx
-  #   build: 
-  #     context: .
-  #     dockerfile: Web/Dockerfile
-  #   ports:
-  #   - 80:80
-  #   env_file: ./.env
-  #   volumes:
-  #   - ./Web/nginx.conf:/etc/nginx/nginx.conf
-  #   # restart: on-failure
-  #   links:
-  #   - event:event
-  #   - participants:participants
-  #   - attendance:attendance
-  #   - simple_projection:simple_projection
+  nginx:
+    container_name: nginx
+    build: 
+      context: .
+      dockerfile: Web/Dockerfile
+    ports:
+    - 80:80
+    env_file: ./.env
+    volumes:
+    - ./Web/nginx.conf:/etc/nginx/nginx.conf
+    # restart: on-failure
+    links:
+    - event:event
+    - participants:participants
+    - attendance:attendance
+    - simple_projection:simple_projection
 
   nats:
     container_name: nats
