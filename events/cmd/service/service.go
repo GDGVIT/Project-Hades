@@ -9,6 +9,8 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/rs/cors"
+
 	endpoint "github.com/GDGVIT/Project-Hades/events/pkg/endpoint"
 	http "github.com/GDGVIT/Project-Hades/events/pkg/http"
 	service "github.com/GDGVIT/Project-Hades/events/pkg/service"
@@ -99,7 +101,8 @@ func initHttpHandler(endpoints endpoint.Endpoints, g *group.Group) {
 	}
 	g.Add(func() error {
 		logger.Log("transport", "HTTP", "addr", *httpAddr)
-		return http1.Serve(httpListener, httpHandler)
+		httpHandlerWithCORS := cors.Default().Handler(httpHandler)
+		return http1.Serve(httpListener, httpHandlerWithCORS)
 	}, func(error) {
 		httpListener.Close()
 	})

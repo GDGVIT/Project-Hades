@@ -19,6 +19,7 @@ import (
 	opentracinggo "github.com/opentracing/opentracing-go"
 	zipkingoopentracing "github.com/openzipkin/zipkin-go-opentracing"
 	promhttp "github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/rs/cors"
 	appdash "sourcegraph.com/sourcegraph/appdash"
 	opentracing "sourcegraph.com/sourcegraph/appdash/opentracing"
 )
@@ -97,7 +98,8 @@ func initHttpHandler(endpoints endpoint.Endpoints, g *group.Group) {
 	}
 	g.Add(func() error {
 		logger.Log("transport", "HTTP", "addr", *httpAddr)
-		return http1.Serve(httpListener, httpHandler)
+		httpHandlerWithCORS := cors.Default().Handler(httpHandler)
+		return http1.Serve(httpListener, httpHandlerWithCORS)
 	}, func(error) {
 		httpListener.Close()
 	})
