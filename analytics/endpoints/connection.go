@@ -36,7 +36,7 @@ func (s *Server) eventSubscribe() (*nats.Conn, error) {
 }
 
 func (s *Server) Run() {
-	http.HandleFunc("/api/v1/analytics", index())
+	http.HandleFunc("/api/v1/analytics", readFromDB())
 	natsConn, _ := s.eventSubscribe()
 	defer natsConn.Close()
 	s.serve(":8085")
