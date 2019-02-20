@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/GDGVIT/Project-Hades/analytics/db"
+	db "github.com/GDGVIT/Project-Hades/analytics/modelfuncs"
 )
 
 func readFromDB() http.HandlerFunc {
