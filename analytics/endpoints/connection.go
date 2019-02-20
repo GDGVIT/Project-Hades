@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/rs/cors"
+
 	"github.com/GDGVIT/Project-Hades/analytics/db"
 	nats "github.com/nats-io/go-nats"
 )
@@ -12,9 +14,9 @@ import (
 type Server struct {
 }
 
-func (s *Server) serve(port string) {
+func (s *Server) serve(port string, mux *http.Handler) {
 	log.Printf("Listening on port %s", port)
-	http.ListenAndServe(port, nil)
+	http.ListenAndServe(port, *mux)
 }
 
 func (s *Server) eventSubscribe() (*nats.Conn, error) {
@@ -36,8 +38,11 @@ func (s *Server) eventSubscribe() (*nats.Conn, error) {
 }
 
 func (s *Server) Run() {
-	http.HandleFunc("/api/v1/analytics", readFromDB())
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/api/v1/analytics", readFromDB())
+	CORSmux := cors.Default().Handler(mux)
 	natsConn, _ := s.eventSubscribe()
 	defer natsConn.Close()
-	s.serve(":8085")
+	s.serve(":8085", &CORSmux)
 }

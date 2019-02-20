@@ -3,6 +3,12 @@ package service
 import (
 	"flag"
 	"fmt"
+	"net"
+	http1 "net/http"
+	"os"
+	"os/signal"
+	"syscall"
+
 	endpoint "github.com/GDGVIT/Project-Hades/attendance/pkg/endpoint"
 	http "github.com/GDGVIT/Project-Hades/attendance/pkg/http"
 	service "github.com/GDGVIT/Project-Hades/attendance/pkg/service"
@@ -15,13 +21,9 @@ import (
 	zipkingoopentracing "github.com/openzipkin/zipkin-go-opentracing"
 	prometheus1 "github.com/prometheus/client_golang/prometheus"
 	promhttp "github.com/prometheus/client_golang/prometheus/promhttp"
-	"net"
-	http1 "net/http"
-	"os"
-	"os/signal"
+	"github.com/rs/cors"
 	appdash "sourcegraph.com/sourcegraph/appdash"
 	opentracing "sourcegraph.com/sourcegraph/appdash/opentracing"
-	"syscall"
 )
 
 var tracer opentracinggo.Tracer
@@ -98,7 +100,8 @@ func initHttpHandler(endpoints endpoint.Endpoints, g *group.Group) {
 	}
 	g.Add(func() error {
 		logger.Log("transport", "HTTP", "addr", *httpAddr)
-		return http1.Serve(httpListener, httpHandler)
+		httpHandlerWithCORS := cors.Default().Handler(httpHandler)
+		return http1.Serve(httpListener, httpHandlerWithCORS)
 	}, func(error) {
 		httpListener.Close()
 	})
