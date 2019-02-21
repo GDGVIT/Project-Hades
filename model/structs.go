@@ -20,26 +20,26 @@ type Attendee struct {
 }
 
 type Event struct {
-	ClubName              string      `json:"clubName"`
-	Name                  string      `json:"name"`
-	ToDate                string      `json:"toDate"`
-	FromDate              string      `json:"fromDate"`
-	ToTime                string      `json:"toTime"`
-	FromTime              string      `json:"fromTime"`
-	Budget                string      `json:"budget"`
-	Description           string      `json:"description"`
-	Category              string      `json:"category"`
-	Venue                 string      `json:"venue"`
-	Attendance            string      `json:"attendance"`
-	ExpectedParticipants  string      `json:"expectedParticipants"`
-	FacultyCoordinator    Participant `json:"facultyCoordinator"`
-	StudentCoordinator    Participant `json:"studentCoordinator"`
-	GuestDetails          Guest       `json:"guest"`
-	PROrequest            string      `json:"PROrequest"`
-	CampusEngineerRequest string      `json:"campusEngineerRequest"`
-	Duration              string      `json:"duration"`
-	MainSponsor           Participant `json:"mainSponsor"`
-	Status                string      `json:"status"`
+	ClubName             string      `json:"clubName"`
+	Name                 string      `json:"name"`
+	ToDate               string      `json:"toDate"`
+	FromDate             string      `json:"fromDate"`
+	ToTime               string      `json:"toTime"`
+	FromTime             string      `json:"fromTime"`
+	Budget               string      `json:"budget"`
+	Description          string      `json:"description"`
+	Category             string      `json:"category"`
+	Venue                string      `json:"venue"`
+	Attendance           string      `json:"attendance"`
+	ExpectedParticipants string      `json:"expectedParticipants"`
+	FacultyCoordinator   Participant `json:"facultyCoordinator"`
+	StudentCoordinator   Participant `json:"studentCoordinator"`
+	// GuestDetails          Guest       `json:"guest"`
+	PROrequest            string `json:"PROrequest"`
+	CampusEngineerRequest string `json:"campusEngineerRequest"`
+	Duration              string `json:"duration"`
+	// MainSponsor           Participant `json:"mainSponsor"`
+	Status string `json:"status"`
 }
 
 type Guest struct {
@@ -85,12 +85,6 @@ type MessageReturn struct {
 	Err     error
 }
 
-// func HandleChanError(c chan error, err error) {
-// 	if err != nil {
-// 		c <- err
-// 		return
-// 	}
-// }
 func (v Event) GetField(field string, value string) string {
 	r := reflect.ValueOf(v)
 	f := reflect.Indirect(r).FieldByName(field)

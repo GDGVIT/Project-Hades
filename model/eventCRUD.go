@@ -55,10 +55,10 @@ func CreateEvent(e Event, ce chan error) {
 	var mutex = &sync.Mutex{}
 	go CreateParticipant(e, "StudentCoordinator", c, mutex)
 	go CreateParticipant(e, "FacultyCoordinator", c, mutex)
-	go CreateParticipant(e, "MainSponsor", c, mutex)
-	go CreateGuest(e, c, mutex)
+	// go CreateParticipant(e, "MainSponsor", c, mutex)
+	// go CreateGuest(e, c, mutex)
 
-	err1, err2, err3, err4 := <-c, <-c, <-c, <-c
+	err1, err2 := <-c, <-c
 
 	switch {
 	case err1 != nil:
@@ -66,12 +66,6 @@ func CreateEvent(e Event, ce chan error) {
 		return
 	case err2 != nil:
 		ce <- err2
-		return
-	case err3 != nil:
-		ce <- err3
-		return
-	case err4 != nil:
-		ce <- err4
 		return
 	}
 
@@ -90,23 +84,21 @@ func ShowEventData(q Query, c chan EventReturn) {
 		str = `
 		MATCH (n:EVENT)-[:StudentCoordinator]->(a)
 		MATCH (n:EVENT)-[:FacultyCoordinator]->(b)
-		MATCH (n:EVENT)-[:GUEST]->(c)
 		WHERE n.` + q.Key + `=$val 
 		RETURN n.clubName, n.name, n.toDate, n.fromDate, n.toTime, n.fromTime, n.budget, n.description, n.category,
 		n.venue, n.attendance, n.expectedParticipants, n.PROrequest, n.campusEngineerRequest, n.duration, a.name, 
 		a.registrationNumber, a.email, a.phoneNumber, a.gender, b.name, b.registrationNumber, b.email, 
-		b.phoneNumber, b.gender, c.name, c.email, c.phoneNumber, c.gender, c.stake, c.locationOfStay, n.status
+		b.phoneNumber, b.gender, n.status
 		`
 	} else {
 		str = `
 		MATCH (n:EVENT)-[:StudentCoordinator]->(a)
 		MATCH (n:EVENT)-[:FacultyCoordinator]->(b)
-		MATCH (n:EVENT)-[:GUEST]->(c)
-		WHERE n.` + q.Key + `=$val 
+		WHERE n.` + q.Key + `=$val  AND n.name=$specific
 		RETURN n.clubName, n.name, n.toDate, n.fromDate, n.toTime, n.fromTime, n.budget, n.description, n.category,
 		n.venue, n.attendance, n.expectedParticipants, n.PROrequest, n.campusEngineerRequest, n.duration, a.name, 
 		a.registrationNumber, a.email, a.phoneNumber, a.gender, b.name, b.registrationNumber, b.email, 
-		b.phoneNumber, b.gender, c.name, c.email, c.phoneNumber, c.gender, c.stake, c.locationOfStay, n.status
+		b.phoneNumber, b.gender, n.status
 		`
 	}
 
@@ -156,15 +148,7 @@ func ShowEventData(q Query, c chan EventReturn) {
 				data[i][23].(string),
 				data[i][24].(string),
 			},
-			GuestDetails: Guest{
-				data[i][25].(string),
-				data[i][26].(string),
-				data[i][27].(string),
-				data[i][28].(string),
-				data[i][29].(string),
-				data[i][30].(string),
-			},
-			Status: data[i][31].(string),
+			Status: data[i][25].(string),
 		})
 	}
 
@@ -241,24 +225,20 @@ func CreateParticipant(e Event, label string, c chan error, mutex *sync.Mutex) {
 }
 
 // create a new guest node with relationship to the event
-func CreateGuest(e Event, c chan error, mutex *sync.Mutex) {
-	if e.GuestDetails.Email == "" {
-		c <- nil
-		return
-	}
+func CreateGuest(event string, g Guest, c chan error, mutex *sync.Mutex) {
 
 	mutex.Lock()
 	_, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
 	CREATE (n:GUEST {name:$name, stake:$stake,
 	email:$email, phoneNumber:$phoneNumber, gender: $gender, locationOfStay:$locationOfStay
 	})<-[:GUEST]-(a) `, map[string]interface{}{
-		"EventName":      e.Name,
-		"name":           e.GetField("GuestDetails", "Name"),
-		"stake":          e.GetField("GuestDetails", "Stake"),
-		"email":          e.GetField("GuestDetails", "Email"),
-		"phoneNumber":    e.GetField("GuestDetails", "PhoneNumber"),
-		"gender":         e.GetField("GuestDetails", "Gender"),
-		"locationOfStay": e.GetField("GuestDetails", "LocationOfStay"),
+		"EventName":      event,
+		"name":           g.Name,
+		"stake":          g.Stake,
+		"email":          g.Email,
+		"phoneNumber":    g.PhoneNumber,
+		"gender":         g.Gender,
+		"locationOfStay": g.LocationOfStay,
 	})
 	if err != nil {
 		c <- err
