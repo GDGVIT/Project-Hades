@@ -85,6 +85,11 @@ type MessageReturn struct {
 	Err     error
 }
 
+type GuestReturn struct {
+	Guests []Guest
+	Err    error
+}
+
 func (v Event) GetField(field string, value string) string {
 	r := reflect.ValueOf(v)
 	f := reflect.Indirect(r).FieldByName(field)
