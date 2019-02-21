@@ -77,6 +77,7 @@ type basicEventsService struct{}
 *  "campusEngineerRequest":"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD",
 *  "duration":"16 hours"
 *}
+*}
 *
 *@apiParamExample {json} response-example
 *{
