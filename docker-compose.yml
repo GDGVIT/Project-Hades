@@ -91,6 +91,21 @@ services:
       MAIL_TO: "${MAIL_TO}"
       MAIL_PASSWORD: "${MAIL_PASSWORD}"
 
+  guests:
+    build:
+      context: .
+      dockerfile: guests/Dockerfile
+    container_name: guests
+    depends_on:
+    - neo4j
+    ports:
+    - 8086:8086
+    volumes:
+    - .:/go/src/github.com/GDGVIT/Project-Hades
+    restart: on-failure
+    environment:
+      PROD_URI: "${PROD_URI}"
+
 
   
   neo4j:
@@ -120,6 +135,8 @@ services:
     - participants:participants
     - attendance:attendance
     - simple_projection:simple_projection
+    - guests:guests
+
 
   nats:
     container_name: nats
