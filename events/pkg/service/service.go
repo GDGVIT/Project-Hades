@@ -38,11 +38,9 @@ type basicEventsService struct{}
 * @apiParam {String} expectedParticipants Expected Participants in the event
 * @apiParam {Object} facultyCoordinator faculty coordinator details (Participant Object)
 * @apiParam {Object} studentCoordinator student coordinator details (Participant Object)
-* @apiParam {Object} guest guest details (Guest object)
 * @apiParam {String} PROrequest PRO department requests
 * @apiParam {String} campusEngineerRequest Campus engineer requests
 * @apiParam {String} duration duration of event
-* @apiParam {Object} mainSponsor sponsor details (Participant Object)
 *
 * @apiParamExample {json} request-example
 *
@@ -75,25 +73,9 @@ type basicEventsService struct{}
 *     "gender":"M",
 *     "eventsAttended":"ALL"
 *  },
-*  "guest":{
-*     "name":"DAAS",
-*     "email":"ASDSAD#ASD.COM",
-*     "phoneNumber":"11111111111",
-*     "gender":"F",
-*     "stake":"SOME MONAYYYY",
-*     "locationOfStay":"GHAR"
-*  },
 *  "PROrequest":"SAJDOOSIJANDFSAKFDSAFD",
 *  "campusEngineerRequest":"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD",
-*  "duration":"16 hours",
-*  "mainSponsor":{
-*     "name":"DAASA",
-*     "email":"ASDSAD#ASD.COM",
-*     "phoneNumber":"11111111111",
-*     "gender":"F",
-*     "stake":"SOME MONAYYYY",
-*     "locationOfStay":"GHAR2"
-*  }
+*  "duration":"16 hours"
 *}
 *
 *@apiParamExample {json} response-example
@@ -162,14 +144,6 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 *            "email": "SDADAS@A.COM",
 *            "phoneNumber": "919191991911",
 *            "gender": "M"
-*        },
-*        "guest": {
-*            "name": "ALLAHH DAAS",
-*            "email": "ASDSAD#ASD.COM",
-*            "phoneNumber": "11111111111",
-*            "gender": "F",
-*            "stake": "SOME MONAYYYY",
-*            "locationOfStay": "TERA GHAR"
 *        },
 *        "PROrequest": "SAJDOOSIJANDFSAKFDSAFD",
 *        "campusEngineerRequest": "SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD",

@@ -3,7 +3,7 @@
 res=`curl -s -I http://localhost:7474 | grep HTTP/1.1 | awk {'print $2'}`
 
 if [ "$1" == "stop" ] && [ "$2" == "--leave-db" ]; then
-docker container rm -f event participants attendance simple_projection exporter nginx
+docker container rm -f event participants attendance simple_projection exporter nginx nats analytics
 exit
 
 elif [ "$1" == "stop" ]; then
@@ -15,7 +15,7 @@ if [ "$1" == "start" ]; then
 
 if [[ "$res" -eq 200 ]]; then
 echo "Database already running"
-docker-compose up event participants attendance simple_projection exporter nginx
+docker-compose up event participants attendance simple_projection exporter nginx nats analytics
 exit
 
 else
@@ -29,7 +29,7 @@ res=`curl -s -I http://localhost:7474 | grep HTTP/1.1 | awk {'print $2'}`
 done
 
 if [[ $res -eq 200 ]]; then
-  docker-compose up event participants attendance simple_projection exporter nginx
+  docker-compose up event participants attendance simple_projection exporter nginx nats analytics
 fi
 
 fi
