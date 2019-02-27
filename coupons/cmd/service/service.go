@@ -3,27 +3,23 @@ package service
 import (
 	"flag"
 	"fmt"
-	"net"
-	http1 "net/http"
-	"os"
-	"os/signal"
-	"syscall"
-
-	endpoint "github.com/GDGVIT/Project-Hades/attendance/pkg/endpoint"
-	http "github.com/GDGVIT/Project-Hades/attendance/pkg/http"
-	service "github.com/GDGVIT/Project-Hades/attendance/pkg/service"
+	endpoint "github.com/GDGVIT/Project-Hades/coupons/pkg/endpoint"
+	http "github.com/GDGVIT/Project-Hades/coupons/pkg/http"
+	service "github.com/GDGVIT/Project-Hades/coupons/pkg/service"
 	endpoint1 "github.com/go-kit/kit/endpoint"
 	log "github.com/go-kit/kit/log"
-	prometheus "github.com/go-kit/kit/metrics/prometheus"
 	lightsteptracergo "github.com/lightstep/lightstep-tracer-go"
 	group "github.com/oklog/oklog/pkg/group"
 	opentracinggo "github.com/opentracing/opentracing-go"
 	zipkingoopentracing "github.com/openzipkin/zipkin-go-opentracing"
-	prometheus1 "github.com/prometheus/client_golang/prometheus"
 	promhttp "github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/rs/cors"
+	"net"
+	http1 "net/http"
+	"os"
+	"os/signal"
 	appdash "sourcegraph.com/sourcegraph/appdash"
 	opentracing "sourcegraph.com/sourcegraph/appdash/opentracing"
+	"syscall"
 )
 
 var tracer opentracinggo.Tracer
@@ -31,11 +27,11 @@ var logger log.Logger
 
 // Define our flags. Your service probably won't need to bind listeners for
 // all* supported transports, but we do it here for demonstration purposes.
-var fs = flag.NewFlagSet("attendance", flag.ExitOnError)
-var debugAddr = fs.String("debug.addr", ":9002", "Debug and metrics listen address")
-var httpAddr = fs.String("http-addr", ":8082", "HTTP listen address")
-var grpcAddr = fs.String("grpc-addr", ":9000", "gRPC listen address")
-var thriftAddr = fs.String("thrift-addr", ":9001", "Thrift listen address")
+var fs = flag.NewFlagSet("coupons", flag.ExitOnError)
+var debugAddr = fs.String("debug.addr", ":8080", "Debug and metrics listen address")
+var httpAddr = fs.String("http-addr", ":8081", "HTTP listen address")
+var grpcAddr = fs.String("grpc-addr", ":8082", "gRPC listen address")
+var thriftAddr = fs.String("thrift-addr", ":8083", "Thrift listen address")
 var thriftProtocol = fs.String("thrift-protocol", "binary", "binary, compact, json, simplejson")
 var thriftBuffer = fs.Int("thrift-buffer", 0, "0 for unbuffered")
 var thriftFramed = fs.Bool("thrift-framed", false, "true to enable framing")
@@ -61,7 +57,7 @@ func Run() {
 			os.Exit(1)
 		}
 		defer collector.Close()
-		recorder := zipkingoopentracing.NewRecorder(collector, false, "localhost:80", "attendance")
+		recorder := zipkingoopentracing.NewRecorder(collector, false, "localhost:80", "coupons")
 		tracer, err = zipkingoopentracing.NewTracer(recorder)
 		if err != nil {
 			logger.Log("err", err)
@@ -100,8 +96,7 @@ func initHttpHandler(endpoints endpoint.Endpoints, g *group.Group) {
 	}
 	g.Add(func() error {
 		logger.Log("transport", "HTTP", "addr", *httpAddr)
-		httpHandlerWithCORS := cors.Default().Handler(httpHandler)
-		return http1.Serve(httpListener, httpHandlerWithCORS)
+		return http1.Serve(httpListener, httpHandler)
 	}, func(error) {
 		httpListener.Close()
 	})
@@ -109,20 +104,12 @@ func initHttpHandler(endpoints endpoint.Endpoints, g *group.Group) {
 }
 func getServiceMiddleware(logger log.Logger) (mw []service.Middleware) {
 	mw = []service.Middleware{}
-	mw = addDefaultServiceMiddleware(logger, mw)
 	// Append your middleware here
 
 	return
 }
 func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middleware) {
 	mw = map[string][]endpoint1.Middleware{}
-	duration := prometheus.NewSummaryFrom(prometheus1.SummaryOpts{
-		Help:      "Request duration in seconds.",
-		Name:      "request_duration_seconds",
-		Namespace: "example",
-		Subsystem: "attendance",
-	}, []string{"method", "success"})
-	addDefaultEndpointMiddleware(logger, duration, mw)
 	// Add you endpoint middleware here
 
 	return

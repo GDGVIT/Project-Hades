@@ -77,7 +77,11 @@ type Attendance struct {
 	EventName string `json:"eventName"`
 	Email     string `json:"email"`
 	Day       int    `json:"day"`
-	Coupons   int    `json:"coupons"`
+}
+
+type Coupon struct {
+	Name string `json:"name"`
+	Desc string `json:"description"`
 }
 
 type MessageReturn struct {
