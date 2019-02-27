@@ -4,14 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/http"
+
 	endpoint "github.com/GDGVIT/Project-Hades/coupons/pkg/endpoint"
 	http1 "github.com/go-kit/kit/transport/http"
-	"net/http"
 )
 
 // makeCreateSchemaHandler creates the handler logic
 func makeCreateSchemaHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/create-schema", http1.NewServer(endpoints.CreateSchemaEndpoint, decodeCreateSchemaRequest, encodeCreateSchemaResponse, options...))
+	m.Handle("/api/v1/coupons/create-schema", http1.NewServer(endpoints.CreateSchemaEndpoint, decodeCreateSchemaRequest, encodeCreateSchemaResponse, options...))
 }
 
 // decodeCreateSchemaResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -36,7 +37,7 @@ func encodeCreateSchemaResponse(ctx context.Context, w http.ResponseWriter, resp
 
 // makeMarkPresentHandler creates the handler logic
 func makeMarkPresentHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/mark-present", http1.NewServer(endpoints.MarkPresentEndpoint, decodeMarkPresentRequest, encodeMarkPresentResponse, options...))
+	m.Handle("/api/v1/coupons/mark-present", http1.NewServer(endpoints.MarkPresentEndpoint, decodeMarkPresentRequest, encodeMarkPresentResponse, options...))
 }
 
 // decodeMarkPresentResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -61,7 +62,7 @@ func encodeMarkPresentResponse(ctx context.Context, w http.ResponseWriter, respo
 
 // makeRedeemCouponHandler creates the handler logic
 func makeRedeemCouponHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/redeem-coupon", http1.NewServer(endpoints.RedeemCouponEndpoint, decodeRedeemCouponRequest, encodeRedeemCouponResponse, options...))
+	m.Handle("/api/v1/coupons/redeem-coupon", http1.NewServer(endpoints.RedeemCouponEndpoint, decodeRedeemCouponRequest, encodeRedeemCouponResponse, options...))
 }
 
 // decodeRedeemCouponResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -86,7 +87,7 @@ func encodeRedeemCouponResponse(ctx context.Context, w http.ResponseWriter, resp
 
 // makeDeleteCouponHandler creates the handler logic
 func makeDeleteCouponHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/delete-coupon", http1.NewServer(endpoints.DeleteCouponEndpoint, decodeDeleteCouponRequest, encodeDeleteCouponResponse, options...))
+	m.Handle("/api/v1/coupons/delete-coupon", http1.NewServer(endpoints.DeleteCouponEndpoint, decodeDeleteCouponRequest, encodeDeleteCouponResponse, options...))
 }
 
 // decodeDeleteCouponResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -111,7 +112,7 @@ func encodeDeleteCouponResponse(ctx context.Context, w http.ResponseWriter, resp
 
 // makeDeleteSchemaHandler creates the handler logic
 func makeDeleteSchemaHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/delete-schema", http1.NewServer(endpoints.DeleteSchemaEndpoint, decodeDeleteSchemaRequest, encodeDeleteSchemaResponse, options...))
+	m.Handle("/api/v1/coupons/delete-schema", http1.NewServer(endpoints.DeleteSchemaEndpoint, decodeDeleteSchemaRequest, encodeDeleteSchemaResponse, options...))
 }
 
 // decodeDeleteSchemaResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -136,7 +137,7 @@ func encodeDeleteSchemaResponse(ctx context.Context, w http.ResponseWriter, resp
 
 // makeViewSchemaHandler creates the handler logic
 func makeViewSchemaHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/view-schema", http1.NewServer(endpoints.ViewSchemaEndpoint, decodeViewSchemaRequest, encodeViewSchemaResponse, options...))
+	m.Handle("/api/v1/coupons/view-schema", http1.NewServer(endpoints.ViewSchemaEndpoint, decodeViewSchemaRequest, encodeViewSchemaResponse, options...))
 }
 
 // decodeViewSchemaResponse  is a transport/http.DecodeRequestFunc that decodes a

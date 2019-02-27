@@ -19,13 +19,25 @@ type CouponsService interface {
 type basicCouponsService struct{}
 
 func (b *basicCouponsService) CreateSchema(ctx context.Context, event string, coupons []model.Coupon) (rs string, err error) {
-	// TODO implement the business logic of CreateSchema
-	return rs, err
+
+	c := make(chan error)
+	go model.CreateCouponSchema(event, coupons, c)
+	if err := <-c; err != nil {
+		return "Some error occurred", err
+	}
+	return "Successfully creted coupon schema for event " + event, nil
 }
+
 func (b *basicCouponsService) MarkPresent(ctx context.Context, attendance model.Attendance) (rs string, err error) {
-	// TODO implement the business logic of MarkPresent
-	return rs, err
+	c := make(chan model.MessageReturn)
+	go model.MarkPresent(attendance, c)
+	msg := <-c
+	if err := msg.Err; err != nil {
+		return msg.Message, err
+	}
+	return msg.Message, nil
 }
+
 func (b *basicCouponsService) RedeemCoupon(ctx context.Context, attendance model.Attendance, couponName string) (rs string, err error) {
 	// TODO implement the business logic of RedeemCoupon
 	return rs, err
