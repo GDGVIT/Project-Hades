@@ -31,11 +31,10 @@ func CreateCouponSchema(event string, coupons []Coupon, c chan error) {
 		return
 	}
 
-	// create schema
+	// create schema; TODO error handling
 	mutex := &sync.Mutex{}
 	for _, cps := range coupons {
 
-		log.Println("\n\n\n\nTEST\n\n\n\n")
 		go func(cp Coupon, mu *sync.Mutex) {
 
 			mu.Lock()
@@ -80,7 +79,6 @@ func MarkPresent(attendance Attendance, c chan MessageReturn) {
 		c <- MessageReturn{"Error marking attendance", err}
 		return
 	}
-
 	if len(data) < 1 {
 		c <- MessageReturn{"No participant found", nil}
 		return
@@ -106,9 +104,9 @@ func MarkPresent(attendance Attendance, c chan MessageReturn) {
 
 	// check if schema exists
 	data, _, _, err = con.QueryNeoAll(
-		`MATCH (n:EVENT)-[r:COUPON]->(:COUPON_SCHEMA)
+		`MATCH (n:EVENT)-[r:COUPON]->(a:COUPON_SCHEMA)
 		 WHERE n.name = $event
-		 RETURN r
+		 RETURN a.name, a.description, a.day
 	`, map[string]interface{}{
 			"event": attendance.EventName,
 		})
@@ -118,6 +116,8 @@ func MarkPresent(attendance Attendance, c chan MessageReturn) {
 	}
 
 	str := fmt.Sprintf("%v", data)
+	fmt.Println(str)
+	fmt.Println("\n\n\n\n")
 	if str != "[[]]" && str != "[]" {
 		// mark present
 		_, err = con.ExecNeo(`
@@ -137,15 +137,17 @@ func MarkPresent(attendance Attendance, c chan MessageReturn) {
 	}
 
 	// if schema exists,generate hash, and save for each coupon
-	var (
-		couponArr []Coupon
-		cps       []Coupon
-	)
-	cps = data[0][0].([]Coupon)
+	var couponArr []Coupon
+	fmt.Println(data[0][0])
 
-	for _, cp := range cps {
-		if cp.Day == attendance.Day {
-			couponArr = append(couponArr)
+	for _, o := range data {
+		log.Println(o)
+		if o[2].(int64) == int64(attendance.Day) {
+			couponArr = append(couponArr, Coupon{
+				Name: o[0].(string),
+				Desc: o[1].(string),
+				Day:  int(o[2].(int64)),
+			})
 		}
 	}
 	go couponGen(couponArr, attendance, c)
