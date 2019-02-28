@@ -74,9 +74,10 @@ type SafeParticipantReturn struct {
 }
 
 type Attendance struct {
-	EventName string `json:"eventName"`
-	Email     string `json:"email"`
-	Day       int    `json:"day"`
+	EventName  string `json:"eventName"`
+	Email      string `json:"email"`
+	Day        int    `json:"day"`
+	CouponName string `json:"couponName"`
 }
 
 type Coupon struct {
