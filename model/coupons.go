@@ -116,10 +116,9 @@ func MarkPresent(attendance Attendance, c chan MessageReturn) {
 	}
 
 	str := fmt.Sprintf("%v", data)
-	fmt.Println(str)
-	fmt.Println("\n\n\n\n")
-	if str != "[[]]" && str != "[]" {
-		// mark present
+
+	if str == "[[]]" && str == "[]" {
+		// mark present if schema does not exist
 		_, err = con.ExecNeo(`
 			MATCH(n:EVENT)-[:ATTENDS]->(b)
 			WHERE n.name=$name AND b.email=$rn
@@ -133,15 +132,13 @@ func MarkPresent(attendance Attendance, c chan MessageReturn) {
 			return
 		}
 		c <- MessageReturn{"Done", nil}
-
+		return
 	}
 
 	// if schema exists,generate hash, and save for each coupon
 	var couponArr []Coupon
-	fmt.Println(data[0][0])
 
 	for _, o := range data {
-		log.Println(o)
 		if o[2].(int64) == int64(attendance.Day) {
 			couponArr = append(couponArr, Coupon{
 				Name: o[0].(string),
@@ -162,9 +159,11 @@ func couponGen(coupons []Coupon, attendance Attendance, c chan MessageReturn) {
 		cps []string
 	)
 	SALT, _ := strconv.Atoi(os.Getenv("SALT"))
+	log.Println(len(coupons))
+	log.Println(coupons)
 
 	for _, coupon := range coupons {
-
+		fmt.Println("YOYO")
 		str = attendance.EventName + strconv.Itoa(attendance.Day) + coupon.Name + attendance.Email
 
 		bytes, err := bcrypt.GenerateFromPassword([]byte(str), SALT)
@@ -172,9 +171,11 @@ func couponGen(coupons []Coupon, attendance Attendance, c chan MessageReturn) {
 			c <- MessageReturn{"Error while hashing", err}
 			return
 		}
+		fmt.Println(string(bytes))
 		cps = append(cps, string(bytes))
 	}
-
+	fmt.Println(cps)
+	fmt.Println("\n\n\n\n")
 	// create coupon relation
 	_, err := con.ExecNeo(`
 			MATCH(n:EVENT)-[:ATTENDS]->(b)
