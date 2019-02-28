@@ -39,9 +39,15 @@ func (b *basicCouponsService) MarkPresent(ctx context.Context, attendance model.
 }
 
 func (b *basicCouponsService) RedeemCoupon(ctx context.Context, attendance model.Attendance, couponName string) (rs string, err error) {
-	// TODO implement the business logic of RedeemCoupon
-	return rs, err
+	c := make(chan model.MessageReturn)
+	go model.RedeemCoupon(attendance, attendance.CouponName, c)
+	msg := <-c
+	if err := msg.Err; err != nil {
+		return msg.Message, msg.Err
+	}
+	return msg.Message, nil
 }
+
 func (b *basicCouponsService) DeleteCoupon(ctx context.Context, event string, coupon model.Coupon) (rs string, err error) {
 	// TODO implement the business logic of DeleteCoupon
 	return rs, err

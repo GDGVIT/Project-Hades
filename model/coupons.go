@@ -3,11 +3,8 @@ package model
 import (
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 	"sync"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 func CreateCouponSchema(event string, coupons []Coupon, c chan error) {
@@ -158,24 +155,18 @@ func couponGen(coupons []Coupon, attendance Attendance, c chan MessageReturn) {
 		str string
 		cps []string
 	)
-	SALT, _ := strconv.Atoi(os.Getenv("SALT"))
-	log.Println(len(coupons))
-	log.Println(coupons)
+	//SALT, _ := strconv.Atoi(os.Getenv("SALT"))
 
 	for _, coupon := range coupons {
-		fmt.Println("YOYO")
 		str = attendance.EventName + strconv.Itoa(attendance.Day) + coupon.Name + attendance.Email
-
-		bytes, err := bcrypt.GenerateFromPassword([]byte(str), SALT)
-		if err != nil {
-			c <- MessageReturn{"Error while hashing", err}
-			return
-		}
-		fmt.Println(string(bytes))
-		cps = append(cps, string(bytes))
+		// bytes, err := bcrypt.GenerateFromPassword([]byte(str), SALT)
+		// fmt.Println(str)
+		// if err != nil {
+		// 	c <- MessageReturn{"Error while hashing", err}
+		// 	return
+		// }
+		cps = append(cps, str)
 	}
-	fmt.Println(cps)
-	fmt.Println("\n\n\n\n")
 	// create coupon relation
 	_, err := con.ExecNeo(`
 			MATCH(n:EVENT)-[:ATTENDS]->(b)
@@ -199,14 +190,16 @@ func couponGen(coupons []Coupon, attendance Attendance, c chan MessageReturn) {
 func RedeemCoupon(attendance Attendance, couponName string, c chan MessageReturn) {
 
 	// build coupon
-	SALT, _ := strconv.Atoi(os.Getenv("SALT"))
+	//SALT, _ := strconv.Atoi(os.Getenv("SALT"))
 	str := attendance.EventName + strconv.Itoa(attendance.Day) + couponName + attendance.Email
-	bytes, err := bcrypt.GenerateFromPassword([]byte(str), SALT)
-	if err != nil {
-		c <- MessageReturn{"Error while hashing", err}
-		return
-	}
-	coupon := string(bytes)
+
+	fmt.Println(str)
+	// bytes, err := bcrypt.GenerateFromPassword([]byte(str), SALT)
+	// if err != nil {
+	// 	c <- MessageReturn{"Error while hashing", err}
+	// 	return
+	// }
+	//coupon := string(bytes)
 
 	// check if coupon exists
 	data, _, _, err := con.QueryNeoAll(`
@@ -215,7 +208,7 @@ func RedeemCoupon(attendance Attendance, couponName string, c chan MessageReturn
 	RETURN [x IN r.coupons WHERE x = $coupon];
 	`, map[string]interface{}{
 		"email":  attendance.Email,
-		"coupon": coupon,
+		"coupon": str,
 	})
 
 	if err != nil {
@@ -255,7 +248,7 @@ func RedeemCoupon(attendance Attendance, couponName string, c chan MessageReturn
 		`, map[string]interface{}{
 		"eventName": attendance.EventName,
 		"email":     attendance.Email,
-		"coupon":    coupon,
+		"coupon":    str,
 	})
 
 	if err != nil {
