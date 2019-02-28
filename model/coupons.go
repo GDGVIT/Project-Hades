@@ -2,8 +2,10 @@ package model
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
+	"sync"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -11,13 +13,13 @@ import (
 func CreateCouponSchema(event string, coupons []Coupon, c chan error) {
 
 	// check if coupon exists
-	data, _, _, err := con.QueryNeoAll(
-		`MATCH (n:EVENT)-[r:COUPON]->(:COUPON_SCHEMA)
-		 WHERE n.name = $event
-		 RETURN r
+	data, _, _, err := con.QueryNeoAll(`
+		MATCH (n:EVENT)-[r:COUPON]->(:COUPON_SCHEMA)
+		WHERE n.name = $event
+		RETURN r.coupons
 	`, map[string]interface{}{
-			"event": event,
-		})
+		"event": event,
+	})
 	if err != nil {
 		c <- err
 		return
@@ -30,17 +32,32 @@ func CreateCouponSchema(event string, coupons []Coupon, c chan error) {
 	}
 
 	// create schema
-	_, err = con.ExecNeo(`
-		CREATE (:COUPON_SCHEMA { coupons: $coupons })<-[:COUPON]-(n:EVENT)
-		WHERE n.event = $event
-	`, map[string]interface{}{
-		"event":   event,
-		"coupons": coupons,
-	})
+	mutex := &sync.Mutex{}
+	for _, cps := range coupons {
 
-	if err != nil {
-		c <- err
-		return
+		log.Println("\n\n\n\nTEST\n\n\n\n")
+		go func(cp Coupon, mu *sync.Mutex) {
+
+			mu.Lock()
+			rs, err := con.ExecNeo(`
+				MATCH(n:EVENT) WHERE n.name = $event
+				CREATE (:COUPON_SCHEMA {name:$name, description:$desc, day:$day})<-[:COUPON]-(n)
+			`, map[string]interface{}{
+				"event": event,
+				"name":  cp.Name,
+				"desc":  cp.Desc,
+				"day":   cp.Day,
+			})
+			mu.Unlock()
+
+			if err != nil {
+				log.Println(err)
+				c <- err
+				return
+			}
+			log.Println(rs)
+		}(cps, mutex)
+
 	}
 
 	c <- nil
