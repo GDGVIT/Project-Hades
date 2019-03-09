@@ -1,6 +1,7 @@
 package model
 
 import (
+	"crypto/md5"
 	"fmt"
 	"log"
 	"strconv"
@@ -155,17 +156,11 @@ func couponGen(coupons []Coupon, attendance Attendance, c chan MessageReturn) {
 		str string
 		cps []string
 	)
-	//SALT, _ := strconv.Atoi(os.Getenv("SALT"))
 
 	for _, coupon := range coupons {
 		str = attendance.EventName + strconv.Itoa(attendance.Day) + coupon.Name + attendance.Email
-		// bytes, err := bcrypt.GenerateFromPassword([]byte(str), SALT)
-		// fmt.Println(str)
-		// if err != nil {
-		// 	c <- MessageReturn{"Error while hashing", err}
-		// 	return
-		// }
-		cps = append(cps, str)
+		bytes := md5.Sum([]byte(str))
+		cps = append(cps, string(bytes[:]))
 	}
 	// create coupon relation
 	_, err := con.ExecNeo(`
@@ -190,17 +185,11 @@ func couponGen(coupons []Coupon, attendance Attendance, c chan MessageReturn) {
 func RedeemCoupon(attendance Attendance, couponName string, c chan MessageReturn) {
 
 	// build coupon
-	//SALT, _ := strconv.Atoi(os.Getenv("SALT"))
 	str := attendance.EventName + strconv.Itoa(attendance.Day) + couponName + attendance.Email
+	bytes := md5.Sum([]byte(str)) //bcrypt.GenerateFromPassword([]byte(str), SALT)
 
-	fmt.Println(str)
-	// bytes, err := bcrypt.GenerateFromPassword([]byte(str), SALT)
-	// if err != nil {
-	// 	c <- MessageReturn{"Error while hashing", err}
-	// 	return
-	// }
-	//coupon := string(bytes)
-
+	coupon := string(bytes[:])
+	log.Println(coupon)
 	// check if coupon exists
 	data, _, _, err := con.QueryNeoAll(`
 	MATCH (n:EVENT)-[r:PRESENT`+strconv.Itoa(attendance.Day)+`]->(a)
@@ -208,7 +197,7 @@ func RedeemCoupon(attendance Attendance, couponName string, c chan MessageReturn
 	RETURN [x IN r.coupons WHERE x = $coupon];
 	`, map[string]interface{}{
 		"email":  attendance.Email,
-		"coupon": str,
+		"coupon": coupon,
 	})
 
 	if err != nil {
@@ -216,9 +205,9 @@ func RedeemCoupon(attendance Attendance, couponName string, c chan MessageReturn
 		return
 	}
 
-	str = fmt.Sprintf("%v", data)
-
-	if str == "[[[]]]" || str == "[]" {
+	strData := fmt.Sprintf("%v", data)
+	log.Println(strData)
+	if strData == "[[[]]]" || strData == "[]" {
 		c <- MessageReturn{"No match found for this coupon", nil}
 		return
 	}
@@ -248,7 +237,7 @@ func RedeemCoupon(attendance Attendance, couponName string, c chan MessageReturn
 		`, map[string]interface{}{
 		"eventName": attendance.EventName,
 		"email":     attendance.Email,
-		"coupon":    str,
+		"coupon":    coupon,
 	})
 
 	if err != nil {
