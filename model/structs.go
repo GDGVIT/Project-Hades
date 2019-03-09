@@ -86,6 +86,11 @@ type Coupon struct {
 	Day  int    `json:"day"`
 }
 
+type CouponReturn struct {
+	Coupons []Coupon `json:"coupons"`
+	Err     error    `json:"err"`
+}
+
 type MessageReturn struct {
 	Message string
 	Err     error

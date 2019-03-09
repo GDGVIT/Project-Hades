@@ -90,6 +90,77 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/api/v1/coupons/delete-coupon",
+    "title": "delete coupon",
+    "name": "delete_coupon",
+    "group": "coupons",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "eventName",
+            "description": "<p>name of the event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "name",
+            "description": "<p>name of the coupon</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "int",
+            "optional": false,
+            "field": "day",
+            "description": "<p>day of the event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "description",
+            "description": "<p>description of the coupon</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "delete-specific-request",
+          "content": "{\n\t\"event\":\"DEVRELCONF\",\n\t\"query\":{\n\t\t\"name\":\"lunch\",\n\t\t\"day\":2,\n\t\t\"description\":\"lunch\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "delete-specific-response",
+          "content": "{\n   \"rs\": \"Deleted\",\n   \"err\": null\n}",
+          "type": "json"
+        },
+        {
+          "title": "delete-all-request",
+          "content": "{\n\t\"event\":\"DEVRELCONF\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "delete-all-response",
+          "content": "{\n   \"rs\": \"Deleted\",\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./coupons/pkg/service/service.go",
+    "groupTitle": "coupons"
+  },
+  {
+    "type": "post",
     "url": "/api/v1/coupons/mark-present",
     "title": "mark attendee present",
     "name": "mark_attendee_present",
@@ -195,6 +266,46 @@ define({ "api": [
         {
           "title": "response-example",
           "content": "{\n   \"rs\": \"No match found for this coupon\",\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./coupons/pkg/service/service.go",
+    "groupTitle": "coupons"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/coupons/view-schema",
+    "title": "view coupon schema",
+    "name": "view_coupon_schema",
+    "group": "coupons",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "event",
+            "description": "<p>name of the event</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"event\":\"DEVRELCONF\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": [\n       {\n           \"name\": \"gargentaul\",\n           \"description\": \"dasd\",\n           \"day\": 1\n       },\n       {\n           \"name\": \"bf\",\n           \"description\": \"bf\",\n           \"day\": 1\n       },\n       {\n           \"name\": \"dinner\",\n           \"description\": \"dinner\",\n           \"day\": 2\n       },\n       {\n           \"name\": \"lunch\",\n           \"description\": \"lunch\",\n           \"day\": 2\n       },\n       {\n           \"name\": \"lunch\",\n           \"description\": \"lunch\",\n           \"day\": 1\n       }\n   ],\n   \"err\": null\n}",
           "type": "json"
         }
       ]

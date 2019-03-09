@@ -2,6 +2,7 @@ package endpoint
 
 import (
 	"context"
+
 	service "github.com/GDGVIT/Project-Hades/coupons/pkg/service"
 	model "github.com/GDGVIT/Project-Hades/model"
 	endpoint "github.com/go-kit/kit/endpoint"
@@ -124,7 +125,8 @@ func (r DeleteCouponResponse) Failed() error {
 
 // DeleteSchemaRequest collects the request parameters for the DeleteSchema method.
 type DeleteSchemaRequest struct {
-	Event string `json:"event"`
+	Event string       `json:"event"`
+	Query model.Coupon `json:"query"`
 }
 
 // DeleteSchemaResponse collects the response parameters for the DeleteSchema method.
@@ -137,7 +139,7 @@ type DeleteSchemaResponse struct {
 func MakeDeleteSchemaEndpoint(s service.CouponsService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(DeleteSchemaRequest)
-		rs, err := s.DeleteSchema(ctx, req.Event)
+		rs, err := s.DeleteSchema(ctx, req.Event, req.Query)
 		return DeleteSchemaResponse{
 			Err: err,
 			Rs:  rs,
@@ -235,8 +237,8 @@ func (e Endpoints) DeleteCoupon(ctx context.Context, event string, coupon model.
 }
 
 // DeleteSchema implements Service. Primarily useful in a client.
-func (e Endpoints) DeleteSchema(ctx context.Context, event string) (rs string, err error) {
-	request := DeleteSchemaRequest{Event: event}
+func (e Endpoints) DeleteSchema(ctx context.Context, event string, query model.Coupon) (rs string, err error) {
+	request := DeleteSchemaRequest{Event: event, Query: query}
 	response, err := e.DeleteSchemaEndpoint(ctx, request)
 	if err != nil {
 		return

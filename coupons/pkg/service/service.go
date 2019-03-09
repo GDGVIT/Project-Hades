@@ -12,7 +12,7 @@ type CouponsService interface {
 	MarkPresent(ctx context.Context, attendance model.Attendance) (rs string, err error)
 	RedeemCoupon(ctx context.Context, attendance model.Attendance, couponName string) (rs string, err error)
 	DeleteCoupon(ctx context.Context, event string, coupon model.Coupon) (rs string, err error)
-	DeleteSchema(ctx context.Context, event string) (rs string, err error)
+	DeleteSchema(ctx context.Context, event string, query model.Coupon) (rs string, err error)
 	ViewSchema(ctx context.Context, event string) (rs []model.Coupon, err error)
 }
 
@@ -145,13 +145,108 @@ func (b *basicCouponsService) DeleteCoupon(ctx context.Context, event string, co
 	// TODO implement the business logic of DeleteCoupon
 	return rs, err
 }
-func (b *basicCouponsService) DeleteSchema(ctx context.Context, event string) (rs string, err error) {
-	// TODO implement the business logic of DeleteSchema
-	return rs, err
+
+/**
+*@api {post} /api/v1/coupons/delete-coupon delete coupon
+*@apiName delete coupon
+*@apiGroup coupons
+*@apiPermission admin
+*
+*@apiParam {string} eventName name of the event
+*@apiParam {string} name name of the coupon
+*@apiParam {int} day day of the event
+*@apiParam {string} description description of the coupon
+*
+*@apiParamExample {json} delete-specific-request
+*{
+*	"event":"DEVRELCONF",
+*	"query":{
+*		"name":"lunch",
+*		"day":2,
+*		"description":"lunch"
+*	}
+*}
+*
+*@apiParamExample {json} delete-specific-response
+*{
+*    "rs": "Deleted",
+*    "err": null
+*}
+*
+*@apiParamExample {json} delete-all-request
+*{
+*	"event":"DEVRELCONF"
+*}
+*
+*@apiParamExample {json} delete-all-response
+*{
+*    "rs": "Deleted",
+*    "err": null
+*}
+**/
+func (b *basicCouponsService) DeleteSchema(ctx context.Context, event string, query model.Coupon) (rs string, err error) {
+	c := make(chan model.MessageReturn)
+	go model.DeleteCouponSchema(event, query, c)
+	msg := <-c
+	if err := msg.Err; err != nil {
+		return msg.Message, msg.Err
+	}
+	return msg.Message, nil
 }
+
+/**
+*@api {post} /api/v1/coupons/view-schema view coupon schema
+*@apiName view coupon schema
+*@apiGroup coupons
+*@apiPermission admin
+*
+*@apiParam {string} event name of the event
+
+*@apiParamExample {json} request-example
+*{
+*	"event":"DEVRELCONF"
+*}
+*
+*@apiParamExample {json} response-example
+*{
+*    "rs": [
+*        {
+*            "name": "gargentaul",
+*            "description": "dasd",
+*            "day": 1
+*        },
+*        {
+*            "name": "bf",
+*            "description": "bf",
+*            "day": 1
+*        },
+*        {
+*            "name": "dinner",
+*            "description": "dinner",
+*            "day": 2
+*        },
+*        {
+*            "name": "lunch",
+*            "description": "lunch",
+*            "day": 2
+*        },
+*        {
+*            "name": "lunch",
+*            "description": "lunch",
+*            "day": 1
+*        }
+*    ],
+*    "err": null
+*}
+**/
 func (b *basicCouponsService) ViewSchema(ctx context.Context, event string) (rs []model.Coupon, err error) {
-	// TODO implement the business logic of ViewSchema
-	return rs, err
+	c := make(chan model.CouponReturn)
+	go model.ViewCouponSchema(event, c)
+	msg := <-c
+	if err := msg.Err; err != nil {
+		return nil, err
+	}
+	return msg.Coupons, nil
 }
 
 // NewBasicCouponsService returns a naive, stateless implementation of CouponsService.
