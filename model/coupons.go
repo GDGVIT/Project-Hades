@@ -212,22 +212,7 @@ func RedeemCoupon(attendance Attendance, couponName string, c chan MessageReturn
 		return
 	}
 
-	// check if empty coupon node
-	// cp := ViewCoupon(attendance)
-	// if len(cp) < 1 || cp[0] == "" {
-	// 	ce := make(chan MessageReturn)
-	// 	go DeleteCoupons(attendance, ce)
-
-	// 	msg := <-ce
-	// 	if err = msg.Err; err != nil {
-	// 		c <- msg
-	// 		return
-	// 	}
-
-	// 	c <- MessageReturn{"No more coupons exist for this user", nil}
-	// 	return
-
-	// }
+	// check if empty coupon node todo
 
 	// remove from array
 	_, err = con.ExecNeo(`
@@ -245,23 +230,63 @@ func RedeemCoupon(attendance Attendance, couponName string, c chan MessageReturn
 		return
 	}
 
-	// check if empty node
-	// cp = ViewCoupon(attendance)
-	// if cp[0] == "" {
-	// 	ce := make(chan MessageReturn)
-	// 	go DeleteCoupons(attendance, ce)
-
-	// 	msg := <-ce
-	// 	if err := msg.Err; err != nil {
-	// 		c <- msg
-	// 		return
-	// 	}
-
-	// 	c <- MessageReturn{"No more coupons exist for this user", nil}
-	// 	return
-
-	// }
-
 	c <- MessageReturn{"Successfully posted coupon", nil}
+	return
+}
+
+func ViewCouponSchema(event string, c chan CouponReturn) {
+	data, _, _, err := con.QueryNeoAll(`
+		MATCH(n:EVENT)-[:COUPON]->(a:COUPON_SCHEMA)
+		WHERE n.name=$event
+		RETURN a.name, a.day, a.description
+	`, map[string]interface{}{
+		"event": event,
+	})
+	if err != nil {
+		c <- CouponReturn{nil, err}
+		return
+	}
+	var cp []Coupon
+	for i := range data {
+		cp = append(cp, Coupon{
+			Name: data[i][0].(string),
+			Day:  int(data[i][1].(int64)),
+			Desc: data[i][2].(string),
+		})
+	}
+	c <- CouponReturn{cp, nil}
+	return
+}
+
+func DeleteCouponSchema(event string, q Coupon, c chan MessageReturn) {
+
+	var str string
+
+	if q.Name != "" {
+
+		str = `
+			MATCH(n:EVENT)-[:COUPON]->(a:COUPON_SCHEMA)
+			WHERE n.name=$event AND a.name=$cname AND a.day=$cday AND a.description = $cdesc
+			DETACH DELETE a
+		`
+	} else {
+		str = `
+			MATCH(n:EVENT)-[:COUPON]->(a:COUPON_SCHEMA)
+			WHERE n.name=$event
+			DETACH DELETE a
+		`
+	}
+
+	_, err := con.ExecNeo(str, map[string]interface{}{
+		"event": event,
+		"cname": q.Name,
+		"cday":  q.Day,
+		"cdesc": q.Desc,
+	})
+	if err != nil {
+		c <- MessageReturn{"Error occurred while deleting", err}
+		return
+	}
+	c <- MessageReturn{"Deleted", nil}
 	return
 }
