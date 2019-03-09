@@ -20,24 +20,23 @@ type Attendee struct {
 }
 
 type Event struct {
-	ClubName             string      `json:"clubName"`
-	Name                 string      `json:"name"`
-	ToDate               string      `json:"toDate"`
-	FromDate             string      `json:"fromDate"`
-	ToTime               string      `json:"toTime"`
-	FromTime             string      `json:"fromTime"`
-	Budget               string      `json:"budget"`
-	Description          string      `json:"description"`
-	Category             string      `json:"category"`
-	Venue                string      `json:"venue"`
-	Attendance           string      `json:"attendance"`
-	ExpectedParticipants string      `json:"expectedParticipants"`
-	FacultyCoordinator   Participant `json:"facultyCoordinator"`
-	StudentCoordinator   Participant `json:"studentCoordinator"`
-	// GuestDetails          Guest       `json:"guest"`
-	PROrequest            string `json:"PROrequest"`
-	CampusEngineerRequest string `json:"campusEngineerRequest"`
-	Duration              string `json:"duration"`
+	ClubName              string      `json:"clubName"`
+	Name                  string      `json:"name"`
+	ToDate                string      `json:"toDate"`
+	FromDate              string      `json:"fromDate"`
+	ToTime                string      `json:"toTime"`
+	FromTime              string      `json:"fromTime"`
+	Budget                string      `json:"budget"`
+	Description           string      `json:"description"`
+	Category              string      `json:"category"`
+	Venue                 string      `json:"venue"`
+	Attendance            string      `json:"attendance"`
+	ExpectedParticipants  string      `json:"expectedParticipants"`
+	FacultyCoordinator    Participant `json:"facultyCoordinator"`
+	StudentCoordinator    Participant `json:"studentCoordinator"`
+	PROrequest            string      `json:"PROrequest"`
+	CampusEngineerRequest string      `json:"campusEngineerRequest"`
+	Duration              string      `json:"duration"`
 	// MainSponsor           Participant `json:"mainSponsor"`
 	Status string `json:"status"`
 }

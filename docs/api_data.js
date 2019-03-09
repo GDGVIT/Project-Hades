@@ -28,6 +28,89 @@ define({ "api": [
     "name": ""
   },
   {
+    "type": "get",
+    "url": "/api/v1/analytics/all",
+    "title": "read all logs",
+    "group": "analytics",
+    "name": "read_all_logs",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "examples": [
+        {
+          "title": "request-url-example",
+          "content": "http://localhost:8085/api/v1/analytics/all",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"logs\": [\n       [\n           {\n               \"ID\": 1,\n               \"CreatedAt\": \"2019-02-21T20:45:21.579518607Z\",\n               \"UpdatedAt\": \"2019-02-21T20:45:21.579518607Z\",\n               \"DeletedAt\": null,\n               \"Subject\": \"hades.event.CreateEvent\",\n               \"Timestamp\": \"2019-02-21 20:45:21.579267685 +0000 UTC m=+943.125297422\",\n               \"Body\": \"{\\\"clubName\\\":\\\"GDG\\\",\\\"name\\\":\\\"DEVRELCONF\\\",\\\"toDate\\\":\\\"10TH OCTOBER\\\",\\\"fromDate\\\":\\\"8TH OCTOBER\\\",\\\"toTime\\\":\\\"10 PM\\\",\\\"fromTime\\\":\\\"11 AM\\\",\\\"budget\\\":\\\"200000\\\",\\\"description\\\":\\\"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\\\",\\\"category\\\":\\\"TECHNICAL\\\",\\\"venue\\\":\\\"ANNA AUDI\\\",\\\"attendance\\\":\\\"4000\\\",\\\"expectedParticipants\\\":\\\"4000\\\",\\\"facultyCoordinator\\\":{\\\"name\\\":\\\"NOORU MAA\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"studentCoordinator\\\":{\\\"name\\\":\\\"NOOR\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"PROrequest\\\":\\\"SAJDOOSIJANDFSAKFDSAFD\\\",\\\"campusEngineerRequest\\\":\\\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\\\",\\\"duration\\\":\\\"16 hours\\\",\\\"status\\\":\\\"\\\"}\"\n           },\n           {\n               \"ID\": 2,\n               \"CreatedAt\": \"2019-02-21T20:47:28.002589821Z\",\n               \"UpdatedAt\": \"2019-02-21T20:47:28.002589821Z\",\n               \"DeletedAt\": null,\n               \"Subject\": \"hades.event.CreateEvent\",\n               \"Timestamp\": \"2019-02-21 20:47:28.002438401 +0000 UTC m=+1069.548468003\",\n               \"Body\": \"{\\\"clubName\\\":\\\"GDG\\\",\\\"name\\\":\\\"DEVRELCONF\\\",\\\"toDate\\\":\\\"10TH OCTOBER\\\",\\\"fromDate\\\":\\\"8TH OCTOBER\\\",\\\"toTime\\\":\\\"10 PM\\\",\\\"fromTime\\\":\\\"11 AM\\\",\\\"budget\\\":\\\"200000\\\",\\\"description\\\":\\\"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\\\",\\\"category\\\":\\\"TECHNICAL\\\",\\\"venue\\\":\\\"ANNA AUDI\\\",\\\"attendance\\\":\\\"4000\\\",\\\"expectedParticipants\\\":\\\"4000\\\",\\\"facultyCoordinator\\\":{\\\"name\\\":\\\"NOORU MAA\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"studentCoordinator\\\":{\\\"name\\\":\\\"NOOR\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"PROrequest\\\":\\\"SAJDOOSIJANDFSAKFDSAFD\\\",\\\"campusEngineerRequest\\\":\\\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\\\",\\\"duration\\\":\\\"16 hours\\\",\\\"status\\\":\\\"\\\"}\"\n           },\n           {\n               \"ID\": 3,\n               \"CreatedAt\": \"2019-03-09T10:29:40.344850552Z\",\n               \"UpdatedAt\": \"2019-03-09T10:29:40.344850552Z\",\n               \"DeletedAt\": null,\n               \"Subject\": \"hades.event.CreateEvent\",\n               \"Timestamp\": \"2019-03-09 10:29:40.344694322 +0000 UTC m=+327.442605414\",\n               \"Body\": \"{\\\"clubName\\\":\\\"\\\",\\\"name\\\":\\\"\\\",\\\"toDate\\\":\\\"\\\",\\\"fromDate\\\":\\\"\\\",\\\"toTime\\\":\\\"\\\",\\\"fromTime\\\":\\\"\\\",\\\"budget\\\":\\\"\\\",\\\"description\\\":\\\"\\\",\\\"category\\\":\\\"\\\",\\\"venue\\\":\\\"\\\",\\\"attendance\\\":\\\"\\\",\\\"expectedParticipants\\\":\\\"\\\",\\\"facultyCoordinator\\\":{\\\"name\\\":\\\"\\\",\\\"registrationNumber\\\":\\\"\\\",\\\"email\\\":\\\"\\\",\\\"phoneNumber\\\":\\\"\\\",\\\"gender\\\":\\\"\\\"},\\\"studentCoordinator\\\":{\\\"name\\\":\\\"\\\",\\\"registrationNumber\\\":\\\"\\\",\\\"email\\\":\\\"\\\",\\\"phoneNumber\\\":\\\"\\\",\\\"gender\\\":\\\"\\\"},\\\"PROrequest\\\":\\\"\\\",\\\"campusEngineerRequest\\\":\\\"\\\",\\\"duration\\\":\\\"\\\",\\\"status\\\":\\\"\\\"}\"\n           },\n           {\n               \"ID\": 4,\n               \"CreatedAt\": \"2019-03-09T10:39:59.807360183Z\",\n               \"UpdatedAt\": \"2019-03-09T10:39:59.807360183Z\",\n               \"DeletedAt\": null,\n               \"Subject\": \"hades.event.CreateEvent\",\n               \"Timestamp\": \"2019-03-09 10:39:59.807139694 +0000 UTC m=+4.791159116\",\n               \"Body\": \"{\\\"clubName\\\":\\\"\\\",\\\"name\\\":\\\"\\\",\\\"toDate\\\":\\\"\\\",\\\"fromDate\\\":\\\"\\\",\\\"toTime\\\":\\\"\\\",\\\"fromTime\\\":\\\"\\\",\\\"budget\\\":\\\"\\\",\\\"description\\\":\\\"\\\",\\\"category\\\":\\\"\\\",\\\"venue\\\":\\\"\\\",\\\"attendance\\\":\\\"\\\",\\\"expectedParticipants\\\":\\\"\\\",\\\"facultyCoordinator\\\":{\\\"name\\\":\\\"\\\",\\\"registrationNumber\\\":\\\"\\\",\\\"email\\\":\\\"\\\",\\\"phoneNumber\\\":\\\"\\\",\\\"gender\\\":\\\"\\\"},\\\"studentCoordinator\\\":{\\\"name\\\":\\\"\\\",\\\"registrationNumber\\\":\\\"\\\",\\\"email\\\":\\\"\\\",\\\"phoneNumber\\\":\\\"\\\",\\\"gender\\\":\\\"\\\"},\\\"PROrequest\\\":\\\"\\\",\\\"campusEngineerRequest\\\":\\\"\\\",\\\"duration\\\":\\\"\\\",\\\"status\\\":\\\"\\\"}\"\n           },\n           {\n               \"ID\": 5,\n               \"CreatedAt\": \"2019-03-09T10:42:27.834845067Z\",\n               \"UpdatedAt\": \"2019-03-09T10:42:27.834845067Z\",\n               \"DeletedAt\": null,\n               \"Subject\": \"hades.event.CreateEvent\",\n               \"Timestamp\": \"2019-03-09 10:42:27.834629395 +0000 UTC m=+18.339562524\",\n               \"Body\": \"{\\\"clubName\\\":\\\"GDG\\\",\\\"name\\\":\\\"DEVFEST\\\",\\\"toDate\\\":\\\"10TH OCTOBER\\\",\\\"fromDate\\\":\\\"8TH OCTOBER\\\",\\\"toTime\\\":\\\"10 PM\\\",\\\"fromTime\\\":\\\"11 AM\\\",\\\"budget\\\":\\\"200000\\\",\\\"description\\\":\\\"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\\\",\\\"category\\\":\\\"TECHNICAL\\\",\\\"venue\\\":\\\"ANNA AUDI\\\",\\\"attendance\\\":\\\"4000\\\",\\\"expectedParticipants\\\":\\\"4000\\\",\\\"facultyCoordinator\\\":{\\\"name\\\":\\\"NOORU MAA\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"studentCoordinator\\\":{\\\"name\\\":\\\"NOORU BAAP\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"PROrequest\\\":\\\"SAJDOOSIJANDFSAKFDSAFD\\\",\\\"campusEngineerRequest\\\":\\\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\\\",\\\"duration\\\":\\\"16 hours\\\",\\\"status\\\":\\\"\\\"}\"\n           },\n           {\n               \"ID\": 6,\n               \"CreatedAt\": \"2019-03-09T10:43:26.780351991Z\",\n               \"UpdatedAt\": \"2019-03-09T10:43:26.780351991Z\",\n               \"DeletedAt\": null,\n               \"Subject\": \"hades.event.CreateEvent\",\n               \"Timestamp\": \"2019-03-09 10:43:26.77995934 +0000 UTC m=+77.284892489\",\n               \"Body\": \"{\\\"clubName\\\":\\\"CC\\\",\\\"name\\\":\\\"DEVSOC\\\",\\\"toDate\\\":\\\"10TH OCTOBER\\\",\\\"fromDate\\\":\\\"8TH OCTOBER\\\",\\\"toTime\\\":\\\"10 PM\\\",\\\"fromTime\\\":\\\"11 AM\\\",\\\"budget\\\":\\\"200000\\\",\\\"description\\\":\\\"TECHNICAL EVENT AT CC VIT. ITS GONNA BE AMAZING\\\",\\\"category\\\":\\\"TECHNICAL\\\",\\\"venue\\\":\\\"ANNA AUDI\\\",\\\"attendance\\\":\\\"4000\\\",\\\"expectedParticipants\\\":\\\"4000\\\",\\\"facultyCoordinator\\\":{\\\"name\\\":\\\"NOOR\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"studentCoordinator\\\":{\\\"name\\\":\\\"NOORU\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"PROrequest\\\":\\\"SAJDOOSIJANDFSAKFDSAFD\\\",\\\"campusEngineerRequest\\\":\\\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\\\",\\\"duration\\\":\\\"16 hours\\\",\\\"status\\\":\\\"\\\"}\"\n           },\n           {\n               \"ID\": 7,\n               \"CreatedAt\": \"2019-03-09T10:52:49.264936787Z\",\n               \"UpdatedAt\": \"2019-03-09T10:52:49.264936787Z\",\n               \"DeletedAt\": null,\n               \"Subject\": \"hades.event.CreateEvent\",\n               \"Timestamp\": \"2019-03-09 10:52:49.264770904 +0000 UTC m=+10.214397568\",\n               \"Body\": \"{\\\"clubName\\\":\\\"GDG\\\",\\\"name\\\":\\\"WOMENTECHIxES\\\",\\\"toDate\\\":\\\"10TH OCTOBER\\\",\\\"fromDate\\\":\\\"8TH OCTOBER\\\",\\\"toTime\\\":\\\"10 PM\\\",\\\"fromTime\\\":\\\"11 AM\\\",\\\"budget\\\":\\\"200000\\\",\\\"description\\\":\\\"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\\\",\\\"category\\\":\\\"TECHNICAL\\\",\\\"venue\\\":\\\"ANNA AUDI\\\",\\\"attendance\\\":\\\"4000\\\",\\\"expectedParticipants\\\":\\\"4000\\\",\\\"facultyCoordinator\\\":{\\\"name\\\":\\\"NOOR\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"studentCoordinator\\\":{\\\"name\\\":\\\"NOORU BAAP\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"PROrequest\\\":\\\"SAJDOOSIJANDFSAKFDSAFD\\\",\\\"campusEngineerRequest\\\":\\\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\\\",\\\"duration\\\":\\\"16 hours\\\",\\\"status\\\":\\\"\\\"}\"\n           }\n       ]\n   ],\n   \"errors\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./analytics/endpoints/handlerfuncs.go",
+    "groupTitle": "analytics"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/analytics",
+    "title": "read specific logs",
+    "group": "analytics",
+    "name": "read_specific_logs",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "subject",
+            "description": "<p>event subject</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "timestamp",
+            "description": "<p>event timestamp</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String-Object",
+            "optional": false,
+            "field": "body",
+            "description": "<p>event body</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-url-example",
+          "content": "http://localhost:8085/api/v1/analytics?subject=hades.event.CreateEvent",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"logs\": [\n       [\n           {\n               \"ID\": 1,\n               \"CreatedAt\": \"2019-02-21T20:45:21.579518607Z\",\n               \"UpdatedAt\": \"2019-02-21T20:45:21.579518607Z\",\n               \"DeletedAt\": null,\n               \"Subject\": \"hades.event.CreateEvent\",\n               \"Timestamp\": \"2019-02-21 20:45:21.579267685 +0000 UTC m=+943.125297422\",\n               \"Body\": \"{\\\"clubName\\\":\\\"GDG\\\",\\\"name\\\":\\\"DEVRELCONF\\\",\\\"toDate\\\":\\\"10TH OCTOBER\\\",\\\"fromDate\\\":\\\"8TH OCTOBER\\\",\\\"toTime\\\":\\\"10 PM\\\",\\\"fromTime\\\":\\\"11 AM\\\",\\\"budget\\\":\\\"200000\\\",\\\"description\\\":\\\"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\\\",\\\"category\\\":\\\"TECHNICAL\\\",\\\"venue\\\":\\\"ANNA AUDI\\\",\\\"attendance\\\":\\\"4000\\\",\\\"expectedParticipants\\\":\\\"4000\\\",\\\"facultyCoordinator\\\":{\\\"name\\\":\\\"NOORU MAA\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"studentCoordinator\\\":{\\\"name\\\":\\\"NOOR\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"PROrequest\\\":\\\"SAJDOOSIJANDFSAKFDSAFD\\\",\\\"campusEngineerRequest\\\":\\\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\\\",\\\"duration\\\":\\\"16 hours\\\",\\\"status\\\":\\\"\\\"}\"\n           },\n           {\n               \"ID\": 2,\n               \"CreatedAt\": \"2019-02-21T20:47:28.002589821Z\",\n               \"UpdatedAt\": \"2019-02-21T20:47:28.002589821Z\",\n               \"DeletedAt\": null,\n               \"Subject\": \"hades.event.CreateEvent\",\n               \"Timestamp\": \"2019-02-21 20:47:28.002438401 +0000 UTC m=+1069.548468003\",\n               \"Body\": \"{\\\"clubName\\\":\\\"GDG\\\",\\\"name\\\":\\\"DEVRELCONF\\\",\\\"toDate\\\":\\\"10TH OCTOBER\\\",\\\"fromDate\\\":\\\"8TH OCTOBER\\\",\\\"toTime\\\":\\\"10 PM\\\",\\\"fromTime\\\":\\\"11 AM\\\",\\\"budget\\\":\\\"200000\\\",\\\"description\\\":\\\"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\\\",\\\"category\\\":\\\"TECHNICAL\\\",\\\"venue\\\":\\\"ANNA AUDI\\\",\\\"attendance\\\":\\\"4000\\\",\\\"expectedParticipants\\\":\\\"4000\\\",\\\"facultyCoordinator\\\":{\\\"name\\\":\\\"NOORU MAA\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"studentCoordinator\\\":{\\\"name\\\":\\\"NOOR\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"PROrequest\\\":\\\"SAJDOOSIJANDFSAKFDSAFD\\\",\\\"campusEngineerRequest\\\":\\\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\\\",\\\"duration\\\":\\\"16 hours\\\",\\\"status\\\":\\\"\\\"}\"\n           },\n           {\n               \"ID\": 3,\n               \"CreatedAt\": \"2019-03-09T10:29:40.344850552Z\",\n               \"UpdatedAt\": \"2019-03-09T10:29:40.344850552Z\",\n               \"DeletedAt\": null,\n               \"Subject\": \"hades.event.CreateEvent\",\n               \"Timestamp\": \"2019-03-09 10:29:40.344694322 +0000 UTC m=+327.442605414\",\n               \"Body\": \"{\\\"clubName\\\":\\\"\\\",\\\"name\\\":\\\"\\\",\\\"toDate\\\":\\\"\\\",\\\"fromDate\\\":\\\"\\\",\\\"toTime\\\":\\\"\\\",\\\"fromTime\\\":\\\"\\\",\\\"budget\\\":\\\"\\\",\\\"description\\\":\\\"\\\",\\\"category\\\":\\\"\\\",\\\"venue\\\":\\\"\\\",\\\"attendance\\\":\\\"\\\",\\\"expectedParticipants\\\":\\\"\\\",\\\"facultyCoordinator\\\":{\\\"name\\\":\\\"\\\",\\\"registrationNumber\\\":\\\"\\\",\\\"email\\\":\\\"\\\",\\\"phoneNumber\\\":\\\"\\\",\\\"gender\\\":\\\"\\\"},\\\"studentCoordinator\\\":{\\\"name\\\":\\\"\\\",\\\"registrationNumber\\\":\\\"\\\",\\\"email\\\":\\\"\\\",\\\"phoneNumber\\\":\\\"\\\",\\\"gender\\\":\\\"\\\"},\\\"PROrequest\\\":\\\"\\\",\\\"campusEngineerRequest\\\":\\\"\\\",\\\"duration\\\":\\\"\\\",\\\"status\\\":\\\"\\\"}\"\n           },\n           {\n               \"ID\": 4,\n               \"CreatedAt\": \"2019-03-09T10:39:59.807360183Z\",\n               \"UpdatedAt\": \"2019-03-09T10:39:59.807360183Z\",\n               \"DeletedAt\": null,\n               \"Subject\": \"hades.event.CreateEvent\",\n               \"Timestamp\": \"2019-03-09 10:39:59.807139694 +0000 UTC m=+4.791159116\",\n               \"Body\": \"{\\\"clubName\\\":\\\"\\\",\\\"name\\\":\\\"\\\",\\\"toDate\\\":\\\"\\\",\\\"fromDate\\\":\\\"\\\",\\\"toTime\\\":\\\"\\\",\\\"fromTime\\\":\\\"\\\",\\\"budget\\\":\\\"\\\",\\\"description\\\":\\\"\\\",\\\"category\\\":\\\"\\\",\\\"venue\\\":\\\"\\\",\\\"attendance\\\":\\\"\\\",\\\"expectedParticipants\\\":\\\"\\\",\\\"facultyCoordinator\\\":{\\\"name\\\":\\\"\\\",\\\"registrationNumber\\\":\\\"\\\",\\\"email\\\":\\\"\\\",\\\"phoneNumber\\\":\\\"\\\",\\\"gender\\\":\\\"\\\"},\\\"studentCoordinator\\\":{\\\"name\\\":\\\"\\\",\\\"registrationNumber\\\":\\\"\\\",\\\"email\\\":\\\"\\\",\\\"phoneNumber\\\":\\\"\\\",\\\"gender\\\":\\\"\\\"},\\\"PROrequest\\\":\\\"\\\",\\\"campusEngineerRequest\\\":\\\"\\\",\\\"duration\\\":\\\"\\\",\\\"status\\\":\\\"\\\"}\"\n           },\n           {\n               \"ID\": 5,\n               \"CreatedAt\": \"2019-03-09T10:42:27.834845067Z\",\n               \"UpdatedAt\": \"2019-03-09T10:42:27.834845067Z\",\n               \"DeletedAt\": null,\n               \"Subject\": \"hades.event.CreateEvent\",\n               \"Timestamp\": \"2019-03-09 10:42:27.834629395 +0000 UTC m=+18.339562524\",\n               \"Body\": \"{\\\"clubName\\\":\\\"GDG\\\",\\\"name\\\":\\\"DEVFEST\\\",\\\"toDate\\\":\\\"10TH OCTOBER\\\",\\\"fromDate\\\":\\\"8TH OCTOBER\\\",\\\"toTime\\\":\\\"10 PM\\\",\\\"fromTime\\\":\\\"11 AM\\\",\\\"budget\\\":\\\"200000\\\",\\\"description\\\":\\\"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\\\",\\\"category\\\":\\\"TECHNICAL\\\",\\\"venue\\\":\\\"ANNA AUDI\\\",\\\"attendance\\\":\\\"4000\\\",\\\"expectedParticipants\\\":\\\"4000\\\",\\\"facultyCoordinator\\\":{\\\"name\\\":\\\"NOORU MAA\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"studentCoordinator\\\":{\\\"name\\\":\\\"NOORU BAAP\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"PROrequest\\\":\\\"SAJDOOSIJANDFSAKFDSAFD\\\",\\\"campusEngineerRequest\\\":\\\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\\\",\\\"duration\\\":\\\"16 hours\\\",\\\"status\\\":\\\"\\\"}\"\n           },\n           {\n               \"ID\": 6,\n               \"CreatedAt\": \"2019-03-09T10:43:26.780351991Z\",\n               \"UpdatedAt\": \"2019-03-09T10:43:26.780351991Z\",\n               \"DeletedAt\": null,\n               \"Subject\": \"hades.event.CreateEvent\",\n               \"Timestamp\": \"2019-03-09 10:43:26.77995934 +0000 UTC m=+77.284892489\",\n               \"Body\": \"{\\\"clubName\\\":\\\"CC\\\",\\\"name\\\":\\\"DEVSOC\\\",\\\"toDate\\\":\\\"10TH OCTOBER\\\",\\\"fromDate\\\":\\\"8TH OCTOBER\\\",\\\"toTime\\\":\\\"10 PM\\\",\\\"fromTime\\\":\\\"11 AM\\\",\\\"budget\\\":\\\"200000\\\",\\\"description\\\":\\\"TECHNICAL EVENT AT CC VIT. ITS GONNA BE AMAZING\\\",\\\"category\\\":\\\"TECHNICAL\\\",\\\"venue\\\":\\\"ANNA AUDI\\\",\\\"attendance\\\":\\\"4000\\\",\\\"expectedParticipants\\\":\\\"4000\\\",\\\"facultyCoordinator\\\":{\\\"name\\\":\\\"NOOR\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"studentCoordinator\\\":{\\\"name\\\":\\\"NOORU\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"PROrequest\\\":\\\"SAJDOOSIJANDFSAKFDSAFD\\\",\\\"campusEngineerRequest\\\":\\\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\\\",\\\"duration\\\":\\\"16 hours\\\",\\\"status\\\":\\\"\\\"}\"\n           },\n           {\n               \"ID\": 7,\n               \"CreatedAt\": \"2019-03-09T10:52:49.264936787Z\",\n               \"UpdatedAt\": \"2019-03-09T10:52:49.264936787Z\",\n               \"DeletedAt\": null,\n               \"Subject\": \"hades.event.CreateEvent\",\n               \"Timestamp\": \"2019-03-09 10:52:49.264770904 +0000 UTC m=+10.214397568\",\n               \"Body\": \"{\\\"clubName\\\":\\\"GDG\\\",\\\"name\\\":\\\"WOMENTECHIxES\\\",\\\"toDate\\\":\\\"10TH OCTOBER\\\",\\\"fromDate\\\":\\\"8TH OCTOBER\\\",\\\"toTime\\\":\\\"10 PM\\\",\\\"fromTime\\\":\\\"11 AM\\\",\\\"budget\\\":\\\"200000\\\",\\\"description\\\":\\\"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\\\",\\\"category\\\":\\\"TECHNICAL\\\",\\\"venue\\\":\\\"ANNA AUDI\\\",\\\"attendance\\\":\\\"4000\\\",\\\"expectedParticipants\\\":\\\"4000\\\",\\\"facultyCoordinator\\\":{\\\"name\\\":\\\"NOOR\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"studentCoordinator\\\":{\\\"name\\\":\\\"NOORU BAAP\\\",\\\"registrationNumber\\\":\\\"17BBE1010\\\",\\\"email\\\":\\\"SDADAS@A.COM\\\",\\\"phoneNumber\\\":\\\"919191991911\\\",\\\"gender\\\":\\\"M\\\"},\\\"PROrequest\\\":\\\"SAJDOOSIJANDFSAKFDSAFD\\\",\\\"campusEngineerRequest\\\":\\\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\\\",\\\"duration\\\":\\\"16 hours\\\",\\\"status\\\":\\\"\\\"}\"\n           }\n       ]\n   ],\n   \"errors\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./analytics/endpoints/handlerfuncs.go",
+    "groupTitle": "analytics"
+  },
+  {
     "type": "post",
     "url": "/api/v1/coupons/create-schema",
     "title": "create coupon schema",
@@ -764,6 +847,189 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "./exporter/endpoints/controller/handlerfuncs.go",
     "groupTitle": "exporter"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/guests/create-guest",
+    "title": "create a guest",
+    "name": "create_a_guest",
+    "group": "guest",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "event",
+            "description": "<p>name of the event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "name",
+            "description": "<p>name of the guest</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "email",
+            "description": "<p>email of the guest</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "phoneNumber",
+            "description": "<p>phone number of the guest</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "gender",
+            "description": "<p>gender of the guest</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "stake",
+            "description": "<p>stake of the guest</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "locationOfStay",
+            "description": "<p>where does the guest stay? (origin)</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\n{\n\t\"event\":\"DEVRELCONF\",\n\t\"guest\": {\n\t\t\"name\":\"angad\",\n\t\t\"email\":\"sdaasd@a.com\",\n\t\t\"phoneNumber\":\"9999999999\",\n\t\t\"gender\":\"M\",\n\t\t\"stake\":\"speaker\",\n\t\t\"locationOfStay\":\"Bangalore\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": \"Guest created\",\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./guests/pkg/service/service.go",
+    "groupTitle": "guest"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/guests/delete-guest",
+    "title": "delete a guest",
+    "name": "delete_a_guest",
+    "group": "guest",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "key",
+            "description": "<p>key of the event field</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "value",
+            "description": "<p>value of the event field</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "changeKey",
+            "description": "<p>Name of the guest to be deleted</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\n{\n\t\"query\": {\n\t\t\"key\":\"name\",\n\t\t\"value\":\"DEVRELCONF\",\n\t\t\"changeKey\":\"angad\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": \"Guest deleted\",\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./guests/pkg/service/service.go",
+    "groupTitle": "guest"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/guests/read-guest",
+    "title": "read a guest",
+    "name": "read_a_guest",
+    "group": "guest",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "key",
+            "description": "<p>key of the event field</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "value",
+            "description": "<p>value of the event field</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\n{\n\t\"query\": {\n\t\t\"key\":\"name\",\n\t\t\"value\":\"DEVRELCONF\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": [\n       {\n           \"name\": \"dafds\",\n           \"email\": \"sdadsaadasd@a.com\",\n           \"phoneNumber\": \"9699999999\",\n           \"gender\": \"M\",\n           \"stake\": \"speaker\",\n           \"locationOfStay\": \"Bangalore\"\n       },\n       {\n           \"name\": \"angad\",\n           \"email\": \"sdaasd@a.com\",\n           \"phoneNumber\": \"9999999999\",\n           \"gender\": \"M\",\n           \"stake\": \"speaker\",\n           \"locationOfStay\": \"Bangalore\"\n       }\n   ],\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./guests/pkg/service/service.go",
+    "groupTitle": "guest"
   },
   {
     "type": "post",

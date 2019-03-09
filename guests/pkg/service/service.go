@@ -23,6 +23,42 @@ type GuestsService interface {
 
 type basicGuestsService struct{}
 
+/**
+*@api {post} /api/v1/guests/create-guest create a guest
+*@apiName create a guest
+*@apiGroup guest
+*@apiPermission admin
+*
+*@apiParam {string} event name of the event
+*@apiParam {string} name name of the guest
+*@apiParam {string} email email of the guest
+*@apiParam {string} phoneNumber phone number of the guest
+*@apiParam {string} gender gender of the guest
+*@apiParam {string} stake stake of the guest
+*@apiParam {string} locationOfStay where does the guest stay? (origin)
+
+*
+*@apiParamExample {json} request-example
+*
+*{
+*	"event":"DEVRELCONF",
+*	"guest": {
+*		"name":"angad",
+*		"email":"sdaasd@a.com",
+*		"phoneNumber":"9999999999",
+*		"gender":"M",
+*		"stake":"speaker",
+*		"locationOfStay":"Bangalore"
+*	}
+*}
+*
+*@apiParamExample {json} response-example
+*{
+*    "rs": "Guest created",
+*    "err": null
+*}
+*
+**/
 func (b *basicGuestsService) CreateGuest(ctx context.Context, event string, guest model.Guest) (rs string, err error) {
 
 	c := make(chan error)
@@ -34,6 +70,48 @@ func (b *basicGuestsService) CreateGuest(ctx context.Context, event string, gues
 	return "Guest created", nil
 }
 
+/**
+*@api {post} /api/v1/guests/read-guest read a guest
+*@apiName read a guest
+*@apiGroup guest
+*@apiPermission admin
+*
+*@apiParam {string} key key of the event field
+*@apiParam {string} value value of the event field
+*
+*@apiParamExample {json} request-example
+*
+*{
+*	"query": {
+*		"key":"name",
+*		"value":"DEVRELCONF"
+*	}
+*}
+*
+*@apiParamExample {json} response-example
+*{
+*    "rs": [
+*        {
+*            "name": "dafds",
+*            "email": "sdadsaadasd@a.com",
+*            "phoneNumber": "9699999999",
+*            "gender": "M",
+*            "stake": "speaker",
+*            "locationOfStay": "Bangalore"
+*        },
+*        {
+*            "name": "angad",
+*            "email": "sdaasd@a.com",
+*            "phoneNumber": "9999999999",
+*            "gender": "M",
+*            "stake": "speaker",
+*            "locationOfStay": "Bangalore"
+*        }
+*    ],
+*    "err": null
+*}
+*
+**/
 func (b *basicGuestsService) ReadGuest(ctx context.Context, query model.Query) (rs []model.Guest, err error) {
 	c := make(chan model.GuestReturn)
 	go model.ReadGuest(query, c)
@@ -48,6 +126,34 @@ func (b *basicGuestsService) UpdateGuest(ctx context.Context, query model.Query)
 	// TODO implement the business logic of UpdateGuest
 	return rs, err
 }
+
+/**
+*@api {post} /api/v1/guests/delete-guest delete a guest
+*@apiName delete a guest
+*@apiGroup guest
+*@apiPermission admin
+*
+*@apiParam {string} key key of the event field
+*@apiParam {string} value value of the event field
+*@apiParam {string} changeKey Name of the guest to be deleted
+*
+*@apiParamExample {json} request-example
+*
+*{
+*	"query": {
+*		"key":"name",
+*		"value":"DEVRELCONF",
+*		"changeKey":"angad"
+*	}
+*}
+*
+*@apiParamExample {json} response-example
+*{
+*    "rs": "Guest deleted",
+*    "err": null
+*}
+*
+**/
 func (b *basicGuestsService) DeleteGuest(ctx context.Context, query model.Query) (rs string, err error) {
 	c := make(chan error)
 	go model.RmGuest(query, c)
