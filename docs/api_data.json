@@ -28,11 +28,11 @@
     "name": ""
   },
   {
-    "type": "delete",
-    "url": "/api/v1/attendance/delete-all-coupons",
-    "title": "delete all coupons of a particular day",
-    "name": "delete_all_coupons_of_a_particular_day",
-    "group": "attendance",
+    "type": "post",
+    "url": "/api/v1/coupons/create-schema",
+    "title": "create coupon schema",
+    "name": "create_coupon_schema",
+    "group": "coupons",
     "permission": [
       {
         "name": "admin"
@@ -45,15 +45,22 @@
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "eventName",
+            "field": "event",
             "description": "<p>name of the event</p>"
           },
           {
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "email",
-            "description": "<p>email of the participant</p>"
+            "field": "name",
+            "description": "<p>name of the coupon</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "description",
+            "description": "<p>description of the coupon</p>"
           },
           {
             "group": "Parameter",
@@ -67,26 +74,26 @@
       "examples": [
         {
           "title": "request-example",
-          "content": "\n{\n\n\t\"query\":{\n\t\t\"eventName\":\"DEVFEST 2019\",\n\t\t\"day\":1,\n\t\t\"email\":\"x@x.com\"\n\t}\n}",
+          "content": "\n{\n\t\"event\":\"DEVRELCONF\",\n\t\"coupons\": [{\n\t\t\"name\":\"lunch\",\n\t\t\"description\":\"lunch\",\n\t\t\"day\":1\n\t},{\n\t\t\"name\":\"bf\",\n\t\t\"description\":\"bf\",\n\t\t\"day\":1\n\t},{\n\t\t\"name\":\"lunch\",\n\t\t\"description\":\"lunch\",\n\t\t\"day\":2\n\t},{\n\t\t\"name\":\"dinner\",\n\t\t\"description\":\"dinner\",\n\t\t\"day\":2\n\t}]\n}",
           "type": "json"
         },
         {
           "title": "response-example",
-          "content": "{\n   \"rs\": \"Successfully deleted coupon node\",\n   \"err\": null\n}",
+          "content": "{\n   \"rs\": \"Successfully creted coupon schema for event DEVRELCONF\",\n   \"err\": null\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "./attendance/pkg/service/service.go",
-    "groupTitle": "attendance"
+    "filename": "./coupons/pkg/service/service.go",
+    "groupTitle": "coupons"
   },
   {
     "type": "post",
-    "url": "/api/v1/attendance/post-attendance",
-    "title": "mark attendance",
-    "name": "mark_attendance",
-    "group": "attendance",
+    "url": "/api/v1/coupons/mark-present",
+    "title": "mark attendee present",
+    "name": "mark_attendee_present",
+    "group": "coupons",
     "permission": [
       {
         "name": "admin"
@@ -107,7 +114,7 @@
             "type": "string",
             "optional": false,
             "field": "email",
-            "description": "<p>email of the participant</p>"
+            "description": "<p>email of the attendee</p>"
           },
           {
             "group": "Parameter",
@@ -115,20 +122,13 @@
             "optional": false,
             "field": "day",
             "description": "<p>day of the event</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "int",
-            "optional": false,
-            "field": "coupons",
-            "description": "<p>number of coupons for that day</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "request-example",
-          "content": "\n{\n\n\t\"query\":{\n\t\t\"eventName\":\"DEVFEST\",\n\t\t\"day\":2,\n\t\t\"coupons\":5,\n\t\t\"email\":\"angad.sharma2017@vitstudent.ac.in\"\n\t}\n}",
+          "content": "{\n\t\"attendance\":{\n\t\t\"eventName\":\"DEVRELCONF\",\n\t\t\"email\":\"a@a.COM\",\n\t\t\"day\":2\n\t}\n}",
           "type": "json"
         },
         {
@@ -139,15 +139,15 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./attendance/pkg/service/service.go",
-    "groupTitle": "attendance"
+    "filename": "./coupons/pkg/service/service.go",
+    "groupTitle": "coupons"
   },
   {
     "type": "post",
-    "url": "/api/v1/attendance/post-coupon",
+    "url": "/api/v1/coupons/redeem-coupon",
     "title": "redeem a coupon",
     "name": "redeem_a_coupon",
-    "group": "attendance",
+    "group": "coupons",
     "permission": [
       {
         "name": "admin"
@@ -168,7 +168,7 @@
             "type": "string",
             "optional": false,
             "field": "email",
-            "description": "<p>email of the participant</p>"
+            "description": "<p>email of the attendee</p>"
           },
           {
             "group": "Parameter",
@@ -179,137 +179,29 @@
           },
           {
             "group": "Parameter",
-            "type": "int",
+            "type": "string",
             "optional": false,
-            "field": "coupon",
-            "description": "<p>the coupon that waas redeemed</p>"
+            "field": "couponName",
+            "description": "<p>name of the coupon</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "request-example",
-          "content": "\n{\n\t\"coupon\":\"$2a$05$uFMPHxzB3IuOYJCZf2TlWutbZWBjLG650ieEbNls4iFBFOYYi.RQK\",\n\t\"query\":{\n\t\t\"eventName\":\"DEVFEST 2019\",\n\t\t\"day\":2,\n\t\t\"email\": \"a@a.com\"\n\t}\n}",
+          "content": "{\n\t\"attendance\": {\n\t\t\"couponName\":\"dinner\",\n\t\t\"day\":2,\n\t\t\"email\":\"a@a.COM\",\n\t\t\"eventName\":\"DEVRELCONF\"\n\t}\n}",
           "type": "json"
         },
         {
           "title": "response-example",
-          "content": "{\n   \"rs\": \"done\",\n   \"err\": null\n}",
+          "content": "{\n   \"rs\": \"No match found for this coupon\",\n   \"err\": null\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "./attendance/pkg/service/service.go",
-    "groupTitle": "attendance"
-  },
-  {
-    "type": "delete",
-    "url": "/api/v1/attendance/unpost-attendance",
-    "title": "unpost attendance",
-    "name": "unpost_attendance",
-    "group": "attendance",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "eventName",
-            "description": "<p>name of the event</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "email",
-            "description": "<p>email of the participant</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "int",
-            "optional": false,
-            "field": "day",
-            "description": "<p>day of the event</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "request-example",
-          "content": "\n{\n\n\t\"query\":{\n\t\t\"eventName\":\"DEVFEST 2019\",\n\t\t\"day\":1,\n\t\t\"email\":\"x@x.com\"\n\t}\n}",
-          "type": "json"
-        },
-        {
-          "title": "response-example",
-          "content": "{\n   \"rs\": \"Successfully deleted presence\",\n   \"err\": null\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./attendance/pkg/service/service.go",
-    "groupTitle": "attendance"
-  },
-  {
-    "type": "get",
-    "url": "/api/v1/attendance/view-coupons",
-    "title": "view coupons",
-    "name": "view_coupons",
-    "group": "attendance",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "eventName",
-            "description": "<p>name of the event</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "email",
-            "description": "<p>email of the participant</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "int",
-            "optional": false,
-            "field": "day",
-            "description": "<p>day of the event</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "request-example",
-          "content": "\n{\n\n\t\"query\":{\n\t\t\"eventName\":\"DEVFEST\",\n\t\t\"day\":2,\n\t\t\"email\":\"angad.sharma2017@vitstudent.ac.in\"\n\t}\n}",
-          "type": "json"
-        },
-        {
-          "title": "response-example",
-          "content": "{\n   \"rs\": [\n       \"$2a$05$Q6p2bV07hR2Kp02jPbo9UOUtV.FZhRfpQDHApdN.xp/5XmSYS0PGC\",\n       \"$2a$05$MPED5ZYA4Q9QwK.mZCaskew/hmM/HOvuN2Vx042QIENEoaUAFS6zW\",\n       \"$2a$05$/iDvNw/11F/xCWMbbRjgMOWWZ1ICJB7crmW2mr0BNI5vElXqPHQL6\",\n       \"$2a$05$IhZM3URq0VMCT1KO/OBeJOPJiG/XZ5y.AW9nLZVgpewGCuBSap/zC\",\n       \"$2a$05$YN95rNFZB9Y7o0UOyQHUlu.7iJ6nZSFf0SNWrHjtboQB3LgHkHcLa\",\n       \"$2a$05$5rAbmkgHkO0VVrcgT8LuwOpty0STOKaTKaEuSYbQtu.YqyM/5jOsa\",\n       \"$2a$05$KmGC/i4VnZFb9h5789dIcu0jz/v6.HKUXPKlUgBKD7HzpUtsLkgD.\",\n       \"$2a$05$4QxBr9uahOE6bW6JMHeXBuuF4P3uRIZJCIebaB91oaj9mjjVGdmIW\",\n       \"$2a$05$IHWoPSkldlbC9YafMTY2w..jw5uCY1zpGCxbMQPFRh/vM4gHCMoFC\",\n       \"$2a$05$QY6oN1pXcRjU.7XIwcgi/u9/D3iz/RXI2od/oqy5zzNY16tNDvN3W\"\n   ],\n   \"err\": null\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./attendance/pkg/service/service.go",
-    "groupTitle": "attendance"
+    "filename": "./coupons/pkg/service/service.go",
+    "groupTitle": "coupons"
   },
   {
     "type": "post",
@@ -454,7 +346,7 @@
       "examples": [
         {
           "title": "request-example",
-          "content": "\n{\"event\":{\n \"clubName\":\"GDG\",\n \"name\":\"DEVRELCONF\",\n \"toDate\":\"10TH OCTOBER\",\n \"fromDate\":\"8TH OCTOBER\",\n \"toTime\":\"10 PM\",\n \"fromTime\":\"11 AM\",\n \"budget\":\"200000\",\n \"description\":\"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\",\n \"category\":\"TECHNICAL\",\n \"venue\":\"ANNA AUDI\",\n \"attendance\":\"4000\",\n \"expectedParticipants\":\"4000\",\n \"facultyCoordinator\":{\n    \"name\":\"NOORU MAA\",\n    \"registrationNumber\":\"17BBE1010\",\n    \"email\":\"SDADAS@A.COM\",\n    \"phoneNumber\":\"919191991911\",\n    \"gender\":\"M\",\n    \"eventsAttended\":\"ALL\"\n },\n \"studentCoordinator\":{\n    \"name\":\"NOOR\",\n    \"registrationNumber\":\"17BBE1010\",\n    \"email\":\"SDADAS@A.COM\",\n    \"phoneNumber\":\"919191991911\",\n    \"gender\":\"M\",\n    \"eventsAttended\":\"ALL\"\n },\n \"PROrequest\":\"SAJDOOSIJANDFSAKFDSAFD\",\n \"campusEngineerRequest\":\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\",\n \"duration\":\"16 hours\"\n}",
+          "content": "\n{\"event\":{\n \"clubName\":\"GDG\",\n \"name\":\"DEVRELCONF\",\n \"toDate\":\"10TH OCTOBER\",\n \"fromDate\":\"8TH OCTOBER\",\n \"toTime\":\"10 PM\",\n \"fromTime\":\"11 AM\",\n \"budget\":\"200000\",\n \"description\":\"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\",\n \"category\":\"TECHNICAL\",\n \"venue\":\"ANNA AUDI\",\n \"attendance\":\"4000\",\n \"expectedParticipants\":\"4000\",\n \"facultyCoordinator\":{\n    \"name\":\"NOORU MAA\",\n    \"registrationNumber\":\"17BBE1010\",\n    \"email\":\"SDADAS@A.COM\",\n    \"phoneNumber\":\"919191991911\",\n    \"gender\":\"M\",\n    \"eventsAttended\":\"ALL\"\n },\n \"studentCoordinator\":{\n    \"name\":\"NOOR\",\n    \"registrationNumber\":\"17BBE1010\",\n    \"email\":\"SDADAS@A.COM\",\n    \"phoneNumber\":\"919191991911\",\n    \"gender\":\"M\",\n    \"eventsAttended\":\"ALL\"\n },\n \"PROrequest\":\"SAJDOOSIJANDFSAKFDSAFD\",\n \"campusEngineerRequest\":\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\",\n \"duration\":\"16 hours\"\n}\n}",
           "type": "json"
         },
         {
