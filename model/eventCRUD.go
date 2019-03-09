@@ -223,29 +223,3 @@ func CreateParticipant(e Event, label string, c chan error, mutex *sync.Mutex) {
 	c <- nil
 	return
 }
-
-// create a new guest node with relationship to the event
-func CreateGuest(event string, g Guest, c chan error, mutex *sync.Mutex) {
-
-	mutex.Lock()
-	_, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
-	CREATE (n:GUEST {name:$name, stake:$stake,
-	email:$email, phoneNumber:$phoneNumber, gender: $gender, locationOfStay:$locationOfStay
-	})<-[:GUEST]-(a) `, map[string]interface{}{
-		"EventName":      event,
-		"name":           g.Name,
-		"stake":          g.Stake,
-		"email":          g.Email,
-		"phoneNumber":    g.PhoneNumber,
-		"gender":         g.Gender,
-		"locationOfStay": g.LocationOfStay,
-	})
-	if err != nil {
-		c <- err
-		return
-	}
-	mutex.Unlock()
-	log.Println("Created GUEST node")
-	c <- nil
-	return
-}

@@ -41,6 +41,8 @@ func (s *Server) Run() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/v1/analytics", readFromDB())
+	mux.HandleFunc("/api/v1/analytics/all", readAllFromDB())
+
 	CORSmux := cors.Default().Handler(mux)
 	natsConn, _ := s.eventSubscribe()
 	defer natsConn.Close()
