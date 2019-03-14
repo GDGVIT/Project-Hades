@@ -12,6 +12,7 @@ type AuthService interface {
 	Login(ctx context.Context, email string, password string) (rs string, token string, err error)
 	Signup(ctx context.Context, user model.User) (rs string, token string, err error)
 	CreateOrg(ctx context.Context, data model.Organization) (rs string, err error)
+	LoginOrg(ctx context.Context, data model.Organization) (rs string, err error)
 	Invite(ctx context.Context, email string, org string) (rs string, err error)
 	ShowInvites(ctx context.Context) (org string, admin string, err error)
 	ShowProfile(ctx context.Context) (orgs []model.Organization, user []model.User, events []model.Event, err error)
@@ -24,10 +25,26 @@ func (b *basicAuthService) Login(ctx context.Context, email string, password str
 	return rs, token, err
 }
 func (b *basicAuthService) Signup(ctx context.Context, user model.User) (rs string, token string, err error) {
-	// TODO implement the business logic of Signup
-	return rs, token, err
+	if user.Email == "" {
+		return "User email not found", "", nil
+	}
+	c := make(chan model.UserReturn)
+	go user.Get(c)
+	msg := <-c
+	close(c)
+	if err := msg.Err; err != nil {
+		return msg.Message, "", err
+	} else if msg.User.Email == "" {
+		return msg.Message, "", nil
+	}
+	return msg.Message, token, nil
 }
 func (b *basicAuthService) CreateOrg(ctx context.Context, data model.Organization) (rs string, err error) {
+	// TODO implement the business logic of CreateOrg
+	return rs, err
+}
+
+func (b *basicAuthService) LoginOrg(ctx context.Context, data model.Organization) (rs string, err error) {
 	// TODO implement the business logic of CreateOrg
 	return rs, err
 }

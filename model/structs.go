@@ -113,6 +113,12 @@ type User struct {
 	CreatedAt   string `json:"createdAt"`
 }
 
+type UserReturn struct {
+	User    User
+	Err     error
+	Message string
+}
+
 type Organization struct {
 	Name        string `json:"name"`
 	Location    string `json:"location"`
@@ -120,6 +126,12 @@ type Organization struct {
 	Tag         string `json:"tag"`
 	CreatedAt   string `json:"createdAt"`
 	Website     string `json:"website"`
+}
+
+type Token struct {
+	Email        string `json:"email"`
+	Role         string `json:"role"`
+	Organization string `json:"organization"`
 }
 
 func (v Event) GetField(field string, value string) string {
