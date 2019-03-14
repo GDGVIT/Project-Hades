@@ -1,6 +1,10 @@
 package model
 
-import "reflect"
+import (
+	"reflect"
+
+	jwt "github.com/dgrijalva/jwt-go"
+)
 
 type Participant struct {
 	Name               string `json:"name"`
@@ -132,6 +136,13 @@ type Token struct {
 	Email        string `json:"email"`
 	Role         string `json:"role"`
 	Organization string `json:"organization"`
+	jwt.StandardClaims
+}
+
+type TokenReturn struct {
+	Token   string
+	Err     error
+	Message string
 }
 
 func (v Event) GetField(field string, value string) string {
