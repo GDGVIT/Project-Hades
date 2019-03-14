@@ -105,6 +105,21 @@ services:
     restart: on-failure
     environment:
       PROD_URI: "${PROD_URI}"
+  
+  auth:
+    build:
+      context: .
+      dockerfile: auth/Dockerfile
+    container_name: auth
+    depends_on:
+    - neo4j
+    ports:
+    - 8087:8087
+    volumes:
+    - .:/go/src/github.com/GDGVIT/Project-Hades
+    restart: on-failure
+    environment:
+      PROD_URI: "${PROD_URI}"
 
 
   

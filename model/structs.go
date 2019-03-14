@@ -100,6 +100,28 @@ type GuestReturn struct {
 	Err    error
 }
 
+// role as relation
+type User struct {
+	FirstName   string `json:"firstName"`
+	LastName    string `json:"lastName"`
+	Password    string `json:"password"`
+	Email       string `json:"email"`
+	PhoneNumber string `json:"phoneNumber"`
+	LinkedIn    string `json:"linkedIn"`
+	Facebook    string `json:"facebook"`
+	Description string `json:"description"`
+	CreatedAt   string `json:"createdAt"`
+}
+
+type Organization struct {
+	Name        string `json:"name"`
+	Location    string `json:"location"`
+	Description string `json:"description"`
+	Tag         string `json:"tag"`
+	CreatedAt   string `json:"createdAt"`
+	Website     string `json:"website"`
+}
+
 func (v Event) GetField(field string, value string) string {
 	r := reflect.ValueOf(v)
 	f := reflect.Indirect(r).FieldByName(field)
