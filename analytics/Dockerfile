@@ -6,7 +6,7 @@ ADD . /go/src/github.com/GDGVIT/Project-Hades
 
 WORKDIR /go/src/github.com/GDGVIT/Project-Hades/analytics
 
-RUN go get -t -v ./...
+#RUN go get -t -v ./...
 
 RUN go get  github.com/canthefason/go-watcher
 RUN go install github.com/canthefason/go-watcher/cmd/watcher
