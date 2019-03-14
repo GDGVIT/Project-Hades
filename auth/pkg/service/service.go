@@ -45,7 +45,6 @@ type basicAuthService struct{}
 func (b *basicAuthService) Login(ctx context.Context, email string, password string) (rs string, token string, err error) {
 
 	token, err = model.Login(email, password, "DEFAULT", "")
-
 	if err != nil {
 		return "Some error occurred", token, err
 	}
