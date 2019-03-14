@@ -2,6 +2,7 @@ package endpoint
 
 import (
 	"context"
+
 	service "github.com/GDGVIT/Project-Hades/auth/pkg/service"
 	model "github.com/GDGVIT/Project-Hades/model"
 	endpoint "github.com/go-kit/kit/endpoint"
@@ -93,6 +94,34 @@ func MakeCreateOrgEndpoint(s service.AuthService) endpoint.Endpoint {
 
 // Failed implements Failer.
 func (r CreateOrgResponse) Failed() error {
+	return r.Err
+}
+
+// LoginOrgRequest collects the request parameters for the LoginOrg method.
+type LoginOrgRequest struct {
+	Data model.Organization `json:"data"`
+}
+
+// LoginOrgResponse collects the response parameters for the LoginOrg method.
+type LoginOrgResponse struct {
+	Rs  string `json:"rs"`
+	Err error  `json:"err"`
+}
+
+// MakeLoginOrgEndpoint returns an endpoint that invokes LoginOrg on the service.
+func MakeLoginOrgEndpoint(s service.AuthService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(LoginOrgRequest)
+		rs, err := s.LoginOrg(ctx, req.Data)
+		return LoginOrgResponse{
+			Err: err,
+			Rs:  rs,
+		}, nil
+	}
+}
+
+// Failed implements Failer.
+func (r LoginOrgResponse) Failed() error {
 	return r.Err
 }
 
