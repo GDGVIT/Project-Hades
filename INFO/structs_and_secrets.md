@@ -94,6 +94,7 @@ PROJECTION_URI=http://<IP of machine>/api/v1/simple-projection/
 MAIL_FROM=
 MAIL_PASSWORD=
 MAIL_TO=
+JWT_PASSWORD=
 ```
 
 <br />
