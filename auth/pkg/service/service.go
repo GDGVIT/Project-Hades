@@ -20,10 +20,80 @@ type AuthService interface {
 
 type basicAuthService struct{}
 
+/**
+* @api {post} /api/v1/auth/login login as a user
+* @apiName login as a user
+* @apiGroup auth
+*
+* @apiParam {string} password password of the user
+* @apiParam {string} email email of the user
+*
+*
+* @apiParamExample {json} request-example
+*{
+*	"email":"test1@test.com",
+*	"password":"test"
+*}
+*
+* @apiParamExample {json} response-example
+*{
+*    "rs": "Done",
+*    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwicm9sZSI6IkRFRkFVTFQiLCJvcmdhbml6YXRpb24iOiIifQ.3Qj3eu8iwXL2v1Rb7qGEf5USQ-WVjRvYiLALWIbWZ5c",
+*    "err": null
+*}
+**/
 func (b *basicAuthService) Login(ctx context.Context, email string, password string) (rs string, token string, err error) {
-	// TODO implement the business logic of Login
-	return rs, token, err
+
+	token, err = model.Login(email, password, "DEFAULT", "")
+
+	if err != nil {
+		return "Some error occurred", token, err
+	}
+	return "Done", token, nil
 }
+
+/**
+* @api {post} /api/v1/auth/signup signup as a user
+* @apiName signup as a user
+* @apiGroup auth
+*
+* @apiParam {string} firstName first name of the user
+* @apiParam {string} lastName last name of the user
+* @apiParam {string} password password of the user
+* @apiParam {string} email email of the user
+* @apiParam {string} phoneNumber phoneNumber of the user
+* @apiParam {string} linkedIn linkedIn URL of the user
+* @apiParam {string} facebook facebook URL of the user
+* @apiParam {string} linkedIn linkedIn URL of the user
+* @apiParam {string} description description of the user
+* @apiParam {string} createdAt when was the user created
+*
+*
+* @apiParamExample {json} request-example
+*
+* {
+* 	"user" : {
+* 	"firstName": "test",
+* 	"lastName": "test",
+* 	"password": "test",
+* 	"email": "test1@test.com",
+* 	"phoneNumber": "998171818",
+* 	"linkedIn": "test",
+* 	"facebook": "test",
+* 	"description": "test",
+* 	"createdAt": "20-01-01"
+* 	}
+* }
+*
+*
+*
+* @apiParamExample {json} response-example
+* {
+*     "rs": "Done",
+*     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwicm9sZSI6IkRFRkFVTFQiLCJvcmdhbml6YXRpb24iOiIifQ.3Qj3eu8iwXL2v1Rb7qGEf5USQ-WVjRvYiLALWIbWZ5c",
+*     "err": null
+* }
+**/
 func (b *basicAuthService) Signup(ctx context.Context, user model.User) (rs string, token string, err error) {
 	if user.Email == "" {
 		return "User email not found", "", nil
@@ -37,8 +107,18 @@ func (b *basicAuthService) Signup(ctx context.Context, user model.User) (rs stri
 	} else if msg.User.Email == "" {
 		return msg.Message, "", nil
 	}
-	return msg.Message, token, nil
+
+	// generate JWT
+	cc := make(chan model.TokenReturn)
+	go model.TokenGen(user.Email, "DEFAULT", "", cc)
+	msg2 := <-cc
+	close(cc)
+	if err := msg2.Err; err != nil {
+		return msg2.Message, "", err
+	}
+	return msg2.Message, msg2.Token, nil
 }
+
 func (b *basicAuthService) CreateOrg(ctx context.Context, data model.Organization) (rs string, err error) {
 	// TODO implement the business logic of CreateOrg
 	return rs, err

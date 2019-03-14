@@ -13,6 +13,7 @@ type Endpoints struct {
 	LoginEndpoint       endpoint.Endpoint
 	SignupEndpoint      endpoint.Endpoint
 	CreateOrgEndpoint   endpoint.Endpoint
+	LoginOrgEndpoint    endpoint.Endpoint
 	InviteEndpoint      endpoint.Endpoint
 	ShowInvitesEndpoint endpoint.Endpoint
 	ShowProfileEndpoint endpoint.Endpoint
@@ -25,6 +26,7 @@ func New(s service.AuthService, mdw map[string][]endpoint.Middleware) Endpoints 
 		CreateOrgEndpoint:   MakeCreateOrgEndpoint(s),
 		InviteEndpoint:      MakeInviteEndpoint(s),
 		LoginEndpoint:       MakeLoginEndpoint(s),
+		LoginOrgEndpoint:    MakeLoginOrgEndpoint(s),
 		ShowInvitesEndpoint: MakeShowInvitesEndpoint(s),
 		ShowProfileEndpoint: MakeShowProfileEndpoint(s),
 		SignupEndpoint:      MakeSignupEndpoint(s),

@@ -282,3 +282,13 @@ func (e Endpoints) ShowProfile(ctx context.Context) (orgs []model.Organization, 
 	}
 	return response.(ShowProfileResponse).Orgs, response.(ShowProfileResponse).User, response.(ShowProfileResponse).Events, response.(ShowProfileResponse).Err
 }
+
+// LoginOrg implements Service. Primarily useful in a client.
+func (e Endpoints) LoginOrg(ctx context.Context, data model.Organization) (rs string, err error) {
+	request := LoginOrgRequest{Data: data}
+	response, err := e.LoginOrgEndpoint(ctx, request)
+	if err != nil {
+		return
+	}
+	return response.(LoginOrgResponse).Rs, response.(LoginOrgResponse).Err
+}
