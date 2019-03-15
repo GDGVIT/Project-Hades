@@ -238,6 +238,14 @@
   version = "v1.0.1"
 
 [[projects]]
+  digest = "1:53bc4cd4914cd7cd52139990d5170d6dc99067ae31c56530621b18b35fc30318"
+  name = "github.com/mitchellh/mapstructure"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "3536a929edddb9a5b34bd6861dc4a9647cb459fe"
+  version = "v1.1.2"
+
+[[projects]]
   digest = "1:2ca73053216eb11c8eea2855c8099ad82773638522f91cc0542ec9759163ff3c"
   name = "github.com/nats-io/go-nats"
   packages = [
@@ -553,6 +561,7 @@
     "github.com/jinzhu/gorm/dialects/sqlite",
     "github.com/johnnadratowski/golang-neo4j-bolt-driver",
     "github.com/lightstep/lightstep-tracer-go",
+    "github.com/mitchellh/mapstructure",
     "github.com/nats-io/go-nats",
     "github.com/oklog/oklog/pkg/group",
     "github.com/opentracing/opentracing-go",

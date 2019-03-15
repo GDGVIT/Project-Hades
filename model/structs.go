@@ -130,6 +130,7 @@ type Organization struct {
 	Tag         string `json:"tag"`
 	CreatedAt   string `json:"createdAt"`
 	Website     string `json:"website"`
+	Token       string `json:"token"`
 }
 
 type Token struct {
