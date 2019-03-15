@@ -112,6 +112,139 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/api/v1/auth/login",
+    "title": "login as a user",
+    "name": "login_as_a_user",
+    "group": "auth",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "password",
+            "description": "<p>password of the user</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "email",
+            "description": "<p>email of the user</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"email\":\"test1@test.com\",\n\t\"password\":\"test\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": \"Done\",\n   \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwicm9sZSI6IkRFRkFVTFQiLCJvcmdhbml6YXRpb24iOiIifQ.3Qj3eu8iwXL2v1Rb7qGEf5USQ-WVjRvYiLALWIbWZ5c\",\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./auth/pkg/service/service.go",
+    "groupTitle": "auth"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/auth/signup",
+    "title": "signup as a user",
+    "name": "signup_as_a_user",
+    "group": "auth",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "firstName",
+            "description": "<p>first name of the user</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "lastName",
+            "description": "<p>last name of the user</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "password",
+            "description": "<p>password of the user</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "email",
+            "description": "<p>email of the user</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "phoneNumber",
+            "description": "<p>phoneNumber of the user</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "linkedIn",
+            "description": "<p>linkedIn URL of the user</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "facebook",
+            "description": "<p>facebook URL of the user</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "description",
+            "description": "<p>description of the user</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "createdAt",
+            "description": "<p>when was the user created</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\n{\n\t\"user\" : {\n\t\"firstName\": \"test\",\n\t\"lastName\": \"test\",\n\t\"password\": \"test\",\n\t\"email\": \"test1@test.com\",\n\t\"phoneNumber\": \"998171818\",\n\t\"linkedIn\": \"test\",\n\t\"facebook\": \"test\",\n\t\"description\": \"test\",\n\t\"createdAt\": \"20-01-01\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n    \"rs\": \"Done\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwicm9sZSI6IkRFRkFVTFQiLCJvcmdhbml6YXRpb24iOiIifQ.3Qj3eu8iwXL2v1Rb7qGEf5USQ-WVjRvYiLALWIbWZ5c\",\n    \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./auth/pkg/service/service.go",
+    "groupTitle": "auth"
+  },
+  {
+    "type": "post",
     "url": "/api/v1/coupons/create-schema",
     "title": "create coupon schema",
     "name": "create_coupon_schema",
