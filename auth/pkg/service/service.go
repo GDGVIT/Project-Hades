@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"log"
 
 	"github.com/GDGVIT/Project-Hades/model"
 )
@@ -119,8 +120,10 @@ func (b *basicAuthService) Signup(ctx context.Context, user model.User) (rs stri
 }
 
 func (b *basicAuthService) CreateOrg(ctx context.Context, data model.Organization) (rs string, err error) {
-	// TODO implement the business logic of CreateOrg
-	return rs, err
+	log.Println(data.Token)
+	tk, err := model.VerifyToken(data.Token)
+	log.Println(tk)
+	return "", err
 }
 
 func (b *basicAuthService) LoginOrg(ctx context.Context, data model.Organization) (rs string, err error) {

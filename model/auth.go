@@ -2,11 +2,13 @@ package model
 
 import (
 	"crypto/md5"
+	"errors"
 	"fmt"
 	"log"
 	"os"
 
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/mitchellh/mapstructure"
 )
 
 func TokenGen(email string, role string, organization string, c chan TokenReturn) {
@@ -24,6 +26,26 @@ func TokenGen(email string, role string, organization string, c chan TokenReturn
 	}
 	c <- TokenReturn{tokenString, nil, "Done"}
 	return
+}
+
+func VerifyToken(token string) (tk Token, err error) {
+
+	tok, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		if token.Method != jwt.GetSigningMethod("HS256") {
+			return nil, errors.New("Error, invalid signing method")
+		}
+		return []byte(os.Getenv("JWT_PASSWORD")), nil
+	})
+
+	if err != nil {
+		return tk, err
+	}
+
+	if tok.Valid {
+		mapstructure.Decode(tok.Claims, &tk)
+		return tk, nil
+	}
+	return tk, errors.New("Invalid token")
 }
 
 func (u *User) Get(c chan UserReturn) {
