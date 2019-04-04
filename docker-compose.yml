@@ -134,6 +134,9 @@ services:
     - ./db/data:/data/
     - ./db/conf/:/conf/
     command: neo4j
+    env_file: ./.env
+    environment:
+      NEO4J_AUTH: "${NEO4J_AUTH}"
   nginx:
     container_name: nginx
     build: 
