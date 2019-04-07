@@ -1,0 +1,6 @@
+FROM alpine
+WORKDIR /app
+ADD ./bin/coupons
+EXPOSE 8082
+RUN chmod +x ./coupons
+ENTRYPOINT ./coupons

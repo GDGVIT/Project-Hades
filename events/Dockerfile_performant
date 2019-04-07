@@ -1,0 +1,6 @@
+FROM alpine
+WORKDIR /app
+ADD ./bin/events
+EXPOSE 8080
+RUN chmod +x ./events
+ENTRYPOINT ./events

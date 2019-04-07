@@ -1,0 +1,6 @@
+FROM alpine
+WORKDIR /app
+ADD ./bin/simple_projection
+EXPOSE 8083
+RUN chmod +x ./simple_projection
+ENTRYPOINT ./simple_projection

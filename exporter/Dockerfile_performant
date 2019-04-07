@@ -1,0 +1,6 @@
+FROM alpine
+WORKDIR /app
+ADD ./bin/exporter
+EXPOSE 8084
+RUN chmod +x ./exporter
+ENTRYPOINT ./exporter
