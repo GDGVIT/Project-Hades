@@ -1,10 +1,13 @@
 #!/bin/bash
 
-go build -o ./bin/analytics ./analytics/cmd/main.go 
-go build -o ./bin/auth ./auth/cmd/main.go
-go build -o ./bin/coupons ./coupons/cmd/main.go
-go build -o ./bin/events ./events/cmd/main.go
-go build -o ./bin/exporter ./exporter/cmd/main.go
-go build -o ./bin/guests ./guests/cmd/main.go
-go build -o ./bin/participants ./participants/cmd/main.go
-go build -o ./bin/simple_projection ./simple_projection/cmd/main.go
+export GOOS=linux 
+export GOARCH=amd64 
+export CGO_ENABLED=0
+go build -ldflags="-w -s" -o ./bin/analytics ./analytics/cmd/main.go 
+go build -ldflags="-w -s" -o ./bin/auth ./auth/cmd/main.go
+go build -ldflags="-w -s" -o ./bin/coupons ./coupons/cmd/main.go
+go build -ldflags="-w -s" -o ./bin/events ./events/cmd/main.go
+go build -ldflags="-w -s" -o ./bin/exporter ./exporter/cmd/main.go
+go build -ldflags="-w -s" -o ./bin/guests ./guests/cmd/main.go
+go build -ldflags="-w -s" -o ./bin/participants ./participants/cmd/main.go
+go build -ldflags="-w -s" -o ./bin/simple_projection ./simple_projection/cmd/main.go
