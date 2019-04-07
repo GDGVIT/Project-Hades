@@ -1,7 +1,13 @@
-FROM scratch
+# Because go-sqlite3 does not support static linking with CGO_ENABLED=0
 
-COPY ./bin/analytics /
+FROM golang
+
+RUN mkdir -p /go/src/github.com/GDGVIT/Project-Hades
+
+ADD . /go/src/github.com/GDGVIT/Project-Hades
+
+WORKDIR /go/src/github.com/GDGVIT/Project-Hades
 
 EXPOSE 8085
 
-ENTRYPOINT ["/analytics"]
+ENTRYPOINT go run ./analytics/cmd/main.go 
