@@ -1,0 +1,6 @@
+FROM alpine
+WORKDIR /app
+ADD ./bin/auth
+EXPOSE 8087
+RUN chmod +x ./auth
+ENTRYPOINT ./auth

@@ -1,0 +1,6 @@
+FROM alpine
+WORKDIR /app
+ADD ./bin/participants
+EXPOSE 8081
+RUN chmod +x ./participants
+ENTRYPOINT ./participants

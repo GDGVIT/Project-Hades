@@ -1,0 +1,6 @@
+FROM alpine
+WORKDIR /app
+ADD ./bin/guests
+EXPOSE 8086
+RUN chmod +x ./guests
+ENTRYPOINT ./guests
