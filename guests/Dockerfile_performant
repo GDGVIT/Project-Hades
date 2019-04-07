@@ -1,6 +1,7 @@
-FROM alpine
-WORKDIR /app
-ADD ./bin/guests
+FROM scratch
+
+COPY ./bin/guests /
+
 EXPOSE 8086
-RUN chmod +x ./guests
-ENTRYPOINT ./guests
+
+ENTRYPOINT ["/guests"]

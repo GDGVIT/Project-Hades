@@ -1,6 +1,7 @@
-FROM alpine
-WORKDIR /app
-ADD ./bin/events
+FROM scratch
+
+COPY ./bin/events /
+
 EXPOSE 8080
-RUN chmod +x ./events
-ENTRYPOINT ./events
+
+ENTRYPOINT ["/events"]

@@ -1,6 +1,7 @@
-FROM alpine
-WORKDIR /app
-ADD ./bin/analytics
+FROM scratch
+
+COPY ./bin/analytics /
+
 EXPOSE 8085
-RUN chmod +x ./analytics
-ENTRYPOINT ./analytics
+
+ENTRYPOINT ["/analytics"]
