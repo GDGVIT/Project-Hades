@@ -411,9 +411,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:d5891c5bca9c62e5d394ca26491d2b710a1dc08cedeb0ca8f9ac4c3305120b02"
+  digest = "1:90dcab715aecdc8aed7c08be63ccb48f6684258f71f8b2798aeeca5a97c5ee58"
   name = "golang.org/x/crypto"
   packages = [
+    "bcrypt",
+    "blowfish",
     "ed25519",
     "ed25519/internal/edwards25519",
   ]
@@ -563,6 +565,7 @@
     "github.com/prometheus/client_golang/prometheus",
     "github.com/prometheus/client_golang/prometheus/promhttp",
     "github.com/rs/cors",
+    "golang.org/x/crypto/bcrypt",
     "gopkg.in/fsnotify.v1",
     "sourcegraph.com/sourcegraph/appdash",
     "sourcegraph.com/sourcegraph/appdash/opentracing",
