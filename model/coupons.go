@@ -1,6 +1,7 @@
 package model
 
 import (
+	"bytes"
 	"crypto/md5"
 	"fmt"
 	"log"
@@ -149,6 +150,14 @@ func MarkPresent(attendance Attendance, c chan MessageReturn) {
 
 }
 
+func returnStrs(arr []string) string {
+	var buffer bytes.Buffer
+	for _, r := range arr {
+		buffer.WriteString(r + ",")
+	}
+	return buffer.String()[:len(buffer.String())]
+}
+
 // generate coupons and save
 func couponGen(coupons []Coupon, attendance Attendance, c chan MessageReturn) {
 
@@ -162,19 +171,34 @@ func couponGen(coupons []Coupon, attendance Attendance, c chan MessageReturn) {
 		bytes := md5.Sum([]byte(str))
 		cps = append(cps, string(bytes[:]))
 	}
+
 	// create coupon relation
 	_, err := con.ExecNeo(`
 			MATCH(n:EVENT)-[:ATTENDS]->(b)
 			WHERE n.name=$name AND b.email=$rn
-			CREATE (n)-[:PRESENT`+strconv.Itoa(attendance.Day)+`{coupons:$cps}]->(b) 
+			CREATE (n)-[:PRESENT`+strconv.Itoa(attendance.Day)+`]->(b) 
 		`, map[string]interface{}{
 		"name": attendance.EventName,
 		"rn":   attendance.Email,
-		"cps":  cps,
 	})
 	if err != nil {
 		c <- MessageReturn{"Error creating coupon relation", err}
 		return
+	}
+	for _, coup := range cps {
+		_, err := con.ExecNeo(`
+			MATCH(n:EVENT)-[:ATTENDS]->(b)
+			WHERE n.name=$name AND b.email=$rn
+			CREATE (b)-[:COUPON]->(c:COUPON {coupon:$cp})
+		`, map[string]interface{}{
+			"name": attendance.EventName,
+			"rn":   attendance.Email,
+			"cp":   coup,
+		})
+		if err != nil {
+			c <- MessageReturn{"Error creating coupon relation", err}
+			return
+		}
 	}
 	c <- MessageReturn{"Successfully marked present for the day", nil}
 	return
@@ -189,15 +213,14 @@ func RedeemCoupon(attendance Attendance, couponName string, c chan MessageReturn
 	bytes := md5.Sum([]byte(str)) //bcrypt.GenerateFromPassword([]byte(str), SALT)
 
 	coupon := string(bytes[:])
-	log.Println(coupon)
+	fmt.Println(coupon)
 	// check if coupon exists
 	data, _, _, err := con.QueryNeoAll(`
-	MATCH (n:EVENT)-[r:PRESENT`+strconv.Itoa(attendance.Day)+`]->(a)
-	WHERE a.email=$email
-	RETURN [x IN r.coupons WHERE x = $coupon];
+	MATCH (n:EVENT)-[r:PRESENT`+strconv.Itoa(attendance.Day)+`]->(a)-[:COUPON]->(c)
+	WHERE a.email=$email AND c.coupon = "`+coupon+`"
+	RETURN c.coupon
 	`, map[string]interface{}{
-		"email":  attendance.Email,
-		"coupon": coupon,
+		"email": attendance.Email,
 	})
 
 	if err != nil {
@@ -216,13 +239,12 @@ func RedeemCoupon(attendance Attendance, couponName string, c chan MessageReturn
 
 	// remove from array
 	_, err = con.ExecNeo(`
-		MATCH (n:EVENT)-[c:PRESENT`+strconv.Itoa(attendance.Day)+`]->(a)
-		WHERE a.email=$email AND n.name=$eventName
-		SET c.coupons=[x IN c.coupons WHERE x <> $coupon];
+		MATCH (n:EVENT)-[b:PRESENT`+strconv.Itoa(attendance.Day)+`]->(a)-[:COUPON]->(c)
+		WHERE a.email=$email AND n.name=$eventName AND c.coupon = "`+coupon+`"
+		DETACH DELETE c
 		`, map[string]interface{}{
 		"eventName": attendance.EventName,
 		"email":     attendance.Email,
-		"coupon":    coupon,
 	})
 
 	if err != nil {
