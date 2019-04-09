@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/GDGVIT/Project-Hades/model"
 )
@@ -28,7 +27,7 @@ func (req FetchAllRequest) FetchAll(c chan FetchAllResponse) {
 		c <- FetchAllResponse{nil, err}
 	}
 
-	resp, err := http.Post(os.Getenv("PROJECTION_URI")+req.Query.Specific,
+	resp, err := http.Post("http://simple_projection:8083/api/v1/simple-projection/"+req.Query.Specific,
 		"application/json",
 		bytes.NewBuffer(byteMsg),
 	)
