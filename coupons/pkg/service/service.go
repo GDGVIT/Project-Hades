@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"sync"
 
 	"github.com/GDGVIT/Project-Hades/model"
 )
@@ -240,8 +241,9 @@ func (b *basicCouponsService) DeleteSchema(ctx context.Context, event string, qu
 *}
 **/
 func (b *basicCouponsService) ViewSchema(ctx context.Context, event string) (rs []model.Coupon, err error) {
+	mutex := &sync.Mutex{}
 	c := make(chan model.CouponReturn)
-	go model.ViewCouponSchema(event, c)
+	go model.ViewCouponSchema(event, mutex, c)
 	msg := <-c
 	if err := msg.Err; err != nil {
 		return nil, err

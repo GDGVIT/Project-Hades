@@ -256,7 +256,9 @@ func RedeemCoupon(attendance Attendance, couponName string, c chan MessageReturn
 	return
 }
 
-func ViewCouponSchema(event string, c chan CouponReturn) {
+func ViewCouponSchema(event string, mutex *sync.Mutex, c chan CouponReturn) {
+
+	mutex.Lock()
 	data, _, _, err := con.QueryNeoAll(`
 		MATCH(n:EVENT)-[:COUPON]->(a:COUPON_SCHEMA)
 		WHERE n.name=$event
@@ -264,6 +266,7 @@ func ViewCouponSchema(event string, c chan CouponReturn) {
 	`, map[string]interface{}{
 		"event": event,
 	})
+	mutex.Unlock()
 	if err != nil {
 		c <- CouponReturn{nil, err}
 		return
