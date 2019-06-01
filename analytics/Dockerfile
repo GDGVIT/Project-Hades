@@ -8,8 +8,8 @@ WORKDIR /go/src/github.com/GDGVIT/Project-Hades/analytics
 
 #RUN go get -t -v ./...
 
-RUN go get  github.com/canthefason/go-watcher
-RUN go install github.com/canthefason/go-watcher/cmd/watcher
+RUN GO111MODULE=on go get  github.com/canthefason/go-watcher
+RUN GO111MODULE=on go install github.com/canthefason/go-watcher/cmd/watcher
 
 EXPOSE 8085
 

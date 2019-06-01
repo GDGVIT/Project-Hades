@@ -1,33 +1,5 @@
 define({ "api": [
   {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "optional": false,
-            "field": "varname1",
-            "description": "<p>No type.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "varname2",
-            "description": "<p>With type.</p>"
-          }
-        ]
-      }
-    },
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "./docs/main.js",
-    "group": "_home_angad_go_src_github_com_GDGVIT_Project_Hades_docs_main_js",
-    "groupTitle": "_home_angad_go_src_github_com_GDGVIT_Project_Hades_docs_main_js",
-    "name": ""
-  },
-  {
     "type": "get",
     "url": "/api/v1/analytics/all",
     "title": "read all logs",
@@ -53,7 +25,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./analytics/endpoints/handlerfuncs.go",
+    "filename": "analytics/endpoints/handlerfuncs.go",
     "groupTitle": "analytics"
   },
   {
@@ -107,8 +79,45 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./analytics/endpoints/handlerfuncs.go",
+    "filename": "analytics/endpoints/handlerfuncs.go",
     "groupTitle": "analytics"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/auth/invite",
+    "title": "invite a user org",
+    "name": "invite_a_user_to_an_org",
+    "group": "auth",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "email",
+            "description": "<p>email of the user</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "org",
+            "description": "<p>name of the organization</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\n{\n\t\"data\":{\n\t\"name\":\"DSC-VIT\",\n\t\"location\":\"India\",\n\t\"description\":\"Developer Student Clubs\",\n\t\"tag\":\"technical\",\n\t\"website\":\"https://dsv-vit-vellore.com\"\n}\n}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "auth/pkg/service/service.go",
+    "groupTitle": "auth"
   },
   {
     "type": "post",
@@ -149,7 +158,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./auth/pkg/service/service.go",
+    "filename": "auth/pkg/service/service.go",
     "groupTitle": "auth"
   },
   {
@@ -240,7 +249,65 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./auth/pkg/service/service.go",
+    "filename": "auth/pkg/service/service.go",
+    "groupTitle": "auth"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/auth/signup",
+    "title": "signup as a user",
+    "name": "signup_as_a_user",
+    "group": "auth",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "name",
+            "description": "<p>name of the org</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "location",
+            "description": "<p>location of the org</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "description",
+            "description": "<p>description of the org</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "tag",
+            "description": "<p>tag of the org</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "website",
+            "description": "<p>website of the org</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\n{\n\t\"data\":{\n\t\"name\":\"DSC-VIT\",\n\t\"location\":\"India\",\n\t\"description\":\"Developer Student Clubs\",\n\t\"tag\":\"technical\",\n\t\"website\":\"https://dsv-vit-vellore.com\"\n}\n}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "auth/pkg/service/service.go",
     "groupTitle": "auth"
   },
   {
@@ -301,7 +368,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./coupons/pkg/service/service.go",
+    "filename": "coupons/pkg/service/service.go",
     "groupTitle": "coupons"
   },
   {
@@ -372,7 +439,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./coupons/pkg/service/service.go",
+    "filename": "coupons/pkg/service/service.go",
     "groupTitle": "coupons"
   },
   {
@@ -426,7 +493,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./coupons/pkg/service/service.go",
+    "filename": "coupons/pkg/service/service.go",
     "groupTitle": "coupons"
   },
   {
@@ -487,7 +554,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./coupons/pkg/service/service.go",
+    "filename": "coupons/pkg/service/service.go",
     "groupTitle": "coupons"
   },
   {
@@ -527,7 +594,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./coupons/pkg/service/service.go",
+    "filename": "coupons/pkg/service/service.go",
     "groupTitle": "coupons"
   },
   {
@@ -684,7 +751,164 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./events/pkg/service/service.go",
+    "filename": "events/pkg/service/service.go",
+    "groupTitle": "events"
+  },
+  {
+    "type": "post",
+    "url": "/api/v1/event/create-event",
+    "title": "create a new event",
+    "name": "create_a_new_event",
+    "group": "events",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8800/"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "clubName",
+            "description": "<p>Name of your club</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Name of your event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "toDate",
+            "description": "<p>ending date</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fromDate",
+            "description": "<p>start date</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "toTime",
+            "description": "<p>start time</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fromTime",
+            "description": "<p>ending time</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "budget",
+            "description": "<p>budget</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>event description</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "category",
+            "description": "<p>category of the event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "venue",
+            "description": "<p>event venue</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "attendance",
+            "description": "<p>Name of your club</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "expectedParticipants",
+            "description": "<p>Expected Participants in the event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "facultyCoordinator",
+            "description": "<p>faculty coordinator details (Participant Object)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "studentCoordinator",
+            "description": "<p>student coordinator details (Participant Object)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "PROrequest",
+            "description": "<p>PRO department requests</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "campusEngineerRequest",
+            "description": "<p>Campus engineer requests</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "duration",
+            "description": "<p>duration of event</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\n{\"event\":{\n \"clubName\":\"GDG\",\n \"name\":\"DEVRELCONF\",\n \"toDate\":\"10TH OCTOBER\",\n \"fromDate\":\"8TH OCTOBER\",\n \"toTime\":\"10 PM\",\n \"fromTime\":\"11 AM\",\n \"budget\":\"200000\",\n \"description\":\"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\",\n \"category\":\"TECHNICAL\",\n \"venue\":\"ANNA AUDI\",\n \"attendance\":\"4000\",\n \"expectedParticipants\":\"4000\",\n \"facultyCoordinator\":{\n    \"name\":\"NOORU MAA\",\n    \"registrationNumber\":\"17BBE1010\",\n    \"email\":\"SDADAS@A.COM\",\n    \"phoneNumber\":\"919191991911\",\n    \"gender\":\"M\",\n    \"eventsAttended\":\"ALL\"\n },\n \"studentCoordinator\":{\n    \"name\":\"NOOR\",\n    \"registrationNumber\":\"17BBE1010\",\n    \"email\":\"SDADAS@A.COM\",\n    \"phoneNumber\":\"919191991911\",\n    \"gender\":\"M\",\n    \"eventsAttended\":\"ALL\"\n },\n \"PROrequest\":\"SAJDOOSIJANDFSAKFDSAFD\",\n \"campusEngineerRequest\":\"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\",\n \"duration\":\"16 hours\"\n}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n\trs:\"created\",\n\terr:null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "events/pkg/service/service.go",
     "groupTitle": "events"
   },
   {
@@ -731,7 +955,54 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./events/pkg/service/service.go",
+    "filename": "events/pkg/service/service.go",
+    "groupTitle": "events"
+  },
+  {
+    "type": "delete",
+    "url": "/api/v1/event/delete-event",
+    "title": "delete an event",
+    "name": "delete_an_event",
+    "group": "events",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "key",
+            "description": "<p>key to query the event by</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "value",
+            "description": "<p>value of the key</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"query\":{\n\t\t\"key\":\"clubName\",\n\t\t\"value\":\"GDG\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n\t rs:\"deleted\",\n\t err:null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "events/pkg/service/service.go",
     "groupTitle": "events"
   },
   {
@@ -785,7 +1056,61 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./events/pkg/service/service.go",
+    "filename": "events/pkg/service/service.go",
+    "groupTitle": "events"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/event/read-event",
+    "title": "read an event",
+    "name": "read_an_event",
+    "group": "events",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "key",
+            "description": "<p>key to query the event by</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "value",
+            "description": "<p>value of the key</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "specific",
+            "description": "<p>search by name of the event</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "   {\"query\":{\n\t\t\"key\":\"clubName\",\n\t\t\"value\":\"GDG\",\n\t\t\"specific\":\"DEVFEST 2019\"\n\t}}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n   \"rs\": [{\n       \"clubName\": \"GDG\",\n       \"name\": \"DEVRELCONF\",\n       \"toDate\": \"10TH OCTOBER\",\n       \"fromDate\": \"8TH OCTOBER\",\n       \"toTime\": \"10 PM\",\n       \"fromTime\": \"11 AM\",\n       \"budget\": \"200000\",\n       \"description\": \"TECHNICAL EVENT AT GDG VIT. ITS GONNA BE AMAZING\",\n       \"category\": \"TECHNICAL\",\n       \"venue\": \"ANNA AUDI\",\n       \"attendance\": \"4000\",\n       \"expectedParticipants\": \"4000\",\n       \"facultyCoordinator\": {\n           \"name\": \"NOORU MAA\",\n           \"registrationNumber\": \"17BBE1010\",\n           \"email\": \"SDADAS@A.COM\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       },\n       \"studentCoordinator\": {\n           \"name\": \"NOORU BAAP\",\n           \"registrationNumber\": \"17BBE1010\",\n           \"email\": \"SDADAS@A.COM\",\n           \"phoneNumber\": \"919191991911\",\n           \"gender\": \"M\"\n       },\n       \"PROrequest\": \"SAJDOOSIJANDFSAKFDSAFD\",\n       \"campusEngineerRequest\": \"SDFHBSADUB, ASNFD , AS KDFSAM FDSA, AS, SD\",\n       \"duration\": \"16 hours\",\n       \"mainSponsor\": {\n           \"name\": \"\",\n           \"registrationNumber\": \"\",\n           \"email\": \"\",\n           \"phoneNumber\": \"\",\n           \"gender\": \"\"\n       },\n       \"status\": \"false\"\n\n   }],\n   \"err\": null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "events/pkg/service/service.go",
     "groupTitle": "events"
   },
   {
@@ -846,7 +1171,68 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./events/pkg/service/service.go",
+    "filename": "events/pkg/service/service.go",
+    "groupTitle": "events"
+  },
+  {
+    "type": "put",
+    "url": "/api/v1/event/update-event",
+    "title": "update an event",
+    "name": "update_an_event",
+    "group": "events",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "key",
+            "description": "<p>key to query the event by</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "value",
+            "description": "<p>value of the key</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "changeKey",
+            "description": "<p>key of the value which needs to be altered</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "changeValue",
+            "description": "<p>the new value</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"query\":{\n\t\t\"key\":\"clubName\",\n\t\t\"value\":\"GDG\",\n\t\t\"changeKey\":\"clubName\",\n\t\t\"changeValue\":\"codechef\"\n\t}\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\n\trs:\"updated\",\n\terr:null\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "events/pkg/service/service.go",
     "groupTitle": "events"
   },
   {
@@ -912,7 +1298,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./exporter/endpoints/controller/handlerfuncs.go",
+    "filename": "exporter/endpoints/controller/handlerfuncs.go",
     "groupTitle": "exporter"
   },
   {
@@ -978,7 +1364,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./exporter/endpoints/controller/handlerfuncs.go",
+    "filename": "exporter/endpoints/controller/handlerfuncs.go",
     "groupTitle": "exporter"
   },
   {
@@ -1060,7 +1446,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./guests/pkg/service/service.go",
+    "filename": "guests/pkg/service/service.go",
     "groupTitle": "guest"
   },
   {
@@ -1114,7 +1500,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./guests/pkg/service/service.go",
+    "filename": "guests/pkg/service/service.go",
     "groupTitle": "guest"
   },
   {
@@ -1161,7 +1547,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./guests/pkg/service/service.go",
+    "filename": "guests/pkg/service/service.go",
     "groupTitle": "guest"
   },
   {
@@ -1236,7 +1622,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./participants/pkg/service/service.go",
+    "filename": "participants/pkg/service/service.go",
     "groupTitle": "participants"
   },
   {
@@ -1283,7 +1669,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./participants/pkg/service/service.go",
+    "filename": "participants/pkg/service/service.go",
     "groupTitle": "participants"
   },
   {
@@ -1330,7 +1716,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./participants/pkg/service/service.go",
+    "filename": "participants/pkg/service/service.go",
     "groupTitle": "participants"
   },
   {
@@ -1391,7 +1777,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./participants/pkg/service/service.go",
+    "filename": "participants/pkg/service/service.go",
     "groupTitle": "participants"
   },
   {
@@ -1452,7 +1838,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./simple_projection/pkg/service/service.go",
+    "filename": "simple_projection/pkg/service/service.go",
     "groupTitle": "simple_projection"
   },
   {
@@ -1516,7 +1902,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./simple_projection/pkg/service/service.go",
+    "filename": "simple_projection/pkg/service/service.go",
     "groupTitle": "simple_projection"
   },
   {
@@ -1587,7 +1973,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./simple_projection/pkg/service/service.go",
+    "filename": "simple_projection/pkg/service/service.go",
     "groupTitle": "simple_projection"
   }
 ] });
