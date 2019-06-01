@@ -6,6 +6,8 @@
 
 The LightStep distributed tracing library for Go.
 
+**Looking for the LightStep OpenCensus exporter? Check out the [`lightstepoc` package](./lightstepoc).**
+
 ## Installation
 
 ```
@@ -91,7 +93,7 @@ logAndMetricsHandler := func(event lightstep.Event){
 
 func main() {
   // setup event handler first to catch startup errors
-  lightstep.OnEvent(logAndMetricsHandler)
+  lightstep.SetGlobalEventHandler(logAndMetricsHandler)
   
   lightstepTracer := lightstep.NewTracer(lightstep.Options{
     AccessToken: "YourAccessToken",
@@ -105,12 +107,11 @@ Event handlers will receive events from any active tracers, as well as errors in
 
 ## Advanced Configuration: Transport and Serialization Protocols
 
-By default, the tracer will send information to LightStep using GRPC and Protocol Buffers which is the recommended configuration. If there are no specific transport protocol needs you have, there is no need to change this default.
+By following the above configuration, the tracer will send information to LightStep using HTTP and Protocol Buffers which is the recommended configuration. If there are no specific transport protocol needs you have, there is no need to change this default.
 
-There are three total options for transport protocols:
+There are two options for transport protocols:
 
-- [Protocol Buffers](https://developers.google.com/protocol-buffers/) over [GRPC](https://grpc.io/) - The recommended, default, and most performant solution.
-- [Thrift](https://thrift.apache.org/) over HTTP - A legacy implementation not recommended for new deployments.
-- \[ EXPERIMENTAL \] [Protocol Buffers](https://developers.google.com/protocol-buffers/) over HTTP - New transport protocol supported for use cases where GRPC isn't an option. In order to enable HTTP you will need to configure the LightStep collectors receiving the data to accept HTTP traffic. Reach out to LightStep for support in this.
+- [Protocol Buffers](https://developers.google.com/protocol-buffers/) over HTTP - The recommended and default solution.
+- [Protocol Buffers](https://developers.google.com/protocol-buffers/) over [GRPC](https://grpc.io/) - This is a more advanced solution that might be desirable if you already have gRPC networking configured.
 
-You can configure which transport protocol the tracer uses using the `UseGRPC`, `UseThrift`, and `UseHttp` flags in the options.
+You can configure which transport protocol the tracer uses using the `UseGRPC` and `UseHttp` flags in the options.

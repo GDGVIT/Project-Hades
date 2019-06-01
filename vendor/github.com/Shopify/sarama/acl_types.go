@@ -40,15 +40,3 @@ const (
 	AclResourceCluster         AclResourceType = 4
 	AclResourceTransactionalID AclResourceType = 5
 )
-
-type AclResourcePatternType int
-
-// ref: https://github.com/apache/kafka/blob/trunk/clients/src/main/java/org/apache/kafka/common/resource/PatternType.java
-
-const (
-	AclPatternUnknown AclResourcePatternType = iota
-	AclPatternAny
-	AclPatternMatch
-	AclPatternLiteral
-	AclPatternPrefixed
-)

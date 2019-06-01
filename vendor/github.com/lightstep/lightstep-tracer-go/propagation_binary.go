@@ -5,9 +5,9 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/golang/protobuf/proto"
-	lightstep "github.com/lightstep/lightstep-tracer-go/lightsteppb"
-	opentracing "github.com/opentracing/opentracing-go"
+	"github.com/gogo/protobuf/proto"
+	lightstep "github.com/lightstep/lightstep-tracer-common/golang/gogo/lightsteppb"
+	"github.com/opentracing/opentracing-go"
 )
 
 // BinaryCarrier is used as the format parameter in inject/extract for lighstep binary propagation.

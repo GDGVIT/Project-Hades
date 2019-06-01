@@ -2,17 +2,18 @@ package lightstep
 
 import (
 	"bytes"
-	"errors"
+	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"net/url"
 	"time"
 
-	"github.com/golang/protobuf/proto"
-	"github.com/lightstep/lightstep-tracer-go/collectorpb"
-	"golang.org/x/net/context"
-	"golang.org/x/net/http2"
+	"github.com/gogo/protobuf/proto"
+	"github.com/lightstep/lightstep-tracer-common/golang/gogo/collectorpb"
 )
 
 var (
@@ -21,8 +22,8 @@ var (
 )
 
 const (
-	collectorHttpMethod = "POST"
-	collectorHttpPath   = "/api/v2/reports"
+	collectorHTTPMethod = "POST"
+	collectorHTTPPath   = "/api/v2/reports"
 	protoContentType    = "application/octet-stream"
 )
 
@@ -34,7 +35,9 @@ type httpCollectorClient struct {
 	accessToken string // accessToken is the access token used for explicit trace collection requests.
 	attributes  map[string]string
 
-	reportTimeout time.Duration
+	tlsClientConfig *tls.Config
+	reportTimeout   time.Duration
+	reportingPeriod time.Duration
 
 	// Remote service that will receive reports.
 	url    *url.URL
@@ -44,21 +47,16 @@ type httpCollectorClient struct {
 	converter *protoConverter
 }
 
-type HttpRequest struct {
-	http.Request
-}
-
 type transportCloser struct {
-	transport http2.Transport
+	*http.Transport
 }
 
-func (closer *transportCloser) Close() error {
-	closer.transport.CloseIdleConnections()
-
+func (closer transportCloser) Close() error {
+	closer.CloseIdleConnections()
 	return nil
 }
 
-func newHttpCollectorClient(
+func newHTTPCollectorClient(
 	opts Options,
 	reporterID uint64,
 	attributes map[string]string,
@@ -68,28 +66,67 @@ func newHttpCollectorClient(
 		fmt.Println("collector config does not produce valid url", err)
 		return nil, err
 	}
-	url.Path = collectorHttpPath
+	url.Path = collectorHTTPPath
+
+	tlsClientConfig, err := getTLSConfig(opts.Collector.CustomCACertFile)
+	if err != nil {
+		fmt.Println("failed to get TLSConfig: ", err)
+		return nil, err
+	}
 
 	return &httpCollectorClient{
-		reporterID:    reporterID,
-		accessToken:   opts.AccessToken,
-		attributes:    attributes,
-		reportTimeout: opts.ReportTimeout,
-		url:           url,
-		converter:     newProtoConverter(opts),
+		reporterID:      reporterID,
+		accessToken:     opts.AccessToken,
+		attributes:      attributes,
+		tlsClientConfig: tlsClientConfig,
+		reportTimeout:   opts.ReportTimeout,
+		reportingPeriod: opts.ReportingPeriod,
+		url:             url,
+		converter:       newProtoConverter(opts),
 	}, nil
 }
 
+// getTLSConfig returns a *tls.Config according to whether a user has supplied a customCACertFile. If they have,
+// we return a TLSConfig that uses the custom CA cert as the lone Root CA. If not, we return nil which http.Transport
+// will interpret as the default system defined Root CAs.
+func getTLSConfig(customCACertFile string) (*tls.Config, error) {
+	if len(customCACertFile) == 0 {
+		return nil, nil
+	}
+
+	caCerts := x509.NewCertPool()
+	cert, err := ioutil.ReadFile(customCACertFile)
+	if err != nil {
+		return nil, err
+	}
+
+	if !caCerts.AppendCertsFromPEM(cert) {
+		return nil, fmt.Errorf("credentials: failed to append certificate")
+	}
+
+	return &tls.Config{RootCAs: caCerts}, nil
+}
+
 func (client *httpCollectorClient) ConnectClient() (Connection, error) {
-	// The golang http2 client implementation doesn't support plaintext http2 (a.k.a h2c) out of the box.
-	// According to https://github.com/golang/go/issues/14141, they don't have plans to.
-	// For now, we are falling back to http1 for plaintext.
-	// In the future, we might want to add out own h2c implementation (see https://github.com/hkwi/h2c).
-	var transport http.RoundTripper
-	if client.url.Scheme == "https" {
-		transport = &http2.Transport{}
-	} else {
-		transport = &http.Transport{}
+	// Use a transport independent from http.DefaultTransport to provide sane
+	// defaults that make sense in the context of the lightstep client. The
+	// differences are mostly on setting timeouts based on the report timeout
+	// and period.
+	transport := &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
+		DialContext: (&net.Dialer{
+			Timeout:   client.reportTimeout / 2,
+			DualStack: true,
+		}).DialContext,
+		// The collector responses are very small, there is no point asking for
+		// a compressed payload, explicitly disabling it.
+		DisableCompression:     true,
+		IdleConnTimeout:        2 * client.reportingPeriod,
+		TLSHandshakeTimeout:    client.reportTimeout / 2,
+		ResponseHeaderTimeout:  client.reportTimeout,
+		ExpectContinueTimeout:  client.reportTimeout,
+		MaxResponseHeaderBytes: 64 * 1024, // 64 KB, just a safeguard
+		TLSClientConfig:        client.tlsClientConfig,
 	}
 
 	client.client = &http.Client{
@@ -97,11 +134,11 @@ func (client *httpCollectorClient) ConnectClient() (Connection, error) {
 		Timeout:   client.reportTimeout,
 	}
 
-	return &transportCloser{}, nil
+	return transportCloser{transport}, nil
 }
 
 func (client *httpCollectorClient) ShouldReconnect() bool {
-	// http2 will handle connection reuse under the hood
+	// http.Transport will handle connection reuse under the hood
 	return false
 }
 
@@ -110,7 +147,8 @@ func (client *httpCollectorClient) Report(context context.Context, req reportReq
 		return nil, fmt.Errorf("httpRequest cannot be null")
 	}
 
-	httpResponse, err := client.client.Do(req.httpRequest)
+	req.httpRequest.Header.Add(accessTokenHeader, client.accessToken)
+	httpResponse, err := client.client.Do(req.httpRequest.WithContext(context))
 	if err != nil {
 		return nil, err
 	}
@@ -153,7 +191,7 @@ func (client *httpCollectorClient) toRequest(
 
 	requestBody := bytes.NewReader(buf)
 
-	request, err := http.NewRequest(collectorHttpMethod, client.url.String(), requestBody)
+	request, err := http.NewRequest(collectorHTTPMethod, client.url.String(), requestBody)
 	if err != nil {
 		return nil, err
 	}
@@ -166,7 +204,7 @@ func (client *httpCollectorClient) toRequest(
 
 func (client *httpCollectorClient) toResponse(response *http.Response) (collectorResponse, error) {
 	if response.StatusCode != http.StatusOK {
-		return nil, errors.New(fmt.Sprintf("status code (%d) is not ok", response.StatusCode))
+		return nil, fmt.Errorf("status code (%d) is not ok", response.StatusCode)
 	}
 
 	body, err := ioutil.ReadAll(response.Body)
@@ -174,10 +212,10 @@ func (client *httpCollectorClient) toResponse(response *http.Response) (collecto
 		return nil, err
 	}
 
-	protoResponse := &collectorpb.ReportResponse{}
-	if err := proto.Unmarshal(body, protoResponse); err != nil {
+	resp := &collectorpb.ReportResponse{}
+	if err := proto.Unmarshal(body, resp); err != nil {
 		return nil, err
 	}
 
-	return protoResponse, nil
+	return protoResponse{ReportResponse: resp}, nil
 }

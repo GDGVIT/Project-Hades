@@ -33,7 +33,7 @@ type FetchResponseBlock struct {
 	HighWaterMarkOffset int64
 	LastStableOffset    int64
 	AbortedTransactions []*AbortedTransaction
-	Records             *Records // deprecated: use FetchResponseBlock.RecordsSet
+	Records             *Records // deprecated: use FetchResponseBlock.Records
 	RecordsSet          []*Records
 	Partial             bool
 }
@@ -186,11 +186,9 @@ func (b *FetchResponseBlock) encode(pe packetEncoder, version int16) (err error)
 }
 
 type FetchResponse struct {
-	Blocks        map[string]map[int32]*FetchResponseBlock
-	ThrottleTime  time.Duration
-	Version       int16 // v1 requires 0.9+, v2 requires 0.10+
-	LogAppendTime bool
-	Timestamp     time.Time
+	Blocks       map[string]map[int32]*FetchResponseBlock
+	ThrottleTime time.Duration
+	Version      int16 // v1 requires 0.9+, v2 requires 0.10+
 }
 
 func (r *FetchResponse) decode(pd packetDecoder, version int16) (err error) {
@@ -357,13 +355,10 @@ func encodeKV(key, value Encoder) ([]byte, []byte) {
 	return kb, vb
 }
 
-func (r *FetchResponse) AddMessageWithTimestamp(topic string, partition int32, key, value Encoder, offset int64, timestamp time.Time, version int8) {
+func (r *FetchResponse) AddMessage(topic string, partition int32, key, value Encoder, offset int64) {
 	frb := r.getOrCreateBlock(topic, partition)
 	kb, vb := encodeKV(key, value)
-	if r.LogAppendTime {
-		timestamp = r.Timestamp
-	}
-	msg := &Message{Key: kb, Value: vb, LogAppendTime: r.LogAppendTime, Timestamp: timestamp, Version: version}
+	msg := &Message{Key: kb, Value: vb}
 	msgBlock := &MessageBlock{Msg: msg, Offset: offset}
 	if len(frb.RecordsSet) == 0 {
 		records := newLegacyRecords(&MessageSet{})
@@ -373,24 +368,16 @@ func (r *FetchResponse) AddMessageWithTimestamp(topic string, partition int32, k
 	set.Messages = append(set.Messages, msgBlock)
 }
 
-func (r *FetchResponse) AddRecordWithTimestamp(topic string, partition int32, key, value Encoder, offset int64, timestamp time.Time) {
+func (r *FetchResponse) AddRecord(topic string, partition int32, key, value Encoder, offset int64) {
 	frb := r.getOrCreateBlock(topic, partition)
 	kb, vb := encodeKV(key, value)
+	rec := &Record{Key: kb, Value: vb, OffsetDelta: offset}
 	if len(frb.RecordsSet) == 0 {
-		records := newDefaultRecords(&RecordBatch{Version: 2, LogAppendTime: r.LogAppendTime, FirstTimestamp: timestamp, MaxTimestamp: r.Timestamp})
+		records := newDefaultRecords(&RecordBatch{Version: 2})
 		frb.RecordsSet = []*Records{&records}
 	}
 	batch := frb.RecordsSet[0].RecordBatch
-	rec := &Record{Key: kb, Value: vb, OffsetDelta: offset, TimestampDelta: timestamp.Sub(batch.FirstTimestamp)}
 	batch.addRecord(rec)
-}
-
-func (r *FetchResponse) AddMessage(topic string, partition int32, key, value Encoder, offset int64) {
-	r.AddMessageWithTimestamp(topic, partition, key, value, offset, time.Time{}, 0)
-}
-
-func (r *FetchResponse) AddRecord(topic string, partition int32, key, value Encoder, offset int64) {
-	r.AddRecordWithTimestamp(topic, partition, key, value, offset, time.Time{})
 }
 
 func (r *FetchResponse) SetLastOffsetDelta(topic string, partition int32, offset int32) {
