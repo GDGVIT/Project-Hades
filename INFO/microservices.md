@@ -148,6 +148,14 @@
 
 <br />
 
+#### Auth
+
+* User signup/login
+
+* Organization creation
+
+* invitation of organization
+
 #### Miscellaneous 
                            
 * Mining bitcoins based on meeting schedule       
