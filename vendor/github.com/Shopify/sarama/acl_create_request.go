@@ -1,7 +1,6 @@
 package sarama
 
 type CreateAclsRequest struct {
-	Version      int16
 	AclCreations []*AclCreation
 }
 
@@ -11,7 +10,7 @@ func (c *CreateAclsRequest) encode(pe packetEncoder) error {
 	}
 
 	for _, aclCreation := range c.AclCreations {
-		if err := aclCreation.encode(pe, c.Version); err != nil {
+		if err := aclCreation.encode(pe); err != nil {
 			return err
 		}
 	}
@@ -20,7 +19,6 @@ func (c *CreateAclsRequest) encode(pe packetEncoder) error {
 }
 
 func (c *CreateAclsRequest) decode(pd packetDecoder, version int16) (err error) {
-	c.Version = version
 	n, err := pd.getArrayLength()
 	if err != nil {
 		return err
@@ -43,16 +41,11 @@ func (d *CreateAclsRequest) key() int16 {
 }
 
 func (d *CreateAclsRequest) version() int16 {
-	return d.Version
+	return 0
 }
 
 func (d *CreateAclsRequest) requiredVersion() KafkaVersion {
-	switch d.Version {
-	case 1:
-		return V2_0_0_0
-	default:
-		return V0_11_0_0
-	}
+	return V0_11_0_0
 }
 
 type AclCreation struct {
@@ -60,8 +53,8 @@ type AclCreation struct {
 	Acl
 }
 
-func (a *AclCreation) encode(pe packetEncoder, version int16) error {
-	if err := a.Resource.encode(pe, version); err != nil {
+func (a *AclCreation) encode(pe packetEncoder) error {
+	if err := a.Resource.encode(pe); err != nil {
 		return err
 	}
 	if err := a.Acl.encode(pe); err != nil {

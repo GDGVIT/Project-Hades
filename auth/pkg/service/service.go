@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"log"
 
 	"github.com/GDGVIT/Project-Hades/model"
 )
@@ -119,20 +118,77 @@ func (b *basicAuthService) Signup(ctx context.Context, user model.User) (rs stri
 	return msg2.Message, msg2.Token, nil
 }
 
+/**
+* @api {post} /api/v1/auth/signup signup as a user
+* @apiName signup as a user
+* @apiGroup auth
+*
+* @apiParam {string} name name of the org
+* @apiParam {string} location location of the org
+* @apiParam {string} description description of the org
+* @apiParam {string} tag tag of the org
+* @apiParam {string} website website of the org
+*
+* @apiParamExample {json} request-example
+*
+*{
+*	"data":{
+*	"name":"DSC-VIT",
+*	"location":"India",
+*	"description":"Developer Student Clubs",
+*	"tag":"technical",
+*	"website":"https://dsv-vit-vellore.com"
+*}
+*}
+* }
+*
+**/
 func (b *basicAuthService) CreateOrg(ctx context.Context, data model.Organization) (rs string, err error) {
-	log.Println(data.Token)
-	tk, err := model.VerifyToken(data.Token)
-	log.Println(tk)
-	return "", err
+	//log.Println(data.Token)
+	//tk, err := model.VerifyToken(data.Token)
+	//log.Println(tk)
+	if data.Name == "" {
+		return "ORG name needed", nil
+	}
+	if err = model.CreateNewOrg(data); err != nil {
+		return "", err
+	}
+	return "created org", nil
+
 }
 
 func (b *basicAuthService) LoginOrg(ctx context.Context, data model.Organization) (rs string, err error) {
 	// TODO implement the business logic of CreateOrg
 	return rs, err
 }
+
+/**
+* @api {post} /api/v1/auth/invite invite a user org
+* @apiName invite a user to an org
+* @apiGroup auth
+*
+* @apiParam {string} email email of the user
+* @apiParam {string} org name of the organization
+*
+* @apiParamExample {json} request-example
+*
+*{
+*	"data":{
+*	"name":"DSC-VIT",
+*	"location":"India",
+*	"description":"Developer Student Clubs",
+*	"tag":"technical",
+*	"website":"https://dsv-vit-vellore.com"
+*}
+*}
+* }
+*
+**/
 func (b *basicAuthService) Invite(ctx context.Context, email string, org string) (rs string, err error) {
-	// TODO implement the business logic of Invite
-	return rs, err
+	if err := model.InviteUserToOrg(email, org); err != nil {
+		return "", err
+	}
+	return "successful", nil
 }
 func (b *basicAuthService) ShowInvites(ctx context.Context) (org string, admin string, err error) {
 	// TODO implement the business logic of ShowInvites

@@ -1,16 +1,14 @@
-// package lightstep implements the LightStep OpenTracing client for Go.
+// Package lightstep implements the LightStep OpenTracing client for Go.
 package lightstep
 
 import (
+	"context"
 	"fmt"
-	"time"
-
-	"golang.org/x/net/context"
-
 	"runtime"
 	"sync"
+	"time"
 
-	ot "github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go"
 )
 
 // Tracer extends the `opentracing.Tracer` interface with methods for manual
@@ -18,7 +16,7 @@ import (
 // tracer and typecast it to a `lightstep.Tracer`. As a convenience, the
 // lightstep package provides static functions which perform the typecasting.
 type Tracer interface {
-	ot.Tracer
+	opentracing.Tracer
 
 	// Close flushes and then terminates the LightStep collector
 	Close(context.Context)
@@ -67,6 +65,11 @@ type tracerImpl struct {
 	flushingLock      sync.Mutex
 	reportInFlight    bool
 	lastReportAttempt time.Time
+
+	// Meta Event Reporting can be enabled at tracer creation or on-demand by satellite
+	metaEventReportingEnabled bool
+	// Set to true on first report
+	firstReportHasRun bool
 
 	// We allow our remote peer to disable this instrumentation at any
 	// time, turning all potentially costly runtime operations into
@@ -119,6 +122,10 @@ func NewTracer(opts Options) Tracer {
 	}
 	impl.connection = conn
 
+	// set meta reporting to defined option
+	impl.metaEventReportingEnabled = opts.MetaEventReportingEnabled
+	impl.firstReportHasRun = false
+
 	go impl.reportLoop()
 
 	return impl
@@ -130,29 +137,43 @@ func (tracer *tracerImpl) Options() Options {
 
 func (tracer *tracerImpl) StartSpan(
 	operationName string,
-	sso ...ot.StartSpanOption,
-) ot.Span {
+	sso ...opentracing.StartSpanOption,
+) opentracing.Span {
 	return newSpan(operationName, tracer, sso)
 }
 
-func (tracer *tracerImpl) Inject(sc ot.SpanContext, format interface{}, carrier interface{}) error {
+func (tracer *tracerImpl) Inject(sc opentracing.SpanContext, format interface{}, carrier interface{}) error {
+	if tracer.opts.MetaEventReportingEnabled {
+		opentracing.StartSpan(LSMetaEvent_InjectOperation,
+			opentracing.Tag{Key: LSMetaEvent_MetaEventKey, Value: true},
+			opentracing.Tag{Key: LSMetaEvent_TraceIdKey, Value: sc.(SpanContext).TraceID},
+			opentracing.Tag{Key: LSMetaEvent_SpanIdKey, Value: sc.(SpanContext).SpanID},
+			opentracing.Tag{Key: LSMetaEvent_PropagationFormatKey, Value: format}).
+			Finish()
+	}
 	switch format {
-	case ot.TextMap, ot.HTTPHeaders:
+	case opentracing.TextMap, opentracing.HTTPHeaders:
 		return theTextMapPropagator.Inject(sc, carrier)
-	case ot.Binary:
+	case opentracing.Binary:
 		return theBinaryPropagator.Inject(sc, carrier)
 	}
-	return ot.ErrUnsupportedFormat
+	return opentracing.ErrUnsupportedFormat
 }
 
-func (tracer *tracerImpl) Extract(format interface{}, carrier interface{}) (ot.SpanContext, error) {
+func (tracer *tracerImpl) Extract(format interface{}, carrier interface{}) (opentracing.SpanContext, error) {
+	if tracer.opts.MetaEventReportingEnabled {
+		opentracing.StartSpan(LSMetaEvent_ExtractOperation,
+			opentracing.Tag{Key: LSMetaEvent_MetaEventKey, Value: true},
+			opentracing.Tag{Key: LSMetaEvent_PropagationFormatKey, Value: format}).
+			Finish()
+	}
 	switch format {
-	case ot.TextMap, ot.HTTPHeaders:
+	case opentracing.TextMap, opentracing.HTTPHeaders:
 		return theTextMapPropagator.Extract(carrier)
-	case ot.Binary:
+	case opentracing.Binary:
 		return theBinaryPropagator.Extract(carrier)
 	}
-	return nil, ot.ErrUnsupportedFormat
+	return nil, opentracing.ErrUnsupportedFormat
 }
 
 func (tracer *tracerImpl) reconnectClient(now time.Time) {
@@ -225,6 +246,14 @@ func (tracer *tracerImpl) Flush(ctx context.Context) {
 		return
 	}
 
+	if tracer.opts.MetaEventReportingEnabled && !tracer.firstReportHasRun {
+		opentracing.StartSpan(LSMetaEvent_TracerCreateOperation,
+			opentracing.Tag{Key: LSMetaEvent_MetaEventKey, Value: true},
+			opentracing.Tag{Key: LSMetaEvent_TracerGuidKey, Value: tracer.reporterID}).
+			Finish()
+		tracer.firstReportHasRun = true
+	}
+
 	ctx, cancel := context.WithTimeout(ctx, tracer.opts.ReportTimeout)
 	defer cancel()
 
@@ -250,6 +279,14 @@ func (tracer *tracerImpl) Flush(ctx context.Context) {
 	}
 	emitEvent(tracer.postFlush(reportErrorEvent))
 
+	if err == nil && resp.DevMode() {
+		tracer.metaEventReportingEnabled = true
+	}
+
+	if err == nil && !resp.DevMode() {
+		tracer.metaEventReportingEnabled = false
+	}
+
 	if err == nil && resp.Disable() {
 		tracer.Disable()
 	}
@@ -261,11 +298,11 @@ func (tracer *tracerImpl) preFlush() *eventFlushError {
 	defer tracer.lock.Unlock()
 
 	if tracer.disabled {
-		return newEventFlushError(flushErrorTracerClosed, FlushErrorTracerDisabled)
+		return newEventFlushError(errFlushFailedTracerClosed, FlushErrorTracerDisabled)
 	}
 
 	if tracer.connection == nil {
-		return newEventFlushError(flushErrorTracerClosed, FlushErrorTracerClosed)
+		return newEventFlushError(errFlushFailedTracerClosed, FlushErrorTracerClosed)
 	}
 
 	now := time.Now()

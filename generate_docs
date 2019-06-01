@@ -1,0 +1,13 @@
+#!/bin/bash
+
+apidoc -i analytics \
+			 -i auth \
+			 -i events \
+			 -i exporter \
+			 -i guests \
+			 -i participants \
+			 -i simple_projection \
+			 -i events \
+			 -i coupons \
+			 -o docs
+

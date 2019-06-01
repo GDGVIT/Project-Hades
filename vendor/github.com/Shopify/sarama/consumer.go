@@ -314,8 +314,6 @@ type partitionConsumer struct {
 
 	fetchSize int32
 	offset    int64
-
-	retries int32
 }
 
 var errTimedOut = errors.New("timed out feeding messages to the user") // not user-facing
@@ -334,21 +332,12 @@ func (child *partitionConsumer) sendError(err error) {
 	}
 }
 
-func (child *partitionConsumer) computeBackoff() time.Duration {
-	if child.conf.Consumer.Retry.BackoffFunc != nil {
-		retries := atomic.AddInt32(&child.retries, 1)
-		return child.conf.Consumer.Retry.BackoffFunc(int(retries))
-	} else {
-		return child.conf.Consumer.Retry.Backoff
-	}
-}
-
 func (child *partitionConsumer) dispatcher() {
 	for range child.trigger {
 		select {
 		case <-child.dying:
 			close(child.trigger)
-		case <-time.After(child.computeBackoff()):
+		case <-time.After(child.conf.Consumer.Retry.Backoff):
 			if child.broker != nil {
 				child.consumer.unrefBrokerConsumer(child.broker)
 				child.broker = nil
@@ -462,10 +451,6 @@ feederLoop:
 	for response := range child.feeder {
 		msgs, child.responseResult = child.parseResponse(response)
 
-		if child.responseResult == nil {
-			atomic.StoreInt32(&child.retries, 0)
-		}
-
 		for i, msg := range msgs {
 		messageSelect:
 			select {
@@ -502,13 +487,9 @@ func (child *partitionConsumer) parseMessages(msgSet *MessageSet) ([]*ConsumerMe
 	for _, msgBlock := range msgSet.Messages {
 		for _, msg := range msgBlock.Messages() {
 			offset := msg.Offset
-			timestamp := msg.Msg.Timestamp
 			if msg.Msg.Version >= 1 {
 				baseOffset := msgBlock.Offset - msgBlock.Messages()[len(msgBlock.Messages())-1].Offset
 				offset += baseOffset
-				if msg.Msg.LogAppendTime {
-					timestamp = msgBlock.Msg.Timestamp
-				}
 			}
 			if offset < child.offset {
 				continue
@@ -519,14 +500,14 @@ func (child *partitionConsumer) parseMessages(msgSet *MessageSet) ([]*ConsumerMe
 				Key:            msg.Msg.Key,
 				Value:          msg.Msg.Value,
 				Offset:         offset,
-				Timestamp:      timestamp,
+				Timestamp:      msg.Msg.Timestamp,
 				BlockTimestamp: msgBlock.Msg.Timestamp,
 			})
 			child.offset = offset + 1
 		}
 	}
 	if len(messages) == 0 {
-		child.offset++
+		return nil, ErrIncompleteResponse
 	}
 	return messages, nil
 }
@@ -538,23 +519,19 @@ func (child *partitionConsumer) parseRecords(batch *RecordBatch) ([]*ConsumerMes
 		if offset < child.offset {
 			continue
 		}
-		timestamp := batch.FirstTimestamp.Add(rec.TimestampDelta)
-		if batch.LogAppendTime {
-			timestamp = batch.MaxTimestamp
-		}
 		messages = append(messages, &ConsumerMessage{
 			Topic:     child.topic,
 			Partition: child.partition,
 			Key:       rec.Key,
 			Value:     rec.Value,
 			Offset:    offset,
-			Timestamp: timestamp,
+			Timestamp: batch.FirstTimestamp.Add(rec.TimestampDelta),
 			Headers:   rec.Headers,
 		})
 		child.offset = offset + 1
 	}
 	if len(messages) == 0 {
-		child.offset++
+		child.offset += 1
 	}
 	return messages, nil
 }
@@ -809,9 +786,6 @@ func (bc *brokerConsumer) fetchNewMessages() (*FetchResponse, error) {
 	request := &FetchRequest{
 		MinBytes:    bc.consumer.conf.Consumer.Fetch.Min,
 		MaxWaitTime: int32(bc.consumer.conf.Consumer.MaxWaitTime / time.Millisecond),
-	}
-	if bc.consumer.conf.Version.IsAtLeast(V0_9_0_0) {
-		request.Version = 1
 	}
 	if bc.consumer.conf.Version.IsAtLeast(V0_10_0_0) {
 		request.Version = 2

@@ -1,24 +1,15 @@
 package sarama
 
 type Resource struct {
-	ResourceType       AclResourceType
-	ResourceName       string
-	ResoucePatternType AclResourcePatternType
+	ResourceType AclResourceType
+	ResourceName string
 }
 
-func (r *Resource) encode(pe packetEncoder, version int16) error {
+func (r *Resource) encode(pe packetEncoder) error {
 	pe.putInt8(int8(r.ResourceType))
 
 	if err := pe.putString(r.ResourceName); err != nil {
 		return err
-	}
-
-	if version == 1 {
-		if r.ResoucePatternType == AclPatternUnknown {
-			Logger.Print("Cannot encode an unknown resource pattern type, using Literal instead")
-			r.ResoucePatternType = AclPatternLiteral
-		}
-		pe.putInt8(int8(r.ResoucePatternType))
 	}
 
 	return nil
@@ -33,13 +24,6 @@ func (r *Resource) decode(pd packetDecoder, version int16) (err error) {
 
 	if r.ResourceName, err = pd.getString(); err != nil {
 		return err
-	}
-	if version == 1 {
-		pattern, err := pd.getInt8()
-		if err != nil {
-			return err
-		}
-		r.ResoucePatternType = AclResourcePatternType(pattern)
 	}
 
 	return nil
@@ -96,8 +80,8 @@ type ResourceAcls struct {
 	Acls []*Acl
 }
 
-func (r *ResourceAcls) encode(pe packetEncoder, version int16) error {
-	if err := r.Resource.encode(pe, version); err != nil {
+func (r *ResourceAcls) encode(pe packetEncoder) error {
+	if err := r.Resource.encode(pe); err != nil {
 		return err
 	}
 
