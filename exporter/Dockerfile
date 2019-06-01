@@ -9,7 +9,7 @@ WORKDIR /go/src/github.com/GDGVIT/Project-Hades/exporter
 # RUN go get -t -v ./...
 
 RUN GO111MODULE=on go get  github.com/canthefason/go-watcher
-RUN go install github.com/canthefason/go-watcher/cmd/watcher
+RUN GO111MODULE=on go install github.com/canthefason/go-watcher/cmd/watcher
 
 EXPOSE 8084
 
