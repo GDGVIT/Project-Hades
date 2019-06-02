@@ -1,5 +1,17 @@
 version: "3.2"
 services:
+  mailerqr:
+    image: angadsharma1016/hades_mailer_qr
+    container_name: mailerqr
+    #depends_on: 
+    #- events
+    #- participants
+    #- simple_projection
+    restart: on-failure
+    ports:
+      - 3000:3000
+    #environment:
+    # BASE_URL: http://hades.com
   coupons:
     build:
       context: .
