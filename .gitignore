@@ -2,3 +2,10 @@
 push
 db
 attendance.md
+
+
+# For docs
+.eslintrc.yml
+node_modules
+package.json
+package-lock.json

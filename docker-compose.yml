@@ -1,5 +1,17 @@
 version: "3.2"
 services:
+  mailerqr:
+    image: angadsharma1016/hades_mailer_qr
+    container_name: mailerqr
+    #depends_on: 
+    #- events
+    #- participants
+    #- simple_projection
+    restart: on-failure
+    ports:
+      - 3000:3000
+    #environment:
+    # BASE_URL: http://hades.com
   coupons:
     build:
       context: .
@@ -43,7 +55,6 @@ services:
     restart: on-failure
     environment:
       PROD_URI: "${PROD_URI}"
-    
   simple_projection:
     build:
       context: .
@@ -58,7 +69,6 @@ services:
     restart: on-failure
     environment:
       PROD_URI: "${PROD_URI}"
-  
   exporter:
     build:
       context: .
@@ -90,7 +100,6 @@ services:
       MAIL_FROM: "${MAIL_FROM}"
       MAIL_TO: "${MAIL_TO}"
       MAIL_PASSWORD: "${MAIL_PASSWORD}"
-
   guests:
     build:
       context: .
@@ -105,7 +114,6 @@ services:
     restart: on-failure
     environment:
       PROD_URI: "${PROD_URI}"
-  
   auth:
     build:
       context: .
@@ -121,8 +129,6 @@ services:
     environment:
       PROD_URI: "${PROD_URI}"
       JWT_PASSWORD: "${JWT_PASSWORD}"
-
-  
   neo4j:
     container_name: neo4j
     image: neo4j:latest
@@ -155,9 +161,6 @@ services:
     - simple_projection:simple_projection
     - guests:guests
     - analytics:analytics
-
-
-
   nats:
     container_name: nats
     image: nats
@@ -165,6 +168,5 @@ services:
       - 4222:4222 # for clients
       - 8222:8222 # HTTP management port for reporting
       - 6222:6222 # routing port for clustering
-
 volumes:
   dgraph:
