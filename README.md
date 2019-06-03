@@ -1,4 +1,5 @@
 # Project Hades
+---
 
 The last event coordinator you will ever need
 
@@ -7,12 +8,11 @@ The last event coordinator you will ever need
 <br />
 
 ## Directions to run
----
 
 <br/>
 
-### Quick setup
-Quick setup uses performat dockerfiles made from scratch. It directly runs the compiled binaries.
+### Production setup
+Production setup uses performat dockerfiles made from scratch. It directly runs the compiled binaries.
 
 To `compile` binaries run
 
@@ -20,12 +20,12 @@ To `compile` binaries run
 $ make
 $ docker-compose -f docker-compose-light.yml build
 $ docker-compose -f docker-compose-light.yml up -d neo4j
-$ docker-compose -f docker-compose-light.yml up --d
+$ docker-compose -f docker-compose-light.yml up -d
 ```
 <br/>
 
-### Stable setup
-Stable setup compiles binaries on a heavier container runs them using `watcher`. 
+### Dev setup
+Dev setup compiles binaries on a heavier container runs them using `watcher`. 
 
 To run the setup simply do the following 
 
@@ -51,6 +51,7 @@ $ make test
 <br/>
 
 ### WomenTechies'19 database
+We used the setup on *WomenTechies'19* hackathon organized by `WTM` and `DSC` VIT. Here is a live database view of the same.
 <img src="./static/images/neo_event.png" width=100%>
 
 
