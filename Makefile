@@ -22,6 +22,9 @@ docs:
 			 -i events \
 			 -i coupons \
 			 -o docs
+.PHONY: lint
+lint:
+		eslint ./docs/*/*.js --fix
 
 .PHONY: test
 test:
