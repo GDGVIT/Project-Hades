@@ -10,13 +10,29 @@ The last event coordinator you will ever need
 ## Directions to run
 Get started with setting up **Project Hades** locally.
 
+<br/>
+
+### Environment variables
+These variables should reside as key value pairs in a file called `.env`.
+
+| Variable Name | Description | Data type |
+|:-------------:|:-----------:|:------:|
+| SALT | Salt for hashing | Integer |
+| JWT_PASSWORD | Password for JWT | String |
+| PROD_URI | Neo4j URI | String |
+| MAIL_FROM | Mailer email for analytics | String |
+| MAIL_TO | Destination email for analytics| String | 
+| MAIL_PASSWORD | Password for MAIL_FROM | String |
+
+<br/>
+
 ### Production setup
 Production setup uses performat dockerfiles made from scratch. It directly runs the compiled binaries.
 
-To `compile` binaries run
+To `build` binaries run
 
 ```bash
-$ make
+$ make # needs go installed
 $ docker-compose -f docker-compose-light.yml build
 $ docker-compose -f docker-compose-light.yml up -d neo4j
 $ docker-compose -f docker-compose-light.yml up -d
