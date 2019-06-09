@@ -1,14 +1,13 @@
 .PHONY: build
 build: 
-		GO111MODULE=on GOOS=linux GOARCH=amd64 CGOENABLED=0 \
-		go build -ldflags="-w -s" -o ./bin/analytics ./analytics/cmd/main.go &&\
-		go build -ldflags="-w -s" -o ./bin/auth ./auth/cmd/main.go  &&\
-		go build -ldflags="-w -s" -o ./bin/coupons ./coupons/cmd/main.go &&\
-		go build -ldflags="-w -s" -o ./bin/events ./events/cmd/main.go  &&\
-		go build -ldflags="-w -s" -o ./bin/exporter ./exporter/cmd/main.go  &&\
-		go build -ldflags="-w -s" -o ./bin/guests ./guests/cmd/main.go  &&\
-		go build -ldflags="-w -s" -o ./bin/simple_projection ./simple_projection/cmd/main.go &&\
-		go build -ldflags="-w -s" -o ./bin/participants ./participants/cmd/main.go 
+		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/analytics ./analytics/cmd/main.go; \
+		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/auth ./auth/cmd/main.go; \
+		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/coupons ./coupons/cmd/main.go; \
+		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/events ./events/cmd/main.go; \
+		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/exporter ./exporter/cmd/main.go; \
+		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/guests ./guests/cmd/main.go; \
+		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/simple_projection ./simple_projection/cmd/main.go; \
+		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/participants ./participants/cmd/main.go 
 
 .PHONY: docs
 docs:  
