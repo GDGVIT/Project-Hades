@@ -33,9 +33,9 @@ To `build` binaries run
 
 ```bash
 $ make # needs go installed
-$ docker-compose -f docker-compose-light.yml build
-$ docker-compose -f docker-compose-light.yml up -d neo4j
-$ docker-compose -f docker-compose-light.yml up -d
+$ docker-compose -f performant-compose.yaml build
+$ docker-compose -f performant-compose.yaml up -d neo4j
+$ docker-compose -f performant-compose.yaml up -d
 ```
 
 ### Dev setup
