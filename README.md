@@ -3,13 +3,12 @@
 
 The last event coordinator you will ever need
 
-[![CodeFactor](https://www.codefactor.io/repository/github/l04db4l4nc3r/project-hades/badge)](https://www.codefactor.io/repository/github/l04db4l4nc3r/project-hades) [![view docs](https://img.shields.io/badge/docs-view%20API%20documentation-orange.svg)](https://l04db4l4nc3r.github.io/Project-Hades/) [![view mobile app](https://img.shields.io/badge/app-view%20mobile%20app-blue.svg)](https://github.com/GDGVIT/Hades_Admin_App.git) [![view web frontend](https://img.shields.io/badge/frontend-view%20web%20frontend-yellow.svg)](https://github.com/GDGVIT/Project-Hades-Frontend.git)
+[![CodeFactor](https://www.codefactor.io/repository/github/l04db4l4nc3r/project-hades/badge)](https://www.codefactor.io/repository/github/l04db4l4nc3r/project-hades) [![view docs](https://img.shields.io/badge/docs-view%20API%20documentation-orange.svg)](https://l04db4l4nc3r.github.io/Project-Hades/) [![view mobile app](https://img.shields.io/badge/app-view%20mobile%20app-blue.svg)](https://github.com/GDGVIT/Hades_Admin_App.git) [![view web frontend](https://img.shields.io/badge/frontend-view%20web%20frontend-yellow.svg)](https://github.com/GDGVIT/Project-Hades-Frontend.git) [![Mailer service](https://img.shields.io/badge/service-view%20mailer%20service-green.svg)](https://github.com/GDGVIT/Mailer-Microservice.git) [![Permission generator](https://img.shields.io/badge/service-view%20permission--generator%20service-red.svg)](https://github.com/GDGVIT/Permission-Generator-Microservice.git)
 
 <br />
 
 ## Directions to run
-
-<br/>
+Get started with setting up **Project Hades** locally.
 
 ### Production setup
 Production setup uses performat dockerfiles made from scratch. It directly runs the compiled binaries.
@@ -22,7 +21,6 @@ $ docker-compose -f docker-compose-light.yml build
 $ docker-compose -f docker-compose-light.yml up -d neo4j
 $ docker-compose -f docker-compose-light.yml up -d
 ```
-<br/>
 
 ### Dev setup
 Dev setup compiles binaries on a heavier container runs them using `watcher`. 
@@ -46,18 +44,3 @@ To generate docs and testing, simply do the following
 $ make docs
 $ make test
 ```
-
-<br/>
-<br/>
-
-### WomenTechies'19 database
-We used the setup on *WomenTechies'19* hackathon organized by `WTM` and `DSC` VIT. Here is a live database view of the same.
-<img src="./static/images/neo_event.png" width=100%>
-
-
-<br />
-<br />
-
-### High level flow
-
-![functional architecture](./static/images/HADESxml.png)
