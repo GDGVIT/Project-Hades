@@ -1,8 +1,8 @@
 version: "3.2"
 services:
   mailerqr:
-    image: angadsharma1016/hades_mailer_qr
-    container_name: mailerqr
+    image: angadsharma1016/hades_mailer_qr:latest
+    container_name: mailerqr_hades
     #depends_on: 
     #- events
     #- participants
@@ -12,11 +12,19 @@ services:
     - 3000:3000
     #environment:
     # BASE_URL: http://hades.com
+  permission_generator:
+    image: angadsharma1016/hades_permission_generator:latest
+    restart: on-failure
+    container_name: permission_generator_hades
+    ports: 
+    - 3001:3000
+    #depends_on:
+    #- simple_projection
   coupons:
     build:
       context: .
       dockerfile: coupons/Dockerfile_performant
-    container_name: coupons
+    container_name: coupons_hades
     depends_on:
     - neo4j
     ports:
@@ -31,7 +39,7 @@ services:
     build:
       context: .
       dockerfile: events/Dockerfile_performant
-    container_name: event
+    container_name: event_hades
     depends_on:
     - neo4j
     ports:
@@ -45,7 +53,7 @@ services:
     build:
       context: .
       dockerfile: participants/Dockerfile_performant
-    container_name: participants
+    container_name: participants_hades
     depends_on:
     - neo4j
     ports:
@@ -59,7 +67,7 @@ services:
     build:
       context: .
       dockerfile: simple_projection/Dockerfile_performant
-    container_name: simple_projection
+    container_name: simple_projection_hades
     depends_on:
     - neo4j
     ports:
@@ -73,7 +81,7 @@ services:
     build:
       context: .
       dockerfile: exporter/Dockerfile_performant
-    container_name: exporter
+    container_name: exporter_hades
     ports:
     - 8084:8084
     volumes:
@@ -89,7 +97,7 @@ services:
     build:
       context: .
       dockerfile: analytics/Dockerfile_performant
-    container_name: analytics
+    container_name: analytics_hades
     ports:
     - 8085:8085
     volumes:
@@ -104,7 +112,7 @@ services:
     build:
       context: .
       dockerfile: guests/Dockerfile_performant
-    container_name: guests
+    container_name: guests_hades
     depends_on:
     - neo4j
     ports:
@@ -118,7 +126,7 @@ services:
     build:
       context: .
       dockerfile: auth/Dockerfile_performant
-    container_name: auth
+    container_name: auth_hades
     depends_on:
     - neo4j
     ports:
@@ -130,7 +138,7 @@ services:
       PROD_URI: "${PROD_URI}"
       JWT_PASSWORD: "${JWT_PASSWORD}"
   neo4j:
-    container_name: neo4j
+    container_name: neo4j_hades
     image: neo4j:latest
     ports:
     - 7474:7474
@@ -144,7 +152,7 @@ services:
     environment:
       NEO4J_AUTH: "${NEO4J_AUTH}"
   nginx:
-    container_name: nginx
+    container_name: nginx_hades
     build: 
       context: .
       dockerfile: Web/Dockerfile
@@ -162,7 +170,7 @@ services:
     - guests:guests
     - analytics:analytics
   nats:
-    container_name: nats
+    container_name: nats_hades
     image: nats
     ports:
       - 4222:4222 # for clients

@@ -22,6 +22,7 @@ docs:
 			 -i events \
 			 -i coupons \
 			 -o docs
+
 .PHONY: lint
 lint:
 		eslint ./docs/*/*.js --fix
@@ -33,4 +34,10 @@ test:
 .PHONY: exec
 exec:
 		./exec
+
+.PHONY: dep
+dep:
+	GO111MODULE=on
+	go mod vendor
+	go mod verify
 
