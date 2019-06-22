@@ -2,6 +2,7 @@
 push
 db
 attendance.md
+*.db
 
 
 # For docs

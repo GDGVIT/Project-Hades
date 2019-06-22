@@ -21,6 +21,7 @@ services:
     #depends_on:
     #- simple_projection
   coupons:
+    image: hades_coupons
     build:
       context: .
       dockerfile: coupons/Dockerfile
@@ -34,8 +35,13 @@ services:
     restart: on-failure
     environment:
       PROD_URI: "${PROD_URI}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
       SALT: "${SALT}"
   event:
+    image: hades_event
     build:
       context: .
       dockerfile: events/Dockerfile
@@ -49,7 +55,12 @@ services:
     restart: on-failure
     environment:
       PROD_URI: "${PROD_URI}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
   participants:
+    image: hades_participants
     build:
       context: .
       dockerfile: participants/Dockerfile
@@ -63,7 +74,12 @@ services:
     restart: on-failure
     environment:
       PROD_URI: "${PROD_URI}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
   simple_projection:
+    image: hades_simple_projection
     build:
       context: .
       dockerfile: simple_projection/Dockerfile
@@ -77,7 +93,12 @@ services:
     restart: on-failure
     environment:
       PROD_URI: "${PROD_URI}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
   exporter:
+    image: hades_exporter
     build:
       context: .
       dockerfile: exporter/Dockerfile
@@ -92,8 +113,13 @@ services:
     env_file: ./.env
     environment:
       PROD_URI: "${PROD_URI}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
       SIMPLE_PROJECTION_URI: "${SIMPLE_PROJECTION_URI}"
   analytics:
+    image: hades_analytics
     build:
       context: .
       dockerfile: analytics/Dockerfile
@@ -106,9 +132,14 @@ services:
     env_file: ./.env
     environment:
       MAIL_FROM: "${MAIL_FROM}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MAIL_TO: "${MAIL_TO}"
       MAIL_PASSWORD: "${MAIL_PASSWORD}"
   guests:
+    image: hades_guests
     build:
       context: .
       dockerfile: guests/Dockerfile
@@ -122,7 +153,12 @@ services:
     restart: on-failure
     environment:
       PROD_URI: "${PROD_URI}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
   auth:
+    image: hades_auth
     build:
       context: .
       dockerfile: auth/Dockerfile
@@ -136,6 +172,10 @@ services:
     restart: on-failure
     environment:
       PROD_URI: "${PROD_URI}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
       JWT_PASSWORD: "${JWT_PASSWORD}"
   neo4j:
     container_name: neo4j_hades
@@ -176,5 +216,21 @@ services:
       - 4222:4222 # for clients
       - 8222:8222 # HTTP management port for reporting
       - 6222:6222 # routing port for clustering
+  # For policies
+  db:
+    container_name: db
+    image: mysql:5.7.25
+    restart: always
+    volumes:
+      - ./db_data:/var/lib/mysql
+      # - ./database/setup.sql:/docker-entrypoint-initdb.d
+    env_file: ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+    ports:
+    - 3306:3306
 volumes:
   dgraph:
