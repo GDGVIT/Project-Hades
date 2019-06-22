@@ -87,7 +87,6 @@ type basicEventsService struct{}
 *
  */
 func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event) (rs string, err error) {
-
 	ce := make(chan error)
 	go model.CreateEvent(event, ce)
 	if err := <-ce; err != nil {

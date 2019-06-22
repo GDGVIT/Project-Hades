@@ -34,7 +34,7 @@ func ConnectToDB() bolt.Conn {
 func ConnectEnforcer() {
 	uri := fmt.Sprintf("%s:%s@tcp(%s:%s)/", "root", os.Getenv("MYSQL_ROOT_PASSWORD"), "db", "3306")
 	adapter := mysqladapter.NewAdapter("mysql", uri)
-	enforcer = casbin.NewEnforcer("../policy.conf", adapter)
+	enforcer = casbin.NewEnforcer("./policy.conf", adapter)
 	enforcer.EnableAutoSave(true)
 }
 
@@ -42,9 +42,8 @@ func Enforce(who, resource, access string) bool {
 	return enforcer.Enforce(who, resource, access)
 }
 
-func AddPolicy(who, resource, access string) error {
-	enforcer.AddPolicy(who, resource, access)
-	return enforcer.SavePolicy()
+func AddPolicy(who, resource, access string) bool {
+	return enforcer.AddPolicy(who, resource, access)
 }
 
 func RemovePolicy(who, resource, access string) bool {

@@ -9,5 +9,6 @@ func main() {
 	conn := model.ConnectToDB()
 	defer conn.Close()
 	model.DBInit(conn)
+	model.ConnectEnforcer()
 	service.Run()
 }
