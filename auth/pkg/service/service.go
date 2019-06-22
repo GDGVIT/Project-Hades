@@ -2,8 +2,10 @@ package service
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/GDGVIT/Project-Hades/model"
+	"github.com/go-kit/kit/transport/http"
 )
 
 // AuthService describes the service.
@@ -44,11 +46,12 @@ type basicAuthService struct{}
 **/
 func (b *basicAuthService) Login(ctx context.Context, email string, password string) (rs string, token string, err error) {
 
+	fmt.Println(http.ContextKeyRequestAuthorization)
 	token, err = model.Login(email, password, "DEFAULT", "")
 	if err != nil {
 		return "Some error occurred", token, err
 	}
-	return "Done", token, nil
+	return "Done!!", token, nil
 }
 
 /**
