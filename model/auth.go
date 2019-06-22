@@ -48,6 +48,17 @@ func VerifyToken(token string) (tk Token, err error) {
 	return tk, errors.New("Invalid token")
 }
 
+func AuthorizeUser(token string) (bool, error) {
+	tk, err := VerifyToken(token)
+	if err != nil {
+		return false, err
+	}
+	if !Enforce(tk.Email, tk.Organization, tk.Role) {
+		return false, nil
+	}
+	return true, nil
+}
+
 func (u *User) Get(c chan UserReturn) {
 	var user User
 	log.Println(u)
