@@ -3,8 +3,10 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/GDGVIT/Project-Hades/model"
+	"github.com/go-kit/kit/transport/http"
 )
 
 // EventsService describes the service.
@@ -87,6 +89,9 @@ type basicEventsService struct{}
 *
  */
 func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event) (rs string, err error) {
+
+	// extract Authorizatin header
+	fmt.Println(ctx.Value(http.ContextKeyRequestAuthorization))
 	ce := make(chan error)
 	go model.CreateEvent(event, ce)
 	if err := <-ce; err != nil {
