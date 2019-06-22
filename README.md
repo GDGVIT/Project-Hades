@@ -8,7 +8,7 @@ The last event coordinator you will ever need
 <br />
 
 ## Directions to run
-Get started with setting up **Project Hades** locally.
+Get started with setting up **Project Hades** locally. This project uses `GO111MODULE`. To install dependencies run a `go mod vendor` after cloning.
 
 <br/>
 
@@ -25,6 +25,7 @@ These variables should reside as key value pairs in a file called `.env`.
 | MAIL_PASSWORD | Password for MAIL_FROM | String |
 
 <br/>
+
 
 ### Production setup
 Production setup uses performat dockerfiles made from scratch. It directly runs the compiled binaries.
