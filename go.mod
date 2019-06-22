@@ -23,7 +23,7 @@ require (
 	github.com/opentracing/opentracing-go v1.1.0
 	github.com/openzipkin-contrib/zipkin-go-opentracing v0.3.5 // indirect
 	github.com/openzipkin/zipkin-go-opentracing v0.3.5
-	github.com/prometheus/client_golang v0.9.3
+	github.com/prometheus/client_golang v0.9.4
 	github.com/rs/cors v1.6.0
 	sourcegraph.com/sourcegraph/appdash v0.0.0-20190107175209-d9ea5c54f7dc
 )
