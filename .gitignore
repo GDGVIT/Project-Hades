@@ -4,7 +4,6 @@ push
 db
 attendance.md
 *.db
-vendor
 
 # For docs
 .eslintrc.yml
