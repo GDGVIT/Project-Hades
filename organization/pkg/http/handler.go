@@ -6,13 +6,13 @@ import (
 	"errors"
 	"net/http"
 
-	endpoint "github.com/GDGVIT/Project-Hades/auth/pkg/endpoint"
+	endpoint "github.com/GDGVIT/Project-Hades/organization/pkg/endpoint"
 	http1 "github.com/go-kit/kit/transport/http"
 )
 
 // makeLoginHandler creates the handler logic
 func makeLoginHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/api/v1/auth/login", http1.NewServer(endpoints.LoginEndpoint, decodeLoginRequest, encodeLoginResponse, options...))
+	m.Handle("/api/v1/org/login", http1.NewServer(endpoints.LoginEndpoint, decodeLoginRequest, encodeLoginResponse, options...))
 }
 
 // decodeLoginResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -37,7 +37,7 @@ func encodeLoginResponse(ctx context.Context, w http.ResponseWriter, response in
 
 // makeSignupHandler creates the handler logic
 func makeSignupHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/api/v1/auth/signup", http1.NewServer(endpoints.SignupEndpoint, decodeSignupRequest, encodeSignupResponse, options...))
+	m.Handle("/api/v1/org/signup", http1.NewServer(endpoints.SignupEndpoint, decodeSignupRequest, encodeSignupResponse, options...))
 }
 
 // decodeSignupResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -62,7 +62,7 @@ func encodeSignupResponse(ctx context.Context, w http.ResponseWriter, response i
 
 // makeCreateOrgHandler creates the handler logic
 func makeCreateOrgHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/api/v1/auth/create-org", http1.NewServer(endpoints.CreateOrgEndpoint, decodeCreateOrgRequest, encodeCreateOrgResponse, options...))
+	m.Handle("/api/v1/org/create-org", http1.NewServer(endpoints.CreateOrgEndpoint, decodeCreateOrgRequest, encodeCreateOrgResponse, options...))
 }
 
 // decodeCreateOrgResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -85,9 +85,9 @@ func encodeCreateOrgResponse(ctx context.Context, w http.ResponseWriter, respons
 	return
 }
 
-// makeLoginOrgHandler Logins the handler logic
+// makeLoginOrgHandler creates the handler logic
 func makeLoginOrgHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/api/v1/auth/login-org", http1.NewServer(endpoints.LoginOrgEndpoint, decodeLoginOrgRequest, encodeLoginOrgResponse, options...))
+	m.Handle("/api/v1/org/login-org", http1.NewServer(endpoints.LoginOrgEndpoint, decodeLoginOrgRequest, encodeLoginOrgResponse, options...))
 }
 
 // decodeLoginOrgResponse  is a transport/http.DecodeRequestFunc that decodes a
@@ -110,22 +110,22 @@ func encodeLoginOrgResponse(ctx context.Context, w http.ResponseWriter, response
 	return
 }
 
-// makeInviteHandler creates the handler logic
-func makeInviteHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/api/v1/auth/invite", http1.NewServer(endpoints.InviteEndpoint, decodeInviteRequest, encodeInviteResponse, options...))
+// makeAddMembersHandler creates the handler logic
+func makeAddMembersHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
+	m.Handle("/api/v1/org/add-members", http1.NewServer(endpoints.AddMembersEndpoint, decodeAddMembersRequest, encodeAddMembersResponse, options...))
 }
 
-// decodeInviteResponse  is a transport/http.DecodeRequestFunc that decodes a
+// decodeAddMembersResponse  is a transport/http.DecodeRequestFunc that decodes a
 // JSON-encoded request from the HTTP request body.
-func decodeInviteRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	req := endpoint.InviteRequest{}
+func decodeAddMembersRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	req := endpoint.AddMembersRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	return req, err
 }
 
-// encodeInviteResponse is a transport/http.EncodeResponseFunc that encodes
+// encodeAddMembersResponse is a transport/http.EncodeResponseFunc that encodes
 // the response as JSON to the response writer
-func encodeInviteResponse(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
+func encodeAddMembersResponse(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
 	if f, ok := response.(endpoint.Failure); ok && f.Failed() != nil {
 		ErrorEncoder(ctx, f.Failed(), w)
 		return nil
@@ -135,22 +135,72 @@ func encodeInviteResponse(ctx context.Context, w http.ResponseWriter, response i
 	return
 }
 
-// makeShowInvitesHandler creates the handler logic
-func makeShowInvitesHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/api/v1/auth/show-invites", http1.NewServer(endpoints.ShowInvitesEndpoint, decodeShowInvitesRequest, encodeShowInvitesResponse, options...))
+// makeBulkAddMembersHandler creates the handler logic
+func makeBulkAddMembersHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
+	m.Handle("/api/v1/org/bulk-add-members", http1.NewServer(endpoints.BulkAddMembersEndpoint, decodeBulkAddMembersRequest, encodeBulkAddMembersResponse, options...))
 }
 
-// decodeShowInvitesResponse  is a transport/http.DecodeRequestFunc that decodes a
+// decodeBulkAddMembersResponse  is a transport/http.DecodeRequestFunc that decodes a
 // JSON-encoded request from the HTTP request body.
-func decodeShowInvitesRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	req := endpoint.ShowInvitesRequest{}
+func decodeBulkAddMembersRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	req := endpoint.BulkAddMembersRequest{}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	return req, err
 }
 
-// encodeShowInvitesResponse is a transport/http.EncodeResponseFunc that encodes
+// encodeBulkAddMembersResponse is a transport/http.EncodeResponseFunc that encodes
 // the response as JSON to the response writer
-func encodeShowInvitesResponse(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
+func encodeBulkAddMembersResponse(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
+	if f, ok := response.(endpoint.Failure); ok && f.Failed() != nil {
+		ErrorEncoder(ctx, f.Failed(), w)
+		return nil
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	err = json.NewEncoder(w).Encode(response)
+	return
+}
+
+// makeRemoveMembersHandler creates the handler logic
+func makeRemoveMembersHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
+	m.Handle("/api/v1/org/remove-members", http1.NewServer(endpoints.RemoveMembersEndpoint, decodeRemoveMembersRequest, encodeRemoveMembersResponse, options...))
+}
+
+// decodeRemoveMembersResponse  is a transport/http.DecodeRequestFunc that decodes a
+// JSON-encoded request from the HTTP request body.
+func decodeRemoveMembersRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	req := endpoint.RemoveMembersRequest{}
+	err := json.NewDecoder(r.Body).Decode(&req)
+	return req, err
+}
+
+// encodeRemoveMembersResponse is a transport/http.EncodeResponseFunc that encodes
+// the response as JSON to the response writer
+func encodeRemoveMembersResponse(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
+	if f, ok := response.(endpoint.Failure); ok && f.Failed() != nil {
+		ErrorEncoder(ctx, f.Failed(), w)
+		return nil
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	err = json.NewEncoder(w).Encode(response)
+	return
+}
+
+// makeBulkRemoveMembersHandler creates the handler logic
+func makeBulkRemoveMembersHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
+	m.Handle("/bapi/v1/org/ulk-remove-members", http1.NewServer(endpoints.BulkRemoveMembersEndpoint, decodeBulkRemoveMembersRequest, encodeBulkRemoveMembersResponse, options...))
+}
+
+// decodeBulkRemoveMembersResponse  is a transport/http.DecodeRequestFunc that decodes a
+// JSON-encoded request from the HTTP request body.
+func decodeBulkRemoveMembersRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	req := endpoint.BulkRemoveMembersRequest{}
+	err := json.NewDecoder(r.Body).Decode(&req)
+	return req, err
+}
+
+// encodeBulkRemoveMembersResponse is a transport/http.EncodeResponseFunc that encodes
+// the response as JSON to the response writer
+func encodeBulkRemoveMembersResponse(ctx context.Context, w http.ResponseWriter, response interface{}) (err error) {
 	if f, ok := response.(endpoint.Failure); ok && f.Failed() != nil {
 		ErrorEncoder(ctx, f.Failed(), w)
 		return nil
@@ -162,7 +212,7 @@ func encodeShowInvitesResponse(ctx context.Context, w http.ResponseWriter, respo
 
 // makeShowProfileHandler creates the handler logic
 func makeShowProfileHandler(m *http.ServeMux, endpoints endpoint.Endpoints, options []http1.ServerOption) {
-	m.Handle("/api/v1/auth/show-profile", http1.NewServer(endpoints.ShowProfileEndpoint, decodeShowProfileRequest, encodeShowProfileResponse, options...))
+	m.Handle("/api/v1/org/show-profile", http1.NewServer(endpoints.ShowProfileEndpoint, decodeShowProfileRequest, encodeShowProfileResponse, options...))
 }
 
 // decodeShowProfileResponse  is a transport/http.DecodeRequestFunc that decodes a

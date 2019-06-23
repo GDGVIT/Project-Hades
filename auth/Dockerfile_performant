@@ -1,7 +1,0 @@
-FROM scratch
-
-COPY ./bin/auth /
-
-EXPOSE 8087
-
-ENTRYPOINT ["/auth"]

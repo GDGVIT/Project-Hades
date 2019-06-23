@@ -1,7 +1,7 @@
 .PHONY: build
 build: 
 		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/analytics ./analytics/cmd/main.go; \
-		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/auth ./auth/cmd/main.go; \
+		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/organization ./organization/cmd/main.go; \
 		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/coupons ./coupons/cmd/main.go; \
 		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/events ./events/cmd/main.go; \
 		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/exporter ./exporter/cmd/main.go; \
@@ -12,7 +12,7 @@ build:
 .PHONY: docs
 docs:  
 		apidoc -i analytics \
-			 -i auth \
+			 -i organization \
 			 -i events \
 			 -i exporter \
 			 -i guests \

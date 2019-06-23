@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"crypto/md5"
 	"errors"
 	"fmt"
@@ -8,6 +9,7 @@ import (
 	"os"
 
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/go-kit/kit/transport/http"
 	"github.com/mitchellh/mapstructure"
 )
 
@@ -28,8 +30,9 @@ func TokenGen(email string, role string, organization string, c chan TokenReturn
 	return
 }
 
-func VerifyToken(token string) (tk Token, err error) {
+func VerifyToken(ctx context.Context) (tk Token, err error) {
 
+	token := ctx.Value(http.ContextKeyRequestAuthorization).(string)
 	tok, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		if token.Method != jwt.GetSigningMethod("HS256") {
 			return nil, errors.New("Error, invalid signing method")
@@ -48,11 +51,12 @@ func VerifyToken(token string) (tk Token, err error) {
 	return tk, errors.New("Invalid token")
 }
 
-func AuthorizeUser(token string) (bool, error) {
-	tk, err := VerifyToken(token)
+func AuthorizeUser(ctx context.Context) (bool, error) {
+	tk, err := VerifyToken(ctx)
 	if err != nil {
 		return false, err
 	}
+	fmt.Println(tk.Email, tk.Organization, tk.Role)
 	if !Enforce(tk.Email, tk.Organization, tk.Role) {
 		return false, nil
 	}
@@ -132,7 +136,7 @@ func Login(email string, password string, organization string, role string) (tok
 
 	// generate and return token
 	cc := make(chan TokenReturn)
-	go TokenGen(email, "DEFAULT", "", cc)
+	go TokenGen(email, role, organization, cc)
 	tk := <-cc
 	return tk.Token, tk.Err
 }

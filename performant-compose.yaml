@@ -122,11 +122,11 @@ services:
     restart: on-failure
     environment:
       PROD_URI: "${PROD_URI}"
-  auth:
+  organization:
     build:
       context: .
-      dockerfile: auth/Dockerfile_performant
-    container_name: auth_hades
+      dockerfile: organization/Dockerfile_performant
+    container_name: organization_hades
     depends_on:
     - neo4j
     ports:

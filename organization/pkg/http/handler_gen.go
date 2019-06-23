@@ -2,7 +2,7 @@
 package http
 
 import (
-	endpoint "github.com/GDGVIT/Project-Hades/auth/pkg/endpoint"
+	endpoint "github.com/GDGVIT/Project-Hades/organization/pkg/endpoint"
 	http "github.com/go-kit/kit/transport/http"
 	http1 "net/http"
 )
@@ -14,8 +14,11 @@ func NewHTTPHandler(endpoints endpoint.Endpoints, options map[string][]http.Serv
 	makeLoginHandler(m, endpoints, options["Login"])
 	makeSignupHandler(m, endpoints, options["Signup"])
 	makeCreateOrgHandler(m, endpoints, options["CreateOrg"])
-	makeInviteHandler(m, endpoints, options["Invite"])
-	makeShowInvitesHandler(m, endpoints, options["ShowInvites"])
+	makeLoginOrgHandler(m, endpoints, options["LoginOrg"])
+	makeAddMembersHandler(m, endpoints, options["AddMembers"])
+	makeBulkAddMembersHandler(m, endpoints, options["BulkAddMembers"])
+	makeRemoveMembersHandler(m, endpoints, options["RemoveMembers"])
+	makeBulkRemoveMembersHandler(m, endpoints, options["BulkRemoveMembers"])
 	makeShowProfileHandler(m, endpoints, options["ShowProfile"])
 	return m
 }
