@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/GDGVIT/Project-Hades/model"
-	"github.com/go-kit/kit/transport/http"
 )
 
 // EventsService describes the service.
@@ -90,8 +89,15 @@ type basicEventsService struct{}
  */
 func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event) (rs string, err error) {
 
-	// extract Authorizatin header
-	fmt.Println(ctx.Value(http.ContextKeyRequestAuthorization))
+	// authorize user
+	token, err := model.VerifyToken(ctx)
+	if err != nil {
+		fmt.Println("Hello world")
+		return "Error authorizing user", err
+	}
+	if !model.Enforce(token.Email, event.ClubName, "member") || event.ClubName != token.Organization {
+		return "Error authorizing user", nil
+	}
 	ce := make(chan error)
 	go model.CreateEvent(event, ce)
 	if err := <-ce; err != nil {
@@ -119,6 +125,7 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 *		"key":"clubName",
 *		"value":"GDG",
 *		"specific":"DEVFEST 2019"
+*		"organization":"CodeChef-VIT"
 *	}}
 *
 *@apiParamExample {json} response-example
@@ -168,6 +175,15 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 **/
 func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (rs []model.Event, err error) {
 
+	// authorize user
+	token, err := model.VerifyToken(ctx)
+	if err != nil {
+		fmt.Println("Hello world")
+		return nil, err
+	}
+	if !model.Enforce(token.Email, query.Organization, "member") || token.Organization != query.Organization {
+		return nil, nil
+	}
 	ce := make(chan model.EventReturn)
 
 	go model.ShowEventData(query, ce)
@@ -196,6 +212,7 @@ func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (
 *		"value":"GDG",
 *		"changeKey":"clubName",
 *		"changeValue":"codechef"
+*		"organization":"CodeChef-VIT"
 *	}
 *}
 *@apiParamExample {json} response-example
@@ -205,6 +222,16 @@ func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (
 *}
 **/
 func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query) (rs string, err error) {
+
+	// authorize user
+	token, err := model.VerifyToken(ctx)
+	if err != nil {
+		fmt.Println("Hello world")
+		return "Error authorizing user", err
+	}
+	if !model.Enforce(token.Email, query.Organization, "member") || token.Organization != query.Organization {
+		return "Error authorizing user", nil
+	}
 
 	ce := make(chan error)
 
@@ -228,6 +255,7 @@ func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query)
 *	"query":{
 *		"key":"clubName",
 *		"value":"GDG"
+*		"organization":"CodeChef-VIT"
 *	}
 *}
 *@apiParamExample {json} response-example
@@ -238,6 +266,15 @@ func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query)
 *
 **/
 func (b *basicEventsService) DeleteEvent(ctx context.Context, query model.Query) (rs string, err error) {
+	// authorize user
+	token, err := model.VerifyToken(ctx)
+	if err != nil {
+		fmt.Println("Hello world")
+		return "Error authorizing user", err
+	}
+	if !model.Enforce(token.Email, query.Organization, "member") || token.Organization != query.Organization {
+		return "Error authorizing user", nil
+	}
 
 	ce := make(chan error)
 
