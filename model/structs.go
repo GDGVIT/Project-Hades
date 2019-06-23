@@ -55,11 +55,12 @@ type Guest struct {
 }
 
 type Query struct {
-	Key         string `json:"key"`
-	Value       string `json:"value"`
-	ChangeKey   string `json:"changeKey"`
-	ChangeValue string `json:"changeValue"`
-	Specific    string `json:"specific"`
+	Key          string `json:"key"`
+	Value        string `json:"value"`
+	ChangeKey    string `json:"changeKey"`
+	ChangeValue  string `json:"changeValue"`
+	Organization string `json:"organization"`
+	Specific     string `json:"specific"`
 }
 
 type EventReturn struct {

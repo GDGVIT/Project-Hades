@@ -34,6 +34,7 @@ services:
     - .:/go/src/github.com/GDGVIT/Project-Hades
     restart: on-failure
     environment:
+      JWT_PASSWORD: "${JWT_PASSWORD}"
       PROD_URI: "${PROD_URI}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       MYSQL_USER: "${MYSQL_USER}"
@@ -56,6 +57,7 @@ services:
       PROD_URI: "${PROD_URI}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       MYSQL_USER: "${MYSQL_USER}"
+      JWT_PASSWORD: "${JWT_PASSWORD}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
   participants:
     image: hades_participants
@@ -73,6 +75,7 @@ services:
     environment:
       PROD_URI: "${PROD_URI}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      JWT_PASSWORD: "${JWT_PASSWORD}"
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
   simple_projection:
@@ -91,6 +94,7 @@ services:
     environment:
       PROD_URI: "${PROD_URI}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      JWT_PASSWORD: "${JWT_PASSWORD}"
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
   exporter:
@@ -110,6 +114,7 @@ services:
     environment:
       PROD_URI: "${PROD_URI}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      JWT_PASSWORD: "${JWT_PASSWORD}"
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       SIMPLE_PROJECTION_URI: "${SIMPLE_PROJECTION_URI}"
@@ -129,6 +134,7 @@ services:
       MAIL_FROM: "${MAIL_FROM}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       MYSQL_USER: "${MYSQL_USER}"
+      JWT_PASSWORD: "${JWT_PASSWORD}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       MAIL_TO: "${MAIL_TO}"
       MAIL_PASSWORD: "${MAIL_PASSWORD}"
@@ -147,6 +153,7 @@ services:
     restart: on-failure
     environment:
       PROD_URI: "${PROD_URI}"
+      JWT_PASSWORD: "${JWT_PASSWORD}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
@@ -218,6 +225,7 @@ services:
       # - ./database/setup.sql:/docker-entrypoint-initdb.d
     env_file: ./.env
     environment:
+      JWT_PASSWORD: "${JWT_PASSWORD}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"

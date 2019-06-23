@@ -26,7 +26,7 @@ type basicOrganizationService struct{}
 /**
 * @api {post} /api/v1/org/login login as a user
 * @apiName login as a user
-* @apiGroup org
+* @apiGroup organization
 *
 * @apiParam {string} password password of the user
 * @apiParam {string} email email of the user
@@ -56,7 +56,7 @@ func (b *basicOrganizationService) Login(ctx context.Context, email string, pass
 /**
 * @api {post} /api/v1/org/signup signup as a user
 * @apiName signup as a user
-* @apiGroup org
+* @apiGroup organization
 *
 * @apiParam {string} firstName first name of the user
 * @apiParam {string} lastName last name of the user
@@ -96,7 +96,6 @@ func (b *basicOrganizationService) Login(ctx context.Context, email string, pass
 * }
 **/
 func (b *basicOrganizationService) Signup(ctx context.Context, user model.User) (rs string, token string, err error) {
-	// TODO implement the business logic of Signup
 	if user.Email == "" {
 		return "User email not found", "", nil
 	}
@@ -121,6 +120,32 @@ func (b *basicOrganizationService) Signup(ctx context.Context, user model.User) 
 	return msg2.Message, msg2.Token, nil
 }
 
+/**
+* @api {post} /api/v1/org/create-org create an organization
+* @apiName create an organization
+* @apiGroup organization
+*
+* @apiPermission user
+* @apiParam {string} name name of the org
+* @apiParam {string} location location of the org
+* @apiParam {string} description description of the org
+* @apiParam {string} tag tag of the org
+* @apiParam {string} website website of the org
+*
+* @apiParamExample {json} request-example
+*
+*{
+*	"data":{
+*	"name":"DSC-VIT",
+*	"location":"India",
+*	"description":"Developer Student Clubs",
+*	"tag":"technical",
+*	"website":"https://dsv-vit-vellore.com"
+*}
+*}
+* }
+*
+**/
 func (b *basicOrganizationService) CreateOrg(ctx context.Context, data model.Organization) (rs string, err error) {
 	tk, err := model.VerifyToken(ctx)
 	if err != nil {
@@ -138,7 +163,33 @@ func (b *basicOrganizationService) CreateOrg(ctx context.Context, data model.Org
 	}
 	return "Created organization", nil
 }
+
+/**
+* @api {post} /api/v1/org/login-org login to the org workspace (for privellage escalation)
+* @apiName login to the org workspace (for privellage escalation)
+* @apiGroup organization
+* @apiPermission organization member
+*
+* @apiParam {string} password password of the user
+* @apiParam {string} email email of the user
+*
+*
+* @apiParamExample {json} request-example
+*{
+*	"name":"GDGVIT",
+*	"role":"admin"
+*}
+*
+* @apiParamExample {json} response-example
+*{
+*    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwicm9sZSI6IkRFRkFVTFQiLCJvcmdhbml6YXRpb24iOiIifQ.3Qj3eu8iwXL2v1Rb7qGEf5USQ-WVjRvYiLALWIbWZ5c",
+*    "err": null
+*}
+**/
 func (b *basicOrganizationService) LoginOrg(ctx context.Context, name string, role string) (rs string, err error) {
+	if role != "member" && role != "admin" {
+		return "Invalid role. Only <member|admin> allowed", nil
+	}
 	token, err := model.VerifyToken(ctx)
 	if err != nil {
 		return "unable to verufy user", err
@@ -156,9 +207,10 @@ func (b *basicOrganizationService) LoginOrg(ctx context.Context, name string, ro
 }
 
 /**
-* @api {post} /api/v1/org/invite invite a user org
+* @api {post} /api/v1/org/add-members invite a user org
 * @apiName invite a user to an org
-* @apiGroup org
+* @apiGroup organization
+* @apiPermission organization admin
 *
 * @apiParam {string} email email of the user
 * @apiParam {string} org name of the organization
@@ -175,32 +227,10 @@ func (b *basicOrganizationService) LoginOrg(ctx context.Context, name string, ro
 *}
 *}
 * }
-*
-**/ /**
-* @api {post} /api/v1/org/invite invite a user org
-* @apiName invite a user to an org
-* @apiGroup org
-*
-* @apiParam {string} email email of the user
-* @apiParam {string} org name of the organization
-*
-* @apiParamExample {json} request-example
-*
-*{
-*	"data":{
-*	"name":"DSC-VIT",
-*	"location":"India",
-*	"description":"Developer Student Clubs",
-*	"tag":"technical",
-*	"website":"https://dsv-vit-vellore.com"
-*}
-*}
-* }
-*
-**/
+ */
 func (b *basicOrganizationService) AddMembers(ctx context.Context, email string, org string) (rs string, err error) {
-	ok, err := model.AuthorizeUser(ctx)
-	if !ok {
+	tk, err := model.VerifyToken(ctx)
+	if err != nil || !model.Enforce(tk.Email, tk.Organization, "admin") {
 		return "error authorizing user", err
 	}
 	if err := model.InviteUserToOrg(email, org); err != nil {

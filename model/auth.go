@@ -56,7 +56,9 @@ func AuthorizeUser(ctx context.Context) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	fmt.Println(tk.Email, tk.Organization, tk.Role)
+	if tk.Role != "admin" || tk.Role != "manager" || tk.Role != "member" {
+		return false, nil
+	}
 	if !Enforce(tk.Email, tk.Organization, tk.Role) {
 		return false, nil
 	}
