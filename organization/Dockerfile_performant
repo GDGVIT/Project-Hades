@@ -1,0 +1,7 @@
+FROM scratch
+
+COPY ./bin/organization /
+
+EXPOSE 8087
+
+ENTRYPOINT ["/organization"]

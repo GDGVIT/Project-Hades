@@ -9,17 +9,17 @@ import (
 	"os/signal"
 	"syscall"
 
-	endpoint "github.com/GDGVIT/Project-Hades/auth/pkg/endpoint"
-	http "github.com/GDGVIT/Project-Hades/auth/pkg/http"
-	service "github.com/GDGVIT/Project-Hades/auth/pkg/service"
+	endpoint "github.com/GDGVIT/Project-Hades/organization/pkg/endpoint"
+	http "github.com/GDGVIT/Project-Hades/organization/pkg/http"
+	service "github.com/GDGVIT/Project-Hades/organization/pkg/service"
 	endpoint1 "github.com/go-kit/kit/endpoint"
 	log "github.com/go-kit/kit/log"
+	httptransport "github.com/go-kit/kit/transport/http" // for custom header extractor
 	lightsteptracergo "github.com/lightstep/lightstep-tracer-go"
 	group "github.com/oklog/oklog/pkg/group"
 	opentracinggo "github.com/opentracing/opentracing-go"
 	zipkingoopentracing "github.com/openzipkin/zipkin-go-opentracing"
 	promhttp "github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/rs/cors"
 	appdash "sourcegraph.com/sourcegraph/appdash"
 	opentracing "sourcegraph.com/sourcegraph/appdash/opentracing"
 )
@@ -29,11 +29,11 @@ var logger log.Logger
 
 // Define our flags. Your service probably won't need to bind listeners for
 // all* supported transports, but we do it here for demonstration purposes.
-var fs = flag.NewFlagSet("auth", flag.ExitOnError)
-var debugAddr = fs.String("debug.addr", ":9000", "Debug and metrics listen address")
+var fs = flag.NewFlagSet("organization", flag.ExitOnError)
+var debugAddr = fs.String("debug.addr", ":8080", "Debug and metrics listen address")
 var httpAddr = fs.String("http-addr", ":8087", "HTTP listen address")
-var grpcAddr = fs.String("grpc-addr", ":9001", "gRPC listen address")
-var thriftAddr = fs.String("thrift-addr", ":9002", "Thrift listen address")
+var grpcAddr = fs.String("grpc-addr", ":8082", "gRPC listen address")
+var thriftAddr = fs.String("thrift-addr", ":8083", "Thrift listen address")
 var thriftProtocol = fs.String("thrift-protocol", "binary", "binary, compact, json, simplejson")
 var thriftBuffer = fs.Int("thrift-buffer", 0, "0 for unbuffered")
 var thriftFramed = fs.Bool("thrift-framed", false, "true to enable framing")
@@ -59,7 +59,7 @@ func Run() {
 			os.Exit(1)
 		}
 		defer collector.Close()
-		recorder := zipkingoopentracing.NewRecorder(collector, false, "localhost:80", "auth")
+		recorder := zipkingoopentracing.NewRecorder(collector, false, "localhost:80", "organization")
 		tracer, err = zipkingoopentracing.NewTracer(recorder)
 		if err != nil {
 			logger.Log("err", err)
@@ -90,6 +90,16 @@ func Run() {
 func initHttpHandler(endpoints endpoint.Endpoints, g *group.Group) {
 	options := defaultHttpOptions(logger, tracer)
 	// Add your http options here
+	contextOptions := httptransport.ServerBefore(httptransport.PopulateRequestContext)
+	options["AddMembers"] = append(options["AddMembers"], contextOptions)
+	options["BulkAddMembers"] = append(options["BulkAddMembers"], contextOptions)
+	options["BulkRemoveMembers"] = append(options["BulkRemoveMembers"], contextOptions)
+	options["CreateOrg"] = append(options["CreateOrg"], contextOptions)
+	options["Login"] = append(options["Login"], contextOptions)
+	options["LoginOrg"] = append(options["LoginOrg"], contextOptions)
+	options["RemoveMembers"] = append(options["RemoveMembers"], contextOptions)
+	options["ShowProfile"] = append(options["ShowProfile"], contextOptions)
+	options["Signup"] = append(options["Signup"], contextOptions)
 
 	httpHandler := http.NewHTTPHandler(endpoints, options)
 	httpListener, err := net.Listen("tcp", *httpAddr)
@@ -98,8 +108,7 @@ func initHttpHandler(endpoints endpoint.Endpoints, g *group.Group) {
 	}
 	g.Add(func() error {
 		logger.Log("transport", "HTTP", "addr", *httpAddr)
-		corsHandler := cors.Default().Handler(httpHandler)
-		return http1.Serve(httpListener, corsHandler)
+		return http1.Serve(httpListener, httpHandler)
 	}, func(error) {
 		httpListener.Close()
 	})

@@ -150,12 +150,12 @@ services:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
-  auth:
-    image: hades_auth
+  organization:
+    image: hades_organization
     build:
       context: .
-      dockerfile: auth/Dockerfile
-    container_name: auth_hades
+      dockerfile: organization/Dockerfile
+    container_name: organization_hades
     depends_on:
     - neo4j
     ports:

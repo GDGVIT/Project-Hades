@@ -47,6 +47,7 @@ func AddPolicy(who, resource, access string) error {
 	return enforcer.SavePolicy()
 }
 
-func RemovePolicy(who, resource, access string) bool {
-	return enforcer.RemovePolicy(who, resource, access)
+func RemovePolicy(who, resource, access string) error {
+	enforcer.RemovePolicy(who, resource, access)
+	return enforcer.SavePolicy()
 }

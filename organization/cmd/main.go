@@ -1,13 +1,15 @@
 package main
 
 import (
-	service "github.com/GDGVIT/Project-Hades/auth/cmd/service"
 	"github.com/GDGVIT/Project-Hades/model"
+	service "github.com/GDGVIT/Project-Hades/organization/cmd/service"
 )
 
 func main() {
 	conn := model.ConnectToDB()
 	defer conn.Close()
 	model.DBInit(conn)
+	model.ConnectEnforcer()
 	service.Run()
+
 }
