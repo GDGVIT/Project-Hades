@@ -1,6 +1,7 @@
 FROM scratch
 
 COPY ./bin/events /
+COPY policy.conf .
 
 EXPOSE 8080
 

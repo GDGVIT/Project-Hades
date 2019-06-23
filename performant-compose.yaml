@@ -33,6 +33,10 @@ services:
     - .:/go/src/github.com/GDGVIT/Project-Hades
     restart: on-failure
     environment:
+      JWT_PASSWORD: "${JWT_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       PROD_URI: "${PROD_URI}"
       SALT: "${SALT}"
   event:
@@ -48,6 +52,10 @@ services:
     - .:/go/src/github.com/GDGVIT/Project-Hades
     restart: on-failure
     environment:
+      JWT_PASSWORD: "${JWT_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       PROD_URI: "${PROD_URI}"
   participants:
     build:
@@ -62,6 +70,10 @@ services:
     - .:/go/src/github.com/GDGVIT/Project-Hades
     restart: on-failure
     environment:
+      JWT_PASSWORD: "${JWT_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       PROD_URI: "${PROD_URI}"
   simple_projection:
     build:
@@ -76,6 +88,10 @@ services:
     - .:/go/src/github.com/GDGVIT/Project-Hades
     restart: on-failure
     environment:
+      JWT_PASSWORD: "${JWT_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       PROD_URI: "${PROD_URI}"
   exporter:
     build:
@@ -91,6 +107,10 @@ services:
       - simple_projection
     env_file: ./.env
     environment:
+      JWT_PASSWORD: "${JWT_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       PROD_URI: "${PROD_URI}"
       SIMPLE_PROJECTION_URI: "${SIMPLE_PROJECTION_URI}"
   analytics:
@@ -105,6 +125,10 @@ services:
     restart: on-failure
     env_file: ./.env
     environment:
+      JWT_PASSWORD: "${JWT_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       MAIL_FROM: "${MAIL_FROM}"
       MAIL_TO: "${MAIL_TO}"
       MAIL_PASSWORD: "${MAIL_PASSWORD}"
@@ -122,6 +146,10 @@ services:
     restart: on-failure
     environment:
       PROD_URI: "${PROD_URI}"
+      JWT_PASSWORD: "${JWT_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
   organization:
     build:
       context: .
@@ -135,6 +163,10 @@ services:
     - .:/go/src/github.com/GDGVIT/Project-Hades
     restart: on-failure
     environment:
+      JWT_PASSWORD: "${JWT_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       PROD_URI: "${PROD_URI}"
       JWT_PASSWORD: "${JWT_PASSWORD}"
   neo4j:
@@ -150,6 +182,10 @@ services:
     command: neo4j
     env_file: ./.env
     environment:
+      JWT_PASSWORD: "${JWT_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       NEO4J_AUTH: "${NEO4J_AUTH}"
   nginx:
     container_name: nginx_hades
@@ -169,6 +205,21 @@ services:
     - simple_projection:simple_projection
     - guests:guests
     - analytics:analytics
+  db:
+    container_name: db
+    image: mysql:5.7.25
+    restart: always
+    volumes:
+      - ./db_data:/var/lib/mysql
+      # - ./database/setup.sql:/docker-entrypoint-initdb.d
+    env_file: ./.env
+    environment:
+      JWT_PASSWORD: "${JWT_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+    ports:
+    - 3306:3306
   nats:
     container_name: nats_hades
     image: nats
