@@ -4,6 +4,7 @@ cloud.google.com/go v0.37.4/go.mod h1:NHPJ89PdicEuT9hdPXMROBD91xc5uRDxsMtSB16k7h
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/GDGVIT/Project-Hades v0.0.0-20190410194814-258ee5bfefcd h1:iXkihqkKfxMq8R43T1PNNtc2Wj2aU1vFOjon37LbLB8=
 github.com/GDGVIT/Project-Hades v0.0.0-20190410194814-258ee5bfefcd/go.mod h1:hgHl9kzxclHP2Gru+9Zbrx2rcDNlClLHiXp/a+zaWqI=
+github.com/GDGVIT/Project-Hades v0.0.0-20190623140006-fb6cd675d655 h1:35MU5n/oRXjM0t2fHYstTWMZo3vsKTWMGwLEjCYMtoU=
 github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible h1:1G1pk05UrOh0NlF1oeaaix1x8XzrfjIDK47TY0Zehcw=
 github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible/go.mod h1:r7JcOSlj0wfOMncg0iLm8Leh48TZaKVeNIfJntJ2wa0=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=

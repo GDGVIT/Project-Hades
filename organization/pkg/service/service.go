@@ -161,6 +161,9 @@ func (b *basicOrganizationService) CreateOrg(ctx context.Context, data model.Org
 	if err := model.AddPolicy(tk.Email, data.Name, "admin"); err != nil {
 		return "Error creating policy", err
 	}
+	if er := model.AddPolicy(tk.Email, data.Name, "member"); er != nil {
+		return "Error creating policy", err
+	}
 	return "Created organization", nil
 }
 

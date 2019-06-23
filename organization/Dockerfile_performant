@@ -1,6 +1,7 @@
 FROM scratch
 
 COPY ./bin/organization /
+COPY policy.conf .
 
 EXPOSE 8087
 
