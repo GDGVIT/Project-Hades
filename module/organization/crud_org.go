@@ -1,4 +1,4 @@
-package model
+package organizationModule
 
 import (
 	"errors"

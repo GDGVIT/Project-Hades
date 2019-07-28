@@ -1,8 +1,6 @@
 package model
 
 import (
-	"reflect"
-
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
@@ -12,6 +10,22 @@ type Participant struct {
 	Email              string `json:"email"`
 	PhoneNumber        string `json:"phoneNumber"`
 	Gender             string `json:"gender"`
+}
+
+type Organization struct {
+	Name        string `json:"name"`
+	Location    string `json:"location"`
+	Description string `json:"description"`
+	Tag         string `json:"tag"`
+	CreatedAt   string `json:"createdAt"`
+	Website     string `json:"website"`
+}
+
+type Token struct {
+	Email        string `json:"email"`
+	Role         string `json:"role"`
+	Organization string `json:"organization"`
+	jwt.StandardClaims
 }
 
 type Attendee struct {
@@ -63,20 +77,6 @@ type Query struct {
 	Specific     string `json:"specific"`
 }
 
-type EventReturn struct {
-	Event []Event `json:"event"`
-	Err   error   `json:"err"`
-}
-
-type ParticipantReturn struct {
-	Attendees []Attendee `json:"attendee"`
-	Err       error      `json:"err"`
-}
-type SafeParticipantReturn struct {
-	Participants []Participant `json:"participants"`
-	Err          error         `json:"err"`
-}
-
 type Attendance struct {
 	EventName  string `json:"eventName"`
 	Email      string `json:"email"`
@@ -90,21 +90,6 @@ type Coupon struct {
 	Day  int    `json:"day"`
 }
 
-type CouponReturn struct {
-	Coupons []Coupon `json:"coupons"`
-	Err     error    `json:"err"`
-}
-
-type MessageReturn struct {
-	Message string
-	Err     error
-}
-
-type GuestReturn struct {
-	Guests []Guest
-	Err    error
-}
-
 // role as relation
 type User struct {
 	FirstName   string `json:"firstName"`
@@ -116,38 +101,4 @@ type User struct {
 	Facebook    string `json:"facebook"`
 	Description string `json:"description"`
 	CreatedAt   string `json:"createdAt"`
-}
-
-type UserReturn struct {
-	User    User
-	Err     error
-	Message string
-}
-
-type Organization struct {
-	Name        string `json:"name"`
-	Location    string `json:"location"`
-	Description string `json:"description"`
-	Tag         string `json:"tag"`
-	CreatedAt   string `json:"createdAt"`
-	Website     string `json:"website"`
-}
-
-type Token struct {
-	Email        string `json:"email"`
-	Role         string `json:"role"`
-	Organization string `json:"organization"`
-	jwt.StandardClaims
-}
-
-type TokenReturn struct {
-	Token   string
-	Err     error
-	Message string
-}
-
-func (v Event) GetField(field string, value string) string {
-	r := reflect.ValueOf(v)
-	f := reflect.Indirect(r).FieldByName(field)
-	return f.FieldByName(value).String()
 }

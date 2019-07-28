@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/GDGVIT/Project-Hades/model"
+	"github.com/L04DB4L4NC3R/Project-Hades/model"
 )
 
 // CouponsService describes the service.

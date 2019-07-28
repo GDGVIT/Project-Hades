@@ -1,4 +1,4 @@
-package model
+package eventModule
 
 import (
 	"fmt"

@@ -1,4 +1,4 @@
-package model
+package CouponModule
 
 import (
 	"bytes"
