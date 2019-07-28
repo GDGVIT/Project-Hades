@@ -1,5 +1,6 @@
 .PHONY: build
 build: 
+		mkdir bin
 		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/analytics ./analytics/cmd/main.go; \
 		CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/organization ./organization/cmd/main.go; \
 		GO111MODULE=on GOOS=linux CGO_ENABLED=0 go build -v -a -installsuffix cgo -o ./bin/coupons ./coupons/cmd/main.go; \
