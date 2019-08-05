@@ -104,3 +104,28 @@ RETURN n.createdAt
 	return err
 
 }
+
+func GetOrgs(org string) ([]Organization, error) {
+	res, _, _, err := con.QueryNeoAll(`
+					MATCH (n:ORG)
+					WHERE n.name STARTS WITH $name
+					RETURN n.name, n.location, n.description, n.tag, n.createdAt, n.website
+				`, map[string]interface{}{
+		"name": org,
+	})
+	if err != nil {
+		return nil, err
+	}
+	orgs := []Organization{}
+	for i, _ := range res {
+		orgs = append(orgs, Organization{
+			Name:        res[i][0].(string),
+			Location:    res[i][1].(string),
+			Description: res[i][2].(string),
+			Tag:         res[i][3].(string),
+			CreatedAt:   res[i][4].(string),
+			Website:     res[i][5].(string),
+		})
+	}
+	return orgs, nil
+}

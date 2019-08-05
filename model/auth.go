@@ -51,6 +51,25 @@ func VerifyToken(ctx context.Context) (tk Token, err error) {
 	return tk, errors.New("Invalid token")
 }
 
+func ValidateToken(token string) (tk Token, err error) {
+	tok, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		if token.Method != jwt.GetSigningMethod("HS256") {
+			return nil, errors.New("Error, invalid signing method")
+		}
+		return []byte(os.Getenv("JWT_PASSWORD")), nil
+	})
+
+	if err != nil {
+		return tk, err
+	}
+
+	if tok.Valid {
+		mapstructure.Decode(tok.Claims, &tk)
+		return tk, nil
+	}
+	return tk, errors.New("Invalid token")
+}
+
 func AuthorizeUser(ctx context.Context) (bool, error) {
 	tk, err := VerifyToken(ctx)
 	if err != nil {
