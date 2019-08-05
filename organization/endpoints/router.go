@@ -14,5 +14,9 @@ func Init() *http.ServeMux {
 
 	// Get endpoints
 	mux.HandleFunc("/api/v1/org/search", getOrgs())
+
+	// Join endpoints
+	mux.HandleFunc("/api/v1/org/join", sendJoinRequest())
+	mux.HandleFunc("/api/v1/org/accept", acceptJoinRequest())
 	return mux
 }

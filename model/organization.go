@@ -129,3 +129,61 @@ func GetOrgs(org string) ([]Organization, error) {
 	}
 	return orgs, nil
 }
+
+func CreateJoinRequest(user string, org string) error {
+
+	data, _, _, err := con.QueryNeoAll(`
+				MATCH(n:ORG)<-[r:JOIN]-(a:USER)
+				WHERE n.name = $org AND a.email = $user
+				RETURN r
+				`, map[string]interface{}{
+		"org":  org,
+		"user": user,
+	})
+
+	if len(data) > 1 {
+		return errors.New("A join request is already pending")
+	}
+	_, err = con.ExecNeo(`
+					MATCH(n:ORG) WHERE n.name = $org
+					MATCH(a:USER) WHERE a.email = $user
+					CREATE (n)<-[:JOIN]-(a)
+				`, map[string]interface{}{
+		"org":  org,
+		"user": user,
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func AcceptJoinRequest(user string, org string) error {
+
+	data, _, _, err := con.QueryNeoAll(`
+				MATCH(n:ORG)<-[r:JOIN]-(a:USER)
+				WHERE n.name = $org AND a.email = $user
+				RETURN r
+				`, map[string]interface{}{
+		"org":  org,
+		"user": user,
+	})
+
+	if len(data) <= 1 {
+		return errors.New("No join request found")
+	}
+
+	_, err = con.ExecNeo(`
+					MATCH(n:ORG)<-[r:JOIN]-(a:USER) 
+					WHERE n.name = $org AND a.email = $user
+					DELETE r
+					CREATE (n)<-[:MEMBER]-(a)
+				`, map[string]interface{}{
+		"org":  org,
+		"user": user,
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}

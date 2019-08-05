@@ -20,3 +20,9 @@ func getOrgs() http.HandlerFunc {
 		return
 	}
 }
+
+func getJoinRequest() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+	}
+}
