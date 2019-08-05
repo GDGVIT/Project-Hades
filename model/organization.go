@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func CreateNewOrg(org Organization) error {
+func CreateNewOrg(org Organization, user string) error {
 	data, _, _, err := con.QueryNeoAll(`
 MATCH(n:ORG) WHERE n.name = $name
 RETURN n.createdAt
@@ -24,7 +24,9 @@ RETURN n.createdAt
 	}
 
 	res, err := con.ExecNeo(`
-					CREATE(n:ORG {name:$name, location: $location, description: $description, tag: $tag, createdAt: $cat, website: $website})
+				MATCH(u:USER)
+				WHERE u.email = $user
+					CREATE(n:ORG {name:$name, location: $location, description: $description, tag: $tag, createdAt: $cat, website: $website})<-[:ADMIN]-(u)
 				`, map[string]interface{}{
 		"name":        org.Name,
 		"location":    org.Location,
@@ -32,6 +34,7 @@ RETURN n.createdAt
 		"tag":         org.Tag,
 		"cat":         time.Now().String(),
 		"website":     org.Website,
+		"user":        user,
 	})
 
 	if err != nil {
@@ -94,7 +97,7 @@ RETURN n.createdAt
 	res, err := con.ExecNeo(`
 		MATCH(n:ORG) WHERE n.name=$org
 		MATCH (a:USER) WHERE a.email=$user
-		CREATE (n)-[:MEMBER]->(a)
+		CREATE (n)<-[:MEMBER]-(a)
 	`, map[string]interface{}{
 		"org":  org,
 		"user": email,
@@ -186,4 +189,32 @@ func AcceptJoinRequest(user string, org string) error {
 		return err
 	}
 	return nil
+}
+
+func GetJoinRequests(org string) ([]User, error) {
+	data, _, _, err := con.QueryNeoAll(`
+					MATCH (n:ORG)<-[:JOIN]-(a:USER)
+					WHERE n.name = $name
+					RETURN a.email, a.firstName, a.lastname, a.description,
+					a.createdAt, a.facebook, a.linkedIn
+				`, map[string]interface{}{
+		"name": org,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	users := []User{}
+	for i, _ := range data {
+		users = append(users, User{
+			Email:       data[i][0].(string),
+			FirstName:   data[i][1].(string),
+			LastName:    data[i][2].(string),
+			Description: data[i][3].(string),
+			CreatedAt:   data[i][4].(string),
+			Facebook:    data[i][5].(string),
+			LinkedIn:    data[i][6].(string),
+		})
+	}
+	return users, nil
 }

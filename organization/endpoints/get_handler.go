@@ -2,6 +2,7 @@ package endpoints
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/GDGVIT/Project-Hades/model"
@@ -23,6 +24,35 @@ func getOrgs() http.HandlerFunc {
 
 func getJoinRequest() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		token := r.Header.Get("Authorization")
+		tk, err := model.ValidateToken(token)
+		if err != nil {
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
+			return
+		}
+		org := r.URL.Query().Get("org")
+		if !model.Enforce(tk.Email, org, "admin") {
+			json.NewEncoder(w).Encode(views.Msg{"Error: User does not have sufficient permission", nil})
+			return
+		}
 
+		data, err := model.GetJoinRequests(org)
+		if err != nil {
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err})
+			return
+		}
+
+		json.NewEncoder(w).Encode(views.Msg{
+			Message: "Successful",
+			Data:    data,
+		})
+		return
+	}
+}
+
+func GetEventsAndOrgs() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		fmt.Println(model.GetAuth("actions"))
 	}
 }

@@ -41,7 +41,7 @@ func createOrg() http.HandlerFunc {
 			json.NewEncoder(w).Encode(views.Msg{"Organization name needed", nil})
 			return
 		}
-		if err = model.CreateNewOrg(data); err != nil {
+		if err = model.CreateNewOrg(data, tk.Email); err != nil {
 			json.NewEncoder(w).Encode(views.Msg{"", err})
 			return
 		}
@@ -49,6 +49,7 @@ func createOrg() http.HandlerFunc {
 			json.NewEncoder(w).Encode(views.Msg{"Error creating policy", err})
 			return
 		}
+
 		if er := model.AddPolicy(tk.Email, data.Name, "member"); er != nil {
 			json.NewEncoder(w).Encode(views.Msg{"Error creating policy", err})
 			return

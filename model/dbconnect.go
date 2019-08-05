@@ -51,3 +51,17 @@ func RemovePolicy(who, resource, access string) error {
 	enforcer.RemovePolicy(who, resource, access)
 	return enforcer.SavePolicy()
 }
+
+func GetAuth(resource string) []string {
+	switch resource {
+	case "roles":
+		return enforcer.GetAllRoles()
+	case "actions":
+		return enforcer.GetAllActions()
+	case "objects":
+		return enforcer.GetAllObjects()
+	case "subjects":
+		return enforcer.GetAllSubjects()
+	}
+	return nil
+}
