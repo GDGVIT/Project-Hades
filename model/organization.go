@@ -2,6 +2,7 @@ package model
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"time"
 )
@@ -217,4 +218,43 @@ func GetJoinRequests(org string) ([]User, error) {
 		})
 	}
 	return users, nil
+}
+
+func GetUserDetails(user string) (events []Event, orgs []Organization, err error) {
+	data, _, _, err := con.QueryNeoAll(`
+MATCH (u:USER)-[:MEMBER|:ADMIN]->(n:ORG)
+OPTIONAL MATCH (n)<-[:EVENT]-(e:EVENT)
+WHERE u.email = $user
+RETURN n.name, n.tag, n.location, n.description, n.createdAt,
+e.clubName, e.name, e.toDate, e.fromDate, e.toTime, e.fromTime, e.budget, e.description, e.category
+`, map[string]interface{}{
+		"user": user,
+	})
+	fmt.Println(data)
+
+	for i, _ := range data {
+		orgs = append(orgs, Organization{
+			Name:        data[i][0].(string),
+			Tag:         data[i][1].(string),
+			Location:    data[i][2].(string),
+			Description: data[i][3].(string),
+			CreatedAt:   data[i][4].(string),
+		})
+
+		if data[i][5] == nil {
+			continue
+		}
+		events = append(events, Event{
+			ClubName:    data[i][5].(string),
+			Name:        data[i][6].(string),
+			ToDate:      data[i][7].(string),
+			FromDate:    data[i][8].(string),
+			ToTime:      data[i][9].(string),
+			FromTime:    data[i][10].(string),
+			Budget:      data[i][11].(string),
+			Description: data[i][12].(string),
+			Category:    data[i][13].(string),
+		})
+	}
+	return events, orgs, nil
 }

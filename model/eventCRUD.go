@@ -21,11 +21,14 @@ func CreateEvent(e Event, ce chan error) {
 		return
 	}
 
-	result, err := con.ExecNeo(`CREATE (n:EVENT {name:$name, clubName:$clubName, toDate:$toDate, 
+	result, err := con.ExecNeo(`
+MATCH (b:ORG)
+WHERE b.name = $clubName
+CREATE (n:EVENT {name:$name, clubName:$clubName, toDate:$toDate, 
 		fromDate: $fromDate, toTime:$toTime, fromTime:$fromTime, budget:$budget, 
 		description:$description, category:$category, venue:$venue, attendance:$attendance, 
 		expectedParticipants:$expectedParticipants, PROrequest:$PROrequest, 
-		campusEngineerRequest:$campusEngineerRequest, duration:$duration, status:$status}) 
+		campusEngineerRequest:$campusEngineerRequest, duration:$duration, status:$status})-[:EVENT]->(b:ORG) 
 		RETURN n.name`, map[string]interface{}{
 
 		"name":                  e.Name,

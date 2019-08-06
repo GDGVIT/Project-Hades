@@ -2,7 +2,6 @@ package endpoints
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/GDGVIT/Project-Hades/model"
@@ -52,7 +51,22 @@ func getJoinRequest() http.HandlerFunc {
 
 func GetEventsAndOrgs() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		token := r.Header.Get("Authorization")
+		tk, err := model.ValidateToken(token)
+		if err != nil {
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
+			return
+		}
+		events, orgs, err := model.GetUserDetails(tk.Email)
+		if err != nil {
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err})
+			return
+		}
 
-		fmt.Println(model.GetAuth("actions"))
+		json.NewEncoder(w).Encode(views.Msg{"Successful", map[string]interface{}{
+			"organizations": orgs,
+			"events":        events,
+		}})
+		return
 	}
 }
