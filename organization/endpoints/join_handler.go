@@ -8,7 +8,23 @@ import (
 	"github.com/GDGVIT/Project-Hades/organization/endpoints/views"
 )
 
-// for users
+/**
+* @api {get} /api/v1/org/join Send a join request to an org
+* @apiName Send a join request to an org
+* @apiGroup organization
+* @apiPermission user
+*
+* @apiParam {string} org name of the organization as query param
+*
+*
+* @apiParamExample {json} request-example
+*
+* curl -H '{"Authorization":"dbasjbdasbdbasdjkbasjkda"}' localhost/api/v1/org/join?org=GDG-VIT
+*
+* @apiParamExample {json} response-example
+*{"message":"Some error occurred","data":"A join request is already pending"}
+*
+**/
 func sendJoinRequest() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		token := r.Header.Get("Authorization")
@@ -27,7 +43,25 @@ func sendJoinRequest() http.HandlerFunc {
 	}
 }
 
-// for admins
+/**
+* @api {post} /api/v1/org/accept Accept join request
+* @apiName Accept join request
+* @apiGroup organization
+* @apiParam admin
+* @apiParam {string} org name of the organization as query param
+*
+*
+* @apiParamExample {json} request-example
+*{
+*	"email":"test1@test.com",
+*	"org":"GDG-VIT"
+*}
+* @apiParamExample {json} response-example
+*
+*{"message":"Added as a member"}
+*
+**/
+
 func acceptJoinRequest() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		token := r.Header.Get("Authorization")

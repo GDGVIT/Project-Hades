@@ -1324,6 +1324,197 @@
   },
   {
     "type": "post",
+    "url": "/api/v1/org/accept",
+    "title": "Accept join request",
+    "name": "Accept_join_request",
+    "group": "organization",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "admin",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "org",
+            "description": "<p>name of the organization as query param</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "{\n\t\"email\":\"test1@test.com\",\n\t\"org\":\"GDG-VIT\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "\n{\"message\":\"Added as a member\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "organization/endpoints/join_handler.go",
+    "groupTitle": "organization"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/org/land",
+    "title": "Get events and organizations",
+    "name": "Get_events_and_organizations",
+    "group": "organization",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "org",
+            "description": "<p>name of the organization as query param</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "response-example",
+          "content": "\n{\n   \"message\": \"Successful\",\n   \"data\": {\n       \"events\": null,\n       \"organizations\": [\n           {\n               \"name\": \"CodeChef-VIT\",\n               \"location\": \"India\",\n               \"description\": \"Developer Student Clubs\",\n               \"tag\": \"technical\",\n               \"createdAt\": \"2019-08-05 23:12:14.963858896 +0000 UTC m=+14.778325532\",\n               \"website\": \"\"\n           }\n       ]\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "organization/endpoints/get_handler.go",
+    "groupTitle": "organization"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/org/join",
+    "title": "Get organization list",
+    "name": "Get_organization_list",
+    "group": "organization",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "org",
+            "description": "<p>name of the organization as query param</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\ncurl localhost/api/v1/org/search?q=GDG-VIT",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "\n{\n   \"message\": \"Successful\",\n   \"data\": [\n       {\n           \"name\": \"GDG-VIT\",\n           \"location\": \"India\",\n           \"description\": \"Developer Student Clubs\",\n           \"tag\": \"technical\",\n           \"createdAt\": \"2019-08-05 21:49:11.875594638 +0000 UTC m=+30.409044543\",\n           \"website\": \"https://dsv-vit-vellore.com\"\n       }\n   ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "organization/endpoints/get_handler.go",
+    "groupTitle": "organization"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/org/join",
+    "title": "Send a join request to an org",
+    "name": "Send_a_join_request_to_an_org",
+    "group": "organization",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "org",
+            "description": "<p>name of the organization as query param</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\ncurl -H '{\"Authorization\":\"dbasjbdasbdbasdjkbasjkda\"}' localhost/api/v1/org/join?org=GDG-VIT",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "{\"message\":\"Some error occurred\",\"data\":\"A join request is already pending\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "organization/endpoints/join_handler.go",
+    "groupTitle": "organization"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/org/view-req",
+    "title": "View join requests",
+    "name": "View_join_requests",
+    "group": "organization",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "org",
+            "description": "<p>name of the organization as query param</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\ncurl localhost/api/v1/org/view-req?q=GDG-VIT -H '{\"Authorization\":\"asdbasbdbasjdbasjhbdhasd\"}'",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "\n{\n   \"message\": \"Successful\",\n   \"data\": [\n       {\n           \"firstName\": \"test\",\n           \"lastName\": \"test\",\n           \"password\": \"\",\n           \"email\": \"test1@test.com\",\n           \"phoneNumber\": \"\",\n           \"linkedIn\": \"test\",\n           \"facebook\": \"test\",\n           \"description\": \"test\",\n           \"createdAt\": \"20-01-01\"\n       },\n       {\n           \"firstName\": \"test\",\n           \"lastName\": \"test\",\n           \"password\": \"\",\n           \"email\": \"test1@test.com\",\n           \"phoneNumber\": \"\",\n           \"linkedIn\": \"test\",\n           \"facebook\": \"test\",\n           \"description\": \"test\",\n           \"createdAt\": \"20-01-01\"\n       },\n       {\n           \"firstName\": \"test\",\n           \"lastName\": \"test\",\n           \"password\": \"\",\n           \"email\": \"test1@test.com\",\n           \"phoneNumber\": \"\",\n           \"linkedIn\": \"test\",\n           \"facebook\": \"test\",\n           \"description\": \"test\",\n           \"createdAt\": \"20-01-01\"\n       }\n   ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "organization/endpoints/get_handler.go",
+    "groupTitle": "organization"
+  },
+  {
+    "type": "post",
     "url": "/api/v1/org/create-org",
     "title": "create an organization",
     "name": "create_an_organization",
@@ -1376,13 +1567,13 @@
       "examples": [
         {
           "title": "request-example",
-          "content": "\n{\n\t\"data\":{\n\t\"name\":\"DSC-VIT\",\n\t\"location\":\"India\",\n\t\"description\":\"Developer Student Clubs\",\n\t\"tag\":\"technical\",\n\t\"website\":\"https://dsv-vit-vellore.com\"\n}\n}\n}",
+          "content": "\n{\n\t\"name\":\"DSC-VIT\",\n\t\"location\":\"India\",\n\t\"description\":\"Developer Student Clubs\",\n\t\"tag\":\"technical\",\n\t\"website\":\"https://dsv-vit-vellore.com\"\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "organization/pkg/service/service.go",
+    "filename": "organization/endpoints/auth_handler.go",
     "groupTitle": "organization"
   },
   {
@@ -1418,13 +1609,13 @@
       "examples": [
         {
           "title": "request-example",
-          "content": "\n{\n\t\"data\":{\n\t\"name\":\"DSC-VIT\",\n\t\"location\":\"India\",\n\t\"description\":\"Developer Student Clubs\",\n\t\"tag\":\"technical\",\n\t\"website\":\"https://dsv-vit-vellore.com\"\n}\n}\n}",
+          "content": "\n{\n\t\"name\":\"DSC-VIT\",\n\t\"location\":\"India\",\n\t\"description\":\"Developer Student Clubs\",\n\t\"tag\":\"technical\",\n\t\"website\":\"https://dsv-vit-vellore.com\"\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "organization/pkg/service/service.go",
+    "filename": "organization/endpoints/auth_handler.go",
     "groupTitle": "organization"
   },
   {
@@ -1466,7 +1657,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "organization/pkg/service/service.go",
+    "filename": "organization/endpoints/auth_handler.go",
     "groupTitle": "organization"
   },
   {
@@ -1513,7 +1704,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "organization/pkg/service/service.go",
+    "filename": "organization/endpoints/auth_handler.go",
     "groupTitle": "organization"
   },
   {
@@ -1593,7 +1784,7 @@
       "examples": [
         {
           "title": "request-example",
-          "content": "\n{\n\t\"user\" : {\n\t\"firstName\": \"test\",\n\t\"lastName\": \"test\",\n\t\"password\": \"test\",\n\t\"email\": \"test1@test.com\",\n\t\"phoneNumber\": \"998171818\",\n\t\"linkedIn\": \"test\",\n\t\"facebook\": \"test\",\n\t\"description\": \"test\",\n\t\"createdAt\": \"20-01-01\"\n\t}\n}",
+          "content": "\n{\n\t\"firstName\": \"test\",\n\t\"lastName\": \"test\",\n\t\"password\": \"test\",\n\t\"email\": \"test1@test.com\",\n\t\"phoneNumber\": \"998171818\",\n\t\"linkedIn\": \"test\",\n\t\"facebook\": \"test\",\n\t\"description\": \"test\",\n\t\"createdAt\": \"20-01-01\"\n}",
           "type": "json"
         },
         {
@@ -1604,7 +1795,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "organization/pkg/service/service.go",
+    "filename": "organization/endpoints/auth_handler.go",
     "groupTitle": "organization"
   },
   {
