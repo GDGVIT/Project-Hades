@@ -183,8 +183,8 @@ func GetEventsAndOrgs() http.HandlerFunc {
 }
 
 /**
-* @api {get} /api/v1/org/ Get organizations
-* @apiName Get organizations
+* @api {get} /api/v1/org/ Get organizations of user
+* @apiName Get organizations of user
 * @apiGroup organization
 *
 * @apiPermission user
@@ -229,8 +229,8 @@ func GetOrgs() http.HandlerFunc {
 }
 
 /**
-* @api {get} /api/v1/org/events Get organizations
-* @apiName Get organizations
+* @api {get} /api/v1/org/events Get events of organization
+* @apiName Get events of organization
 * @apiGroup organization
 *
 * @apiPermission user

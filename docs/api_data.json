@@ -1389,6 +1389,46 @@
   },
   {
     "type": "get",
+    "url": "/api/v1/org/events",
+    "title": "Get events of organization",
+    "name": "Get_events_of_organization",
+    "group": "organization",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "org",
+            "description": "<p>organization name as query param</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "curl localhost/api/v1/org/events?org=DSC-VIT",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "\n{\n   \"message\": \"Successful\",\n   \"data\": {\n       \"events\": [\n           {\n               \"clubName\": \"DSC-VIT\",\n               \"name\": \"WomenTechies'19\",\n               \"toDate\": \"11th March\",\n               \"fromDate\": \"10th March\",\n               \"toTime\": \"7 PM\",\n               \"fromTime\": \"6 PM\",\n               \"budget\": \"115000\",\n               \"description\": \"Women centric hackathon\",\n               \"category\": \"TECHNICAL\",\n               \"venue\": \"Kamaraj Auditorium\",\n               \"attendance\": \"315\",\n               \"expectedParticipants\": \"315\",\n               \"facultyCoordinator\": {\n                   \"name\": \"\",\n                   \"registrationNumber\": \"\",\n                   \"email\": \"\",\n                   \"phoneNumber\": \"\",\n                   \"gender\": \"\"\n               },\n               \"studentCoordinator\": {\n                   \"name\": \"\",\n                   \"registrationNumber\": \"\",\n                   \"email\": \"\",\n                   \"phoneNumber\": \"\",\n                   \"gender\": \"\"\n               },\n               \"PROrequest\": \"\",\n               \"campusEngineerRequest\": \"mics, podium, projector\",\n               \"duration\": \"24 hours\",\n               \"status\": \"\"\n           }\n       ]\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "organization/endpoints/get_handler.go",
+    "groupTitle": "organization"
+  },
+  {
+    "type": "get",
     "url": "/api/v1/org/join",
     "title": "Get organization list",
     "name": "Get_organization_list",
@@ -1425,8 +1465,8 @@
   {
     "type": "get",
     "url": "/api/v1/org/",
-    "title": "Get organizations",
-    "name": "Get_organizations",
+    "title": "Get organizations of user",
+    "name": "Get_organizations_of_user",
     "group": "organization",
     "permission": [
       {
@@ -1438,46 +1478,6 @@
         {
           "title": "response-example",
           "content": "\n{\n   \"message\": \"Successful\",\n   \"data\": {\n       \"organizations\": [\n           {\n               \"name\": \"CodeChef-VIT\",\n               \"location\": \"India\",\n               \"description\": \"Developer Student Clubs\",\n               \"tag\": \"technical\",\n               \"createdAt\": \"2019-08-05 23:12:14.963858896 +0000 UTC m=+14.778325532\",\n               \"website\": \"\"\n           }\n       ]\n   }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "organization/endpoints/get_handler.go",
-    "groupTitle": "organization"
-  },
-  {
-    "type": "get",
-    "url": "/api/v1/org/events",
-    "title": "Get organizations",
-    "name": "Get_organizations",
-    "group": "organization",
-    "permission": [
-      {
-        "name": "user"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "org",
-            "description": "<p>organization name as query param</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "request-example",
-          "content": "curl localhost/api/v1/org/events?org=DSC-VIT",
-          "type": "json"
-        },
-        {
-          "title": "response-example",
-          "content": "\n{\n   \"message\": \"Successful\",\n   \"data\": {\n       \"events\": [\n           {\n               \"clubName\": \"DSC-VIT\",\n               \"name\": \"WomenTechies'19\",\n               \"toDate\": \"11th March\",\n               \"fromDate\": \"10th March\",\n               \"toTime\": \"7 PM\",\n               \"fromTime\": \"6 PM\",\n               \"budget\": \"115000\",\n               \"description\": \"Women centric hackathon\",\n               \"category\": \"TECHNICAL\",\n               \"venue\": \"Kamaraj Auditorium\",\n               \"attendance\": \"315\",\n               \"expectedParticipants\": \"315\",\n               \"facultyCoordinator\": {\n                   \"name\": \"\",\n                   \"registrationNumber\": \"\",\n                   \"email\": \"\",\n                   \"phoneNumber\": \"\",\n                   \"gender\": \"\"\n               },\n               \"studentCoordinator\": {\n                   \"name\": \"\",\n                   \"registrationNumber\": \"\",\n                   \"email\": \"\",\n                   \"phoneNumber\": \"\",\n                   \"gender\": \"\"\n               },\n               \"PROrequest\": \"\",\n               \"campusEngineerRequest\": \"mics, podium, projector\",\n               \"duration\": \"24 hours\",\n               \"status\": \"\"\n           }\n       ]\n   }\n}",
           "type": "json"
         }
       ]
