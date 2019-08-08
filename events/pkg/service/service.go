@@ -95,7 +95,7 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 		fmt.Println("Hello world")
 		return "Error authorizing user", err
 	}
-	if !model.Enforce(token.Email, event.ClubName, "member") || event.ClubName != token.Organization {
+	if !model.Enforce(token.Email, event.ClubName, "member") && !model.Enforce(token.Email, event.ClubName, "admin") {
 		return "Error authorizing user", nil
 	}
 	ce := make(chan error)

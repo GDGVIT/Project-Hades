@@ -28,7 +28,7 @@ CREATE (n:EVENT {name:$name, clubName:$clubName, toDate:$toDate,
 		fromDate: $fromDate, toTime:$toTime, fromTime:$fromTime, budget:$budget, 
 		description:$description, category:$category, venue:$venue, attendance:$attendance, 
 		expectedParticipants:$expectedParticipants, PROrequest:$PROrequest, 
-		campusEngineerRequest:$campusEngineerRequest, duration:$duration, status:$status})-[:EVENT]->(b:ORG) 
+		campusEngineerRequest:$campusEngineerRequest, duration:$duration, status:$status})-[:EVENT]->(b) 
 		RETURN n.name`, map[string]interface{}{
 
 		"name":                  e.Name,
@@ -225,4 +225,49 @@ func CreateParticipant(e Event, label string, c chan error, mutex *sync.Mutex) {
 	log.Printf("Created %s node", label)
 	c <- nil
 	return
+}
+
+func ReadEventsByOrg(org string) (events []Event, err error) {
+	data, _, _, err := con.QueryNeoAll(`
+						OPTIONAL MATCH (n:EVENT)-[:EVENT]->(o:ORG)
+						WHERE o.name = $org
+						RETURN n.clubName, n.name, n.toDate, n.fromDate, n.toTime, n.fromTime, n.budget, n.description, n.category,
+		n.venue, n.attendance, n.expectedParticipants, n.PROrequest, n.campusEngineerRequest, n.duration
+				`, map[string]interface{}{
+		"org": org,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println(data)
+	fmt.Println(len(data))
+	if len(data) < 1 {
+		return events, nil
+	}
+
+	for i, _ := range data {
+		if data[i][0] == nil {
+			return events, nil
+		}
+		events = append(events, Event{
+			ClubName:              data[i][0].(string),
+			Name:                  data[i][1].(string),
+			ToDate:                data[i][2].(string),
+			FromDate:              data[i][3].(string),
+			ToTime:                data[i][4].(string),
+			FromTime:              data[i][5].(string),
+			Budget:                data[i][6].(string),
+			Description:           data[i][7].(string),
+			Category:              data[i][8].(string),
+			Venue:                 data[i][9].(string),
+			Attendance:            data[i][10].(string),
+			ExpectedParticipants:  data[i][11].(string),
+			PROrequest:            data[i][12].(string),
+			CampusEngineerRequest: data[i][13].(string),
+			Duration:              data[i][14].(string),
+		})
+	}
+
+	return events, nil
 }

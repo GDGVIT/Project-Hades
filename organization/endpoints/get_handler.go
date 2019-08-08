@@ -2,6 +2,7 @@ package endpoints
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/GDGVIT/Project-Hades/model"
@@ -133,11 +134,10 @@ func getJoinRequest() http.HandlerFunc {
 }
 
 /**
-* @api {get} /api/v1/org/land Get events and organizations
+* @api {get} /api/v1/org/org-events Get events and organizations
 * @apiName Get events and organizations
 * @apiGroup organization
 *
-* @apiParam {string} org name of the organization as query param
 * @apiPermission user
 *
 * @apiParamExample {json} response-example
@@ -177,6 +177,119 @@ func GetEventsAndOrgs() http.HandlerFunc {
 		json.NewEncoder(w).Encode(views.Msg{"Successful", map[string]interface{}{
 			"organizations": orgs,
 			"events":        events,
+		}})
+		return
+	}
+}
+
+/**
+* @api {get} /api/v1/org/ Get organizations
+* @apiName Get organizations
+* @apiGroup organization
+*
+* @apiPermission user
+*
+* @apiParamExample {json} response-example
+*
+*{
+*    "message": "Successful",
+*    "data": {
+*        "organizations": [
+*            {
+*                "name": "CodeChef-VIT",
+*                "location": "India",
+*                "description": "Developer Student Clubs",
+*                "tag": "technical",
+*                "createdAt": "2019-08-05 23:12:14.963858896 +0000 UTC m=+14.778325532",
+*                "website": ""
+*            }
+*        ]
+*    }
+*}
+**/
+func GetOrgs() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		token := r.Header.Get("Authorization")
+		tk, err := model.ValidateToken(token)
+		if err != nil {
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
+			return
+		}
+		_, orgs, err := model.GetUserDetails(tk.Email)
+		if err != nil {
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err})
+			return
+		}
+
+		json.NewEncoder(w).Encode(views.Msg{"Successful", map[string]interface{}{
+			"organizations": orgs,
+		}})
+		return
+	}
+}
+
+/**
+* @api {get} /api/v1/org/events Get organizations
+* @apiName Get organizations
+* @apiGroup organization
+*
+* @apiPermission user
+* @apiParam {string} org organization name as query param
+*
+*
+* @apiParamExample {json} request-example
+* curl localhost/api/v1/org/events?org=DSC-VIT
+* @apiParamExample {json} response-example
+*
+*{
+*    "message": "Successful",
+*    "data": {
+*        "events": [
+*            {
+*                "clubName": "DSC-VIT",
+*                "name": "WomenTechies'19",
+*                "toDate": "11th March",
+*                "fromDate": "10th March",
+*                "toTime": "7 PM",
+*                "fromTime": "6 PM",
+*                "budget": "115000",
+*                "description": "Women centric hackathon",
+*                "category": "TECHNICAL",
+*                "venue": "Kamaraj Auditorium",
+*                "attendance": "315",
+*                "expectedParticipants": "315",
+*                 "PROrequest": "",
+*                "campusEngineerRequest": "mics, podium, projector",
+*                "duration": "24 hours",
+*                "status": ""
+*            }
+*        ]
+*    }
+*}
+**/
+func GetOrgEvents() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		token := r.Header.Get("Authorization")
+		tk, err := model.ValidateToken(token)
+		if err != nil {
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
+			return
+		}
+		org := r.URL.Query().Get("org")
+		if !model.Enforce(tk.Email, org, "member") && !model.Enforce(tk.Email, org, "admin") {
+
+			json.NewEncoder(w).Encode(views.Msg{"Not enough permission", nil})
+			return
+		}
+		events, err := model.ReadEventsByOrg(org)
+		if err != nil {
+			fmt.Println(err.Error())
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
+			return
+		}
+
+		json.NewEncoder(w).Encode(views.Msg{"Successful", map[string]interface{}{
+			"events": events,
 		}})
 		return
 	}
