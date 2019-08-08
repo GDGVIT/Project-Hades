@@ -116,6 +116,7 @@ type User struct {
 	Facebook    string `json:"facebook"`
 	Description string `json:"description"`
 	CreatedAt   string `json:"createdAt"`
+	DeviceToken string `json:"deviceToken"`
 }
 
 type UserReturn struct {

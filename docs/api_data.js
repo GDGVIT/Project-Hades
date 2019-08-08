@@ -1365,22 +1365,16 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/api/v1/org/land",
+    "url": "/api/v1/org/org-events",
     "title": "Get events and organizations",
     "name": "Get_events_and_organizations",
     "group": "organization",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "org",
-            "description": "<p>name of the organization as query param</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "response-example",
@@ -1389,11 +1383,6 @@ define({ "api": [
         }
       ]
     },
-    "permission": [
-      {
-        "name": "user"
-      }
-    ],
     "version": "0.0.0",
     "filename": "organization/endpoints/get_handler.go",
     "groupTitle": "organization"
@@ -1425,6 +1414,70 @@ define({ "api": [
         {
           "title": "response-example",
           "content": "\n{\n   \"message\": \"Successful\",\n   \"data\": [\n       {\n           \"name\": \"GDG-VIT\",\n           \"location\": \"India\",\n           \"description\": \"Developer Student Clubs\",\n           \"tag\": \"technical\",\n           \"createdAt\": \"2019-08-05 21:49:11.875594638 +0000 UTC m=+30.409044543\",\n           \"website\": \"https://dsv-vit-vellore.com\"\n       }\n   ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "organization/endpoints/get_handler.go",
+    "groupTitle": "organization"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/org/",
+    "title": "Get organizations",
+    "name": "Get_organizations",
+    "group": "organization",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "parameter": {
+      "examples": [
+        {
+          "title": "response-example",
+          "content": "\n{\n   \"message\": \"Successful\",\n   \"data\": {\n       \"organizations\": [\n           {\n               \"name\": \"CodeChef-VIT\",\n               \"location\": \"India\",\n               \"description\": \"Developer Student Clubs\",\n               \"tag\": \"technical\",\n               \"createdAt\": \"2019-08-05 23:12:14.963858896 +0000 UTC m=+14.778325532\",\n               \"website\": \"\"\n           }\n       ]\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "organization/endpoints/get_handler.go",
+    "groupTitle": "organization"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/org/events",
+    "title": "Get organizations",
+    "name": "Get_organizations",
+    "group": "organization",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "org",
+            "description": "<p>organization name as query param</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "curl localhost/api/v1/org/events?org=DSC-VIT",
+          "type": "json"
+        },
+        {
+          "title": "response-example",
+          "content": "\n{\n   \"message\": \"Successful\",\n   \"data\": {\n       \"events\": [\n           {\n               \"clubName\": \"DSC-VIT\",\n               \"name\": \"WomenTechies'19\",\n               \"toDate\": \"11th March\",\n               \"fromDate\": \"10th March\",\n               \"toTime\": \"7 PM\",\n               \"fromTime\": \"6 PM\",\n               \"budget\": \"115000\",\n               \"description\": \"Women centric hackathon\",\n               \"category\": \"TECHNICAL\",\n               \"venue\": \"Kamaraj Auditorium\",\n               \"attendance\": \"315\",\n               \"expectedParticipants\": \"315\",\n               \"facultyCoordinator\": {\n                   \"name\": \"\",\n                   \"registrationNumber\": \"\",\n                   \"email\": \"\",\n                   \"phoneNumber\": \"\",\n                   \"gender\": \"\"\n               },\n               \"studentCoordinator\": {\n                   \"name\": \"\",\n                   \"registrationNumber\": \"\",\n                   \"email\": \"\",\n                   \"phoneNumber\": \"\",\n                   \"gender\": \"\"\n               },\n               \"PROrequest\": \"\",\n               \"campusEngineerRequest\": \"mics, podium, projector\",\n               \"duration\": \"24 hours\",\n               \"status\": \"\"\n           }\n       ]\n   }\n}",
           "type": "json"
         }
       ]
@@ -1784,7 +1837,7 @@ define({ "api": [
       "examples": [
         {
           "title": "request-example",
-          "content": "\n{\n\t\"firstName\": \"test\",\n\t\"lastName\": \"test\",\n\t\"password\": \"test\",\n\t\"email\": \"test1@test.com\",\n\t\"phoneNumber\": \"998171818\",\n\t\"linkedIn\": \"test\",\n\t\"facebook\": \"test\",\n\t\"description\": \"test\",\n\t\"createdAt\": \"20-01-01\"\n}",
+          "content": "\n{\n\t\"firstName\": \"test\",\n\t\"lastName\": \"test\",\n\t\"password\": \"test\",\n\t\"email\": \"test1@test.com\",\n\t\"phoneNumber\": \"998171818\",\n\t\"linkedIn\": \"test\",\n\t\"facebook\": \"test\",\n\t\"description\": \"test\",\n\t\"createdAt\": \"20-01-01\"\n\t\t\"deviceToken\": \"hasndbaskdjbsajd\"\n}",
           "type": "json"
         },
         {

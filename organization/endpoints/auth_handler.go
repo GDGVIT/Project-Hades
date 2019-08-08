@@ -189,6 +189,7 @@ func loginOrg() http.HandlerFunc {
 * 	"facebook": "test",
 * 	"description": "test",
 * 	"createdAt": "20-01-01"
+*		"deviceToken": "hasndbaskdjbsajd"
 * }
 *
 *

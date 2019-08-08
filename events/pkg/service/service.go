@@ -181,7 +181,7 @@ func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (
 		fmt.Println("Hello world")
 		return nil, err
 	}
-	if !model.Enforce(token.Email, query.Organization, "member") || token.Organization != query.Organization {
+	if !model.Enforce(token.Email, query.Organization, "member") && !model.Enforce(token.Email, query.Organization, "admin") {
 		return nil, nil
 	}
 	ce := make(chan model.EventReturn)
@@ -229,7 +229,7 @@ func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query)
 		fmt.Println("Hello world")
 		return "Error authorizing user", err
 	}
-	if !model.Enforce(token.Email, query.Organization, "member") || token.Organization != query.Organization {
+	if !model.Enforce(token.Email, query.Organization, "member") && !model.Enforce(token.Email, query.Organization, "admin") {
 		return "Error authorizing user", nil
 	}
 
@@ -272,7 +272,8 @@ func (b *basicEventsService) DeleteEvent(ctx context.Context, query model.Query)
 		fmt.Println("Hello world")
 		return "Error authorizing user", err
 	}
-	if !model.Enforce(token.Email, query.Organization, "member") || token.Organization != query.Organization {
+
+	if !model.Enforce(token.Email, query.Organization, "member") && !model.Enforce(token.Email, query.Organization, "admin") {
 		return "Error authorizing user", nil
 	}
 

@@ -258,7 +258,21 @@ func GetOrgs() http.HandlerFunc {
 *                "venue": "Kamaraj Auditorium",
 *                "attendance": "315",
 *                "expectedParticipants": "315",
-*                 "PROrequest": "",
+*                "facultyCoordinator": {
+*                    "name": "",
+*                    "registrationNumber": "",
+*                    "email": "",
+*                    "phoneNumber": "",
+*                    "gender": ""
+*                },
+*                "studentCoordinator": {
+*                    "name": "",
+*                    "registrationNumber": "",
+*                    "email": "",
+*                    "phoneNumber": "",
+*                    "gender": ""
+*                },
+*                "PROrequest": "",
 *                "campusEngineerRequest": "mics, podium, projector",
 *                "duration": "24 hours",
 *                "status": ""
