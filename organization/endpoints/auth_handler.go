@@ -2,6 +2,7 @@ package endpoints
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -37,14 +38,16 @@ func login() http.HandlerFunc {
 		json.NewDecoder(r.Body).Decode(&req)
 		token, err := model.Login(req.Email, req.Password, "DEFAULT", "")
 		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(views.Token{
 				Message: "Some error occurred",
-				Err:     err,
+				Err:     err.Error(),
+			})
+
+			json.NewEncoder(w).Encode(views.Token{
+				Token: token,
 			})
 		}
-		json.NewEncoder(w).Encode(views.Token{
-			Token: token,
-		})
 	}
 }
 
@@ -78,6 +81,7 @@ func createOrg() http.HandlerFunc {
 		token := r.Header.Get("Authorization")
 		tk, err := model.ValidateToken(token)
 		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(views.Msg{"", err.Error()})
 			return
 		}
@@ -87,16 +91,18 @@ func createOrg() http.HandlerFunc {
 			return
 		}
 		if err = model.CreateNewOrg(data, tk.Email); err != nil {
-			json.NewEncoder(w).Encode(views.Msg{"", err})
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
 			return
 		}
 		if err := model.AddPolicy(tk.Email, data.Name, "admin"); err != nil {
-			json.NewEncoder(w).Encode(views.Msg{"Error creating policy", err})
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(views.Msg{"Error creating policy", err.Error()})
 			return
 		}
 
 		if er := model.AddPolicy(tk.Email, data.Name, "member"); er != nil {
-			json.NewEncoder(w).Encode(views.Msg{"Error creating policy", err})
+			json.NewEncoder(w).Encode(views.Msg{"Error creating policy", err.Error()})
 			return
 		}
 		json.NewEncoder(w).Encode(views.Msg{"Created Organization", nil})
@@ -132,7 +138,8 @@ func loginOrg() http.HandlerFunc {
 		json.NewDecoder(r.Body).Decode(&data)
 		token, err := model.ValidateToken(r.Header.Get("Authorization"))
 		if err != nil {
-			json.NewEncoder(w).Encode(views.Msg{"Invalid token", err})
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(views.Msg{"Invalid token", err.Error()})
 			return
 		}
 		if data.Role != "member" && data.Role != "admin" {
@@ -145,7 +152,8 @@ func loginOrg() http.HandlerFunc {
 
 		// check if user is authorized for the role
 		if !model.Enforce(token.Email, data.Name, data.Role) {
-			json.NewEncoder(w).Encode(views.Msg{"failed to authenticate user", nil})
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(views.Msg{"failed to authenticate user", errors.New("failed to authenticate user")})
 			return
 		}
 		// generate and return token
@@ -154,7 +162,7 @@ func loginOrg() http.HandlerFunc {
 		tk := <-cc
 		json.NewEncoder(w).Encode(views.Token{
 			Token: tk.Token,
-			Err:   tk.Err,
+			Err:   tk.Err.Error(),
 		})
 		return
 	}
@@ -207,8 +215,10 @@ func signup() http.HandlerFunc {
 		fmt.Println("Signup")
 		json.NewDecoder(r.Body).Decode(&user)
 		if user.Email == "" {
+			w.WriteHeader(http.StatusUnauthorized)
 			json.NewEncoder(w).Encode(views.Token{
 				Message: "User email not found",
+				Err:     "User email not found",
 			})
 			return
 		}
@@ -217,9 +227,10 @@ func signup() http.HandlerFunc {
 		msg := <-c
 		close(c)
 		if err := msg.Err; err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(views.Token{
 				Message: msg.Message,
-				Err:     err,
+				Err:     err.Error(),
 			})
 			return
 		} else if msg.User.Email == "" {
@@ -235,9 +246,10 @@ func signup() http.HandlerFunc {
 		msg2 := <-cc
 		close(cc)
 		if err := msg2.Err; err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
 			json.NewEncoder(w).Encode(views.Token{
 				Message: msg2.Message,
-				Err:     err,
+				Err:     err.Error(),
 			})
 			return
 		}
@@ -274,15 +286,18 @@ func addMembers() http.HandlerFunc {
 		json.NewDecoder(r.Body).Decode(&data)
 		tk, err := model.ValidateToken(r.Header.Get("Authorization"))
 		if err != nil || !model.Enforce(tk.Email, tk.Organization, "admin") {
-			json.NewEncoder(w).Encode(views.Msg{"error authorizing user", err})
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(views.Msg{"error authorizing user", err.Error()})
 			return
 		}
 		if err := model.InviteUserToOrg(data.Email, data.Org); err != nil {
-			json.NewEncoder(w).Encode(views.Msg{"", err})
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(views.Msg{"", err.Error()})
 			return
 		}
 		if err := model.AddPolicy(data.Email, data.Org, "member"); err != nil {
-			json.NewEncoder(w).Encode(views.Msg{"error adding policy", err})
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(views.Msg{"error adding policy", err.Error()})
 			return
 		}
 
