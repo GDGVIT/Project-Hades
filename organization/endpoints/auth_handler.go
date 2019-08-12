@@ -44,10 +44,11 @@ func login() http.HandlerFunc {
 				Err:     err.Error(),
 			})
 
-			json.NewEncoder(w).Encode(views.Token{
-				Token: token,
-			})
 		}
+
+		json.NewEncoder(w).Encode(views.Token{
+			Token: token,
+		})
 	}
 }
 
