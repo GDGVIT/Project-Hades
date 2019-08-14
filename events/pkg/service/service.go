@@ -95,21 +95,23 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 		fmt.Println("Hello world")
 		return "Error authorizing user", err
 	}
-	if !model.Enforce(token.Email, event.ClubName, "member") && !model.Enforce(token.Email, event.ClubName, "admin") {
-		return "Error authorizing user", nil
-	}
-	ce := make(chan error)
-	go model.CreateEvent(event, ce)
-	if err := <-ce; err != nil {
-		return "some error occurred", err
-	}
+	fmt.Println(token.Email, event.ClubName)
+	if !model.Enforce(token.Email, event.ClubName, "member") || !model.Enforce(token.Email, event.ClubName, "admin") {
 
-	data, err := json.Marshal(event)
-	if err != nil {
-		return "error occurred while unmarshaling json", err
+		ce := make(chan error)
+		go model.CreateEvent(event, ce)
+		if err := <-ce; err != nil {
+			return "some error occurred", err
+		}
+
+		data, err := json.Marshal(event)
+		if err != nil {
+			return "error occurred while unmarshaling json", err
+		}
+		go publishEvent("hades.event.CreateEvent", data)
+		return "created", err
 	}
-	go publishEvent("hades.event.CreateEvent", data)
-	return "created", err
+	return "Error authorizing user", nil
 }
 
 /**
