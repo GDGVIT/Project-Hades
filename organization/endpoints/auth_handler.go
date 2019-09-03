@@ -86,7 +86,7 @@ func createOrg() http.HandlerFunc {
 			json.NewEncoder(w).Encode(views.Msg{"", err.Error()})
 			return
 		}
-		if model.Enforce(tk.Email, data.Name, "member") || model.Enforce(tk.Email, data.Name, "member") {
+		if model.Enforce(tk.Email, data.Name, "member") || model.Enforce(tk.Email, data.Name, "admin") {
 			json.NewEncoder(w).Encode(views.Msg{"Policy for this user already exists", nil})
 			return
 		}

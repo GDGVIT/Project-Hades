@@ -1,25 +1,25 @@
 version: "3.2"
 services:
-  mailerqr:
-    image: angadsharma1016/hades_mailer_qr:latest
-    container_name: mailerqr_hades
+  #mailerqr:
+  #  image: angadsharma1016/hades_mailer_qr:latest
+  #  container_name: mailerqr_hades
     #depends_on:
     #- events
     #- participants
     #- simple_projection
-    restart: on-failure
-    ports:
-      - 3000:3000
+    #  restart: on-failure
+    #ports:
+    #  - 3000:3000
     #environment:
     # BASE_URL: http://hades.com
-  permission_generator:
-    image: angadsharma1016/hades_permission_generator:latest
-    restart: on-failure
-    container_name: permission_generator_hades
-    ports: 
-    - 3001:3000
-    #depends_on:
-    #- simple_projection
+    #  permission_generator:
+    #image: angadsharma1016/hades_permission_generator:latest
+    #restart: on-failure
+    #container_name: permission_generator_hades
+    #ports: 
+    #- 3001:3000
+    ##depends_on:
+    ##- simple_projection
   coupons:
     image: hades_coupons
     build:
@@ -203,6 +203,7 @@ services:
     # restart: on-failure
     links:
     - event:event
+    - organization:organization
     - participants:participants
     - coupons:coupons
     - simple_projection:simple_projection

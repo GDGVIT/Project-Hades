@@ -28,6 +28,7 @@ RETURN n.createdAt
 				MATCH(u:USER)
 				WHERE u.email = $user
 					CREATE(n:ORG {name:$name, location: $location, description: $description, tag: $tag, createdAt: $cat, website: $website})<-[:ADMIN]-(u)
+					CREATE (n)<-[:MEMBER]-(u)
 				`, map[string]interface{}{
 		"name":        org.Name,
 		"location":    org.Location,
@@ -222,7 +223,7 @@ func GetJoinRequests(org string) ([]User, error) {
 
 func GetUserDetails(user string) (events []Event, orgs []Organization, err error) {
 	data, _, _, err := con.QueryNeoAll(`
-MATCH (u:USER)-[:MEMBER|:ADMIN]->(n:ORG)
+MATCH (u:USER)-[:MEMBER]->(n:ORG)
 OPTIONAL MATCH (n)<-[:EVENT]-(e:EVENT)
 WHERE u.email = $user
 RETURN n.name, n.tag, n.location, n.description, n.createdAt,
