@@ -68,7 +68,7 @@ func (b *basicParticipantsService) CreateAttendee(ctx context.Context, details m
 		return "some error occurred", err
 	}
 
-	return "created", err
+	return "created", nil
 }
 
 /**
