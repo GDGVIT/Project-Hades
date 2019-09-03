@@ -115,6 +115,7 @@ func ShowEventData(q Query, c chan EventReturn) {
 		return
 	}
 
+	fmt.Println(data)
 	if len(data) < 1 {
 		c <- EventReturn{ev, fmt.Errorf("No Event found")}
 		return
