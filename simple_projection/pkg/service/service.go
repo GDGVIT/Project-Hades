@@ -31,7 +31,8 @@ type basicSimpleProjectionService struct{}
 *	"event":"DEVFEST 2019",
 *	"query":{
 *		"key":"gender",
-*		"value":"F"
+*		"value":"F",
+* 	"specific" : "DSC-VIT"
 *	}
 *}
 *@apiParamExample {json} response-example
@@ -120,7 +121,8 @@ func (b *basicSimpleProjectionService) ProjectAll(ctx context.Context, event str
 *	"day":2,
 *	"query":{
 *		"key":"gender",
-*		"value":"F"
+*		"value":"F",
+* 	"specific" : "DSC-VIT"
 *	}
 *}
 *@apiParamExample {json} response-example
@@ -211,7 +213,8 @@ func (b *basicSimpleProjectionService) ProjectPresent(ctx context.Context, event
 *	"day":2,
 *	"query":{
 *		"key":"gender",
-*		"value":"F"
+*		"value":"F",
+* 	"specific" : "DSC-VIT"
 *	}
 *}
 *@apiParamExample {json} response-example

@@ -2128,7 +2128,7 @@ define({ "api": [
       "examples": [
         {
           "title": "request-example",
-          "content": "{\n\t\"event\":\"DEVFEST 2019\",\n\t\"day\":2,\n\t\"query\":{\n\t\t\"key\":\"gender\",\n\t\t\"value\":\"F\"\n\t}\n}",
+          "content": "{\n\t\"event\":\"DEVFEST 2019\",\n\t\"day\":2,\n\t\"query\":{\n\t\t\"key\":\"gender\",\n\t\t\"value\":\"F\",\n\t\"specific\" : \"DSC-VIT\"\n\t}\n}",
           "type": "json"
         },
         {
@@ -2182,7 +2182,7 @@ define({ "api": [
       "examples": [
         {
           "title": "request-example",
-          "content": "{\n\t\"event\":\"DEVFEST 2019\",\n\t\"query\":{\n\t\t\"key\":\"gender\",\n\t\t\"value\":\"F\"\n\t}\n}",
+          "content": "{\n\t\"event\":\"DEVFEST 2019\",\n\t\"query\":{\n\t\t\"key\":\"gender\",\n\t\t\"value\":\"F\",\n\t\"specific\" : \"DSC-VIT\"\n\t}\n}",
           "type": "json"
         },
         {
@@ -2253,7 +2253,7 @@ define({ "api": [
       "examples": [
         {
           "title": "request-example",
-          "content": "{\n\t\"event\":\"DEVFEST 2019\",\n\t\"day\":2,\n\t\"query\":{\n\t\t\"key\":\"gender\",\n\t\t\"value\":\"F\"\n\t}\n}",
+          "content": "{\n\t\"event\":\"DEVFEST 2019\",\n\t\"day\":2,\n\t\"query\":{\n\t\t\"key\":\"gender\",\n\t\t\"value\":\"F\",\n\t\"specific\" : \"DSC-VIT\"\n\t}\n}",
           "type": "json"
         },
         {
