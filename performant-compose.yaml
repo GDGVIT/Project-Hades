@@ -12,8 +12,8 @@ services:
     - 4000:4000
     environment:
     # BASE_URL: http://hades.com
-      SENDGRID_API_KEY: "{SENDGRID_API_KEY}"
-      ACCESS_TOKEN: "{ACCESS_TOKEN}"
+      SENDGRID_API_KEY: "${SENDGRID_API_KEY}"
+      ACCESS_TOKEN: "${ACCESS_TOKEN}"
   permission_generator:
     image: angadsharma1016/hades_permission_generator:latest
     restart: on-failure
