@@ -92,11 +92,9 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 	// authorize user
 	token, err := model.VerifyToken(ctx)
 	if err != nil {
-		fmt.Println("Hello world")
 		return "Error authorizing user", err
 	}
-	fmt.Println(token.Email, event.ClubName)
-	if !model.Enforce(token.Email, event.ClubName, "member") || !model.Enforce(token.Email, event.ClubName, "admin") {
+	if model.Enforce(token.Email, event.ClubName, "member") == true || model.Enforce(token.Email, event.ClubName, "admin") == true {
 
 		ce := make(chan error)
 		go model.CreateEvent(event, ce)
