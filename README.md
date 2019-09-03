@@ -25,6 +25,14 @@ These variables should reside as key value pairs in a file called `.env`.
 | MAIL_FROM | Mailer email for analytics | String |
 | MAIL_TO | Destination email for analytics| String | 
 | MAIL_PASSWORD | Password for MAIL_FROM | String |
+| NEO4J_AUTH | Neo4j credentials |
+| MYSQL_ROOT_PASSWORD | mysql root password | 
+| MYSQL_PASSWORD | mysql password | 
+| MYSQL_USER | mysql user | 
+| SENDGRID_API_KEY | SendGrid apikey | 
+| FROM_EMAIL | mailerQR from email | 
+| BASE_URL | Base URL of hades (http://[IP]/api/v1/) | 
+
 
 <br/>
 

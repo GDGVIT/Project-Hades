@@ -10,12 +10,16 @@ import (
 func ViewAll(event string, query Query, c chan SafeParticipantReturn, mutex *sync.Mutex) {
 	var str string
 	if query.Key == "" {
-
 		str = `MATCH (n:EVENT)-[:ATTENDS]->(a)
 		WHERE n.name=$ev
 		RETURN a.name, a.registrationNumber,a.email, a.phoneNumber, a.gender`
 
 	} else {
+		if query.Value == "M" {
+			query.Value = "Male"
+		} else if query.Value == "F" {
+			query.Value = "Female"
+		}
 		str = fmt.Sprintf(`MATCH (n:EVENT)-[:ATTENDS]->(a)
 			WHERE n.name=$ev AND a.%s = "%s"
 			RETURN a.name, a.registrationNumber,a.email, a.phoneNumber, a.gender`,
