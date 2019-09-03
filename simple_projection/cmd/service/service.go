@@ -15,6 +15,7 @@ import (
 	endpoint1 "github.com/go-kit/kit/endpoint"
 	log "github.com/go-kit/kit/log"
 	prometheus "github.com/go-kit/kit/metrics/prometheus"
+	httptransport "github.com/go-kit/kit/transport/http" // for custom header extractor
 	lightsteptracergo "github.com/lightstep/lightstep-tracer-go"
 	group "github.com/oklog/oklog/pkg/group"
 	opentracinggo "github.com/opentracing/opentracing-go"
@@ -92,7 +93,10 @@ func Run() {
 func initHttpHandler(endpoints endpoint.Endpoints, g *group.Group) {
 	options := defaultHttpOptions(logger, tracer)
 	// Add your http options here
-
+	contextOptions := httptransport.ServerBefore(httptransport.PopulateRequestContext)
+	options["ProjectAll"] = append(options["ProjectAll"], contextOptions)
+	options["ProjectPresent"] = append(options["ProjectPresent"], contextOptions)
+	options["ProjectAbsent"] = append(options["ProjectAbsent"], contextOptions)
 	httpHandler := http.NewHTTPHandler(endpoints, options)
 	httpListener, err := net.Listen("tcp", *httpAddr)
 	if err != nil {

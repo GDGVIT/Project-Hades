@@ -8,6 +8,7 @@ import (
 
 	dialer "github.com/GDGVIT/Project-Hades/exporter/dialer"
 	"github.com/GDGVIT/Project-Hades/exporter/endpoints/services"
+	"github.com/GDGVIT/Project-Hades/model"
 )
 
 /**
@@ -53,26 +54,35 @@ import (
 **/
 func HandleExcel(w http.ResponseWriter, r *http.Request) {
 
-	var result dialer.FetchAllRequest
-
-	json.NewDecoder(r.Body).Decode(&result)
-
-	c := make(chan dialer.FetchAllResponse)
+	key := r.URL.Query().Get("key")
+	value := r.URL.Query().Get("value")
+	specific := r.URL.Query().Get("specific")
+	event := r.URL.Query().Get("event")
 
 	// fetch results for result query
-	go result.FetchAll(c)
+	result := dialer.FetchAllRequest{
+		Event: event,
+		Query: model.Query{
+			Key:      key,
+			Value:    value,
+			Specific: specific,
+		},
+	}
+	ret, err := result.FetchAllQ(key, value, specific)
 
-	ret := <-c
-	if err := ret.Err; err != nil {
+	if err != nil {
 		log.Println(err)
 		log.Println("Error occurred while fetching all")
-		json.NewEncoder(w).Encode(ret)
+		json.NewEncoder(w).Encode(struct {
+			Err error `json:"err"`
+		}{err})
 		return
 	}
 
 	// create CSV
 	ce := make(chan error)
-	go services.CreateCSV(ret.Rs, ce)
+	arg := *ret
+	go services.CreateCSV(arg.Rs, ce)
 
 	if err := <-ce; err != nil {
 		log.Println(err)
@@ -130,20 +140,28 @@ func HandleExcel(w http.ResponseWriter, r *http.Request) {
 **/
 func HandleJson(w http.ResponseWriter, r *http.Request) {
 
-	var result dialer.FetchAllRequest
-
-	json.NewDecoder(r.Body).Decode(&result)
-
-	c := make(chan dialer.FetchAllResponse)
+	key := r.URL.Query().Get("key")
+	value := r.URL.Query().Get("value")
+	specific := r.URL.Query().Get("specific")
+	event := r.URL.Query().Get("event")
 
 	// fetch results for result query
-	go result.FetchAll(c)
+	result := dialer.FetchAllRequest{
+		Event: event,
+		Query: model.Query{
+			Key:      key,
+			Value:    value,
+			Specific: specific,
+		},
+	}
+	ret, err := result.FetchAllQ(key, value, specific)
 
-	ret := <-c
-	if err := ret.Err; err != nil {
+	if err != nil {
 		log.Println(err)
 		log.Println("Error occurred while fetching all")
-		json.NewEncoder(w).Encode(ret)
+		json.NewEncoder(w).Encode(struct {
+			Err error `json:"err"`
+		}{err})
 		return
 	}
 

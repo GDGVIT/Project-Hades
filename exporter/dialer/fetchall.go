@@ -50,3 +50,31 @@ func (req FetchAllRequest) FetchAll(c chan FetchAllResponse) {
 
 	close(c)
 }
+
+func (req FetchAllRequest) FetchAllQ(key, value, specific string) (*FetchAllResponse, error) {
+
+	byteMsg, err := json.Marshal(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post("http://simple_projection:8083/api/v1/simple-projection/"+specific,
+		"application/json",
+		bytes.NewBuffer(byteMsg),
+	)
+
+	if err != nil {
+		return nil, fmt.Errorf("Error making request")
+	}
+
+	result := FetchAllResponse{}
+
+	err = json.NewDecoder(resp.Body).Decode(&result)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
