@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 	"sync"
 
 	"github.com/GDGVIT/Project-Hades/model"
@@ -51,7 +52,12 @@ type basicSimpleProjectionService struct{}
 *
 *@apiParamExample {json} request-example-all
 *{
-*	"event":"DEVFEST 2019"
+*	"event":"DEVFEST 2019",
+* "query": {
+*			"key": ""
+*			"value": "",
+*			"specific" :"DSCVIT"
+*	}
 *}
 *
 *@apiParamExample {json} response-example-all
@@ -88,6 +94,7 @@ func (b *basicSimpleProjectionService) ProjectAll(ctx context.Context, event str
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println(query, event)
 	if model.Enforce(token.Email, query.Specific, "member") == true || model.Enforce(token.Email, query.Specific, "admin") == true {
 
 		c := make(chan model.SafeParticipantReturn)
