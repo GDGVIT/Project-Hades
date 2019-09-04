@@ -2192,7 +2192,7 @@ define({ "api": [
         },
         {
           "title": "request-example-all",
-          "content": "{\n\t\"event\":\"DEVFEST 2019\"\n}",
+          "content": "{\n\t\"event\":\"DEVFEST 2019\",\n\"query\": {\n\t\t\t\"key\": \"\"\n\t\t\t\"value\": \"\",\n\t\t\t\"specific\" :\"DSCVIT\"\n\t}\n}",
           "type": "json"
         },
         {
