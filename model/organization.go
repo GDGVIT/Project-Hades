@@ -221,10 +221,34 @@ func GetJoinRequests(org string) ([]User, error) {
 	return users, nil
 }
 
+func GetUserDetailsOnlyOrg(user string) (orgs []Organization, err error) {
+
+	data, _, _, err := con.QueryNeoAll(`
+MATCH (u:USER)-[:MEMBER]->(n:ORG)
+WHERE u.email = $user
+RETURN n.name, n.tag, n.location, n.description, n.createdAt
+`, map[string]interface{}{
+		"user": user,
+	})
+	fmt.Println(data, user)
+
+	for i, _ := range data {
+		orgs = append(orgs, Organization{
+			Name:        data[i][0].(string),
+			Tag:         data[i][1].(string),
+			Location:    data[i][2].(string),
+			Description: data[i][3].(string),
+			CreatedAt:   data[i][4].(string),
+		})
+
+	}
+	return orgs, nil
+}
+
 func GetUserDetails(user string) (events []Event, orgs []Organization, err error) {
 	data, _, _, err := con.QueryNeoAll(`
 MATCH (u:USER)-[:MEMBER]->(n:ORG)
-OPTIONAL MATCH(n)<-[:EVENT]-(e:EVENT)
+MATCH(n)<-[:EVENT]-(e:EVENT)
 WHERE u.email = $user
 RETURN n.name, n.tag, n.location, n.description, n.createdAt,
 e.clubName, e.name, e.toDate, e.fromDate, e.toTime, e.fromTime, e.budget, e.description, e.category

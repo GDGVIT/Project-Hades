@@ -215,7 +215,7 @@ func GetOrgs() http.HandlerFunc {
 			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
 			return
 		}
-		_, orgs, err := model.GetUserDetails(tk.Email)
+		orgs, err := model.GetUserDetailsOnlyOrg(tk.Email)
 		if err != nil {
 			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err})
 			return
