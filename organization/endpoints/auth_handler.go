@@ -34,6 +34,7 @@ import (
 **/
 func login() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
 		req := views.Auth{}
 		json.NewDecoder(r.Body).Decode(&req)
 		token, err := model.Login(req.Email, req.Password, "DEFAULT", "")
@@ -43,7 +44,7 @@ func login() http.HandlerFunc {
 				Message: "Some error occurred",
 				Err:     err.Error(),
 			})
-
+			return
 		}
 
 		json.NewEncoder(w).Encode(views.Token{
