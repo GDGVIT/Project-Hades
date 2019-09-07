@@ -190,7 +190,7 @@ func DenyJoinRequest(user, org string) error {
 		"user": user,
 	})
 
-	if len(data) <= 1 {
+	if len(data) < 1 {
 		return errors.New("No join request found")
 	}
 
