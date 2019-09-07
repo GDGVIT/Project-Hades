@@ -6,3 +6,5 @@ COPY policy.conf .
 EXPOSE 8087
 
 ENTRYPOINT ["/organization"]
+
+

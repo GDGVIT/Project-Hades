@@ -11,6 +11,7 @@ type Role struct {
 }
 
 type AddMembers struct {
-	Email string `json:"email"`
-	Org   string `json:"org"`
+	Email  string `json:"email"`
+	Org    string `json:"org"`
+	Accept bool   `json:"accept"`
 }

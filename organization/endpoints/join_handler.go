@@ -54,7 +54,8 @@ func sendJoinRequest() http.HandlerFunc {
 * @apiParamExample {json} request-example
 *{
 *	"email":"test1@test.com",
-*	"org":"GDG-VIT"
+*	"org":"GDG-VIT",
+* "accept": true
 *}
 * @apiParamExample {json} response-example
 *
@@ -76,17 +77,24 @@ func acceptJoinRequest() http.HandlerFunc {
 			json.NewEncoder(w).Encode(views.Msg{"Error: User does not have sufficient permission", nil})
 			return
 		}
-		if err := model.AcceptJoinRequest(req.Email, req.Org); err != nil {
-			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
-			return
+
+		if req.Accept {
+			if err := model.AcceptJoinRequest(req.Email, req.Org); err != nil {
+				json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
+				return
+			}
+			if err := model.AddPolicy(req.Email, req.Org, "member"); err != nil {
+				json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
+				return
+			}
+		} else {
+			if err := model.DenyJoinRequest(req.Email, req.Org); err != nil {
+				json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
+				return
+			}
 		}
 
-		if err := model.AddPolicy(req.Email, req.Org, "member"); err != nil {
-
-			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
-			return
-		}
-		json.NewEncoder(w).Encode(views.Msg{"Added as a member", nil})
+		json.NewEncoder(w).Encode(views.Msg{"Completed action", nil})
 		return
 	}
 }

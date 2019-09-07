@@ -61,7 +61,7 @@ func getOrgs() http.HandlerFunc {
 *
 * @apiParamExample {json} request-example
 *
-* curl localhost/api/v1/org/view-req?q=GDG-VIT -H '{"Authorization":"asdbasbdbasjdbasjhbdhasd"}'
+* curl localhost/api/v1/org/view-req?org=GDG-VIT -H '{"Authorization":"asdbasbdbasjdbasjhbdhasd"}'
 *
 * @apiParamExample {json} response-example
 *
@@ -114,6 +114,8 @@ func getJoinRequest() http.HandlerFunc {
 			return
 		}
 		org := r.URL.Query().Get("org")
+		fmt.Println(tk.Email, org)
+		fmt.Println("Organuization: ", org)
 		if !model.Enforce(tk.Email, org, "admin") {
 			json.NewEncoder(w).Encode(views.Msg{"Error: User does not have sufficient permission", nil})
 			return
