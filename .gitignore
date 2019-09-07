@@ -1,4 +1,5 @@
 .env
+secrets.yaml
 db_data
 push
 db

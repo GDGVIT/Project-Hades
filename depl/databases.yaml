@@ -1,0 +1,134 @@
+apiVersion: apps/v1
+
+kind: Service
+metadata:
+  name: neo4j
+spec:
+  selector:
+    app: database
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+
+kind: Deployment
+metadata:
+  name: neo4j
+  labels:
+    app: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+        - name: neo4j
+          image: neo4j:latest
+          ports:
+            - containerPort: 27017
+          env:
+            - name: "NEO4J_AUTH"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: NEO4J_AUTH
+---
+
+apiVersion: apps/v1
+
+kind: Service
+metadata:
+  name: db
+spec:
+  selector:
+    app: auth-database
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+
+kind: Deployment
+metadata:
+  name: db
+  labels:
+    app: auth-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-database
+  template:
+    metadata:
+      labels:
+        app: auth-database
+    spec:
+      containers:
+        - name: db
+          image: mysql:5.7.25
+          ports: 
+          - containerPort: 3306
+          env:
+           - name: "MYSQL_ROOT_PASSWORD"
+             valueFrom:
+               secretKeyRef:
+                 name: my-secret
+                 key: MYSQL_ROOT_PASSWORD
+           - name: "MYSQL_USER"
+             valueFrom:
+               secretKeyRef:
+                 name: my-secret
+                 key: MYSQL_USER
+           - name: "MYSQL_PASSWORD"
+             valueFrom:
+               secretKeyRef:
+                 name: my-secret
+                 key: MYSQL_PASSWORD
+
+---
+
+apiVersion: apps/v1
+
+kind: Service
+metadata:
+  name: nats
+spec:
+  selector:
+    app: pubsub
+  ports:
+    - protocol: TCP
+      port: 4222
+      targetPort: 4222
+    - protocol: TCP
+      port: 8222
+      targetPort: 8222
+    - protocol: TCP
+      port: 6222
+      targetPort: 6222
+
+kind: Deployment
+metadata:
+  name: nats
+  labels:
+    app: pubsub
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pubsub
+  template:
+    metadata:
+      labels:
+        app: pubsub
+    spec:
+      containers:
+        - name: nats
+          image: nats
+          ports:
+            - containerPort: 4222
+            - containerPort: 8222
+            - containerPort: 6222

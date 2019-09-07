@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+
+kind: Service
+metadata: 
+  name: participants
+spec:
+  selector:
+    app: backend-core
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+kind: Deployment
+metadata:
+  name: participants
+  labels:
+    app: backend-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-core
+  template:
+    metadata:
+      labels:
+        app: backend-core
+    spec:
+      containers:
+        - name: participants-hades
+          image: angadsharma1016/participants_hades
+          ports:
+            - containerPort: 80
+          env:
+            - name: "JWT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: JWT_PASSWORD
+            - name: "MYSQL_ROOT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: "MYSQL_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_USER
+            - name: "MYSQL_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_PASSWORD
+            - name: "PROD_URI"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: PROD_URI
