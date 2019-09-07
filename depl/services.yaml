@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: v1
 
 kind: Service
 metadata:
@@ -10,6 +10,10 @@ spec:
     - protocol: TCP
       port: 27017
       targetPort: 27017
+
+---
+
+apiVersion: apps/v1
 
 kind: Deployment
 metadata:
@@ -39,7 +43,7 @@ spec:
                   key: NEO4J_AUTH
 ---
 
-apiVersion: apps/v1
+apiVersion: v1
 
 kind: Service
 metadata:
@@ -51,6 +55,10 @@ spec:
     - protocol: TCP
       port: 3306
       targetPort: 3306
+
+---
+
+apiVersion: apps/v1
 
 kind: Deployment
 metadata:
@@ -91,7 +99,7 @@ spec:
 
 ---
 
-apiVersion: apps/v1
+apiVersion: v1
 
 kind: Service
 metadata:
@@ -101,14 +109,21 @@ spec:
     app: pubsub
   ports:
     - protocol: TCP
+      name: four-too-too
       port: 4222
       targetPort: 4222
     - protocol: TCP
+      name: eight-too-too
       port: 8222
       targetPort: 8222
     - protocol: TCP
+      name: six-too-too
       port: 6222
       targetPort: 6222
+
+---
+
+apiVersion: apps/v1
 
 kind: Deployment
 metadata:
@@ -134,7 +149,7 @@ spec:
             - containerPort: 6222
 ---
 
-apiVersion: apps/v1
+apiVersion: v1
 
 kind: Service
 metadata:
@@ -146,7 +161,11 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-      
+
+---
+
+apiVersion: apps/v1
+
 kind: Deployment
 metadata:
   name: nginx
