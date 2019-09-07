@@ -1,0 +1,563 @@
+apiVersion: apps/v1
+
+kind: Service
+metadata: 
+  name: participants
+spec:
+  selector:
+    app: backend-core
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8081
+
+kind: Deployment
+metadata:
+  name: participants
+  labels:
+    app: backend-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-core
+  template:
+    metadata:
+      labels:
+        app: backend-core
+    spec:
+      containers:
+        - name: participants-hades
+          image: angadsharma1016/participants_hades
+          ports:
+            - containerPort: 8081
+          env:
+            - name: "JWT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: JWT_PASSWORD
+            - name: "MYSQL_ROOT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: "MYSQL_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_USER
+            - name: "MYSQL_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_PASSWORD
+            - name: "PROD_URI"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: PROD_URI
+---
+
+apiVersion: apps/v1
+
+kind: Service
+metadata: 
+  name: mailerqr
+spec:
+  selector:
+    app: backend-svc
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 4000
+
+kind: Deployment
+metadata:
+  name: mailerqr
+  labels:
+    app: backend-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-svc
+  template:
+    metadata:
+      labels:
+        app: backend-svc
+    spec:
+      containers:
+        - name: mailerqr-hades
+          image: atechnohazard/mailer-microservice
+          ports:
+            - containerPort: 4000
+          env:
+            - name: "SENDGRID_API_KEY"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: SENDGRID_API_KEY
+            - name: "FROM_EMAIL"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: FROM_EMAIL
+            - name: "BASE_URL"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: BASE_URL
+---
+
+apiVersion: apps/v1
+
+kind: Service
+metadata: 
+  name: coupons
+spec:
+  selector:
+    app: backend-core
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8082
+
+kind: Deployment
+metadata:
+  name: coupons
+  labels:
+    app: backend-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-core
+  template:
+    metadata:
+      labels:
+        app: backend-core
+    spec:
+      containers:
+        - name: coupons-hades
+          image: angadsharma1016/coupons_hades
+          ports:
+            - containerPort: 8082
+          env:
+            - name: "JWT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: JWT_PASSWORD
+            - name: "MYSQL_ROOT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: "MYSQL_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_USER
+            - name: "MYSQL_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_PASSWORD
+            - name: "PROD_URI"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: PROD_URI
+            - name: "SALT"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: SALT
+---
+
+apiVersion: apps/v1
+
+kind: Service
+metadata: 
+  name: event
+spec:
+  selector:
+    app: backend-core
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+kind: Deployment
+metadata:
+  name: event
+  labels:
+    app: backend-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-core
+  template:
+    metadata:
+      labels:
+        app: backend-core
+    spec:
+      containers:
+        - name: event-hades
+          image: angadsharma1016/event_hades
+          ports:
+            - containerPort: 8080
+          env:
+            - name: "JWT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: JWT_PASSWORD
+            - name: "MYSQL_ROOT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: "MYSQL_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_USER
+            - name: "MYSQL_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_PASSWORD
+            - name: "PROD_URI"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: PROD_URI
+---
+
+apiVersion: apps/v1
+
+kind: Service
+metadata: 
+  name: simple-projection
+spec:
+  selector:
+    app: backend-core
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8083
+
+kind: Deployment
+metadata:
+  name: simple_projection
+  labels:
+    app: backend-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-core
+  template:
+    metadata:
+      labels:
+        app: backend-core
+    spec:
+      containers:
+        - name: simple-projection-hades
+          image: angadsharma1016/simple_projection_hades
+          ports:
+            - containerPort: 8083
+          env:
+            - name: "JWT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: JWT_PASSWORD
+            - name: "MYSQL_ROOT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: "MYSQL_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_USER
+            - name: "MYSQL_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_PASSWORD
+            - name: "PROD_URI"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: PROD_URI
+---
+
+apiVersion: apps/v1
+
+kind: Service
+metadata: 
+  name: exporter
+spec:
+  selector:
+    app: backend-core
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8084
+
+kind: Deployment
+metadata:
+  name: exporter
+  labels:
+    app: backend-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-core
+  template:
+    metadata:
+      labels:
+        app: backend-core
+    spec:
+      containers:
+        - name: exporter-hades
+          image: angadsharma1016/exporter_hades
+          ports:
+            - containerPort: 8084
+          env:
+            - name: "JWT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: JWT_PASSWORD
+            - name: "MYSQL_ROOT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: "MYSQL_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_USER
+            - name: "MYSQL_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_PASSWORD
+            - name: "PROD_URI"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: PROD_URI
+            - name: "SIMPLE_PROJECTION_URI"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: SIMPLE_PROJECTION_URI
+---
+
+apiVersion: apps/v1
+
+kind: Service
+metadata: 
+  name: analytics
+spec:
+  selector:
+    app: backend-core
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8085
+
+kind: Deployment
+metadata:
+  name: analytics
+  labels:
+    app: backend-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-core
+  template:
+    metadata:
+      labels:
+        app: backend-core
+    spec:
+      containers:
+        - name: analytics-hades
+          image: angadsharma1016/analytics_hades
+          ports:
+            - containerPort: 8085
+          env:
+            - name: "JWT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: JWT_PASSWORD
+            - name: "MYSQL_ROOT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: "MYSQL_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_USER
+            - name: "MYSQL_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_PASSWORD
+            - name: "PROD_URI"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: PROD_URI
+            - name: "MAIL_FROM"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MAIL_FROM
+            - name: "MAIL_TO"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MAIL_TO
+            - name: "MAIL_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MAIL_PASSWORD
+---
+
+apiVersion: apps/v1
+
+kind: Service
+metadata: 
+  name: guests
+spec:
+  selector:
+    app: backend-core
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8086
+
+kind: Deployment
+metadata:
+  name: guests
+  labels:
+    app: backend-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-core
+  template:
+    metadata:
+      labels:
+        app: backend-core
+    spec:
+      containers:
+        - name: guests-hades
+          image: angadsharma1016/guests_hades
+          ports:
+            - containerPort: 8086
+          env:
+            - name: "JWT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: JWT_PASSWORD
+            - name: "MYSQL_ROOT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: "MYSQL_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_USER
+            - name: "MYSQL_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_PASSWORD
+            - name: "PROD_URI"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: PROD_URI
+---
+
+apiVersion: apps/v1
+
+kind: Service
+metadata: 
+  name: organization
+spec:
+  selector:
+    app: backend-core
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8087
+
+kind: Deployment
+metadata:
+  name: organization
+  labels:
+    app: backend-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-core
+  template:
+    metadata:
+      labels:
+        app: backend-core
+    spec:
+      containers:
+        - name: organization-hades
+          image: angadsharma1016/organization_hades
+          ports:
+            - containerPort: 8087
+          env:
+            - name: "JWT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: JWT_PASSWORD
+            - name: "MYSQL_ROOT_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: "MYSQL_USER"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_USER
+            - name: "MYSQL_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: MYSQL_PASSWORD
+            - name: "PROD_URI"
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: PROD_URI
+---

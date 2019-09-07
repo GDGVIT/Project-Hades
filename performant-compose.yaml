@@ -170,7 +170,6 @@ services:
       MYSQL_USER: "${MYSQL_USER}"
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       PROD_URI: "${PROD_URI}"
-      JWT_PASSWORD: "${JWT_PASSWORD}"
   neo4j:
     container_name: neo4j_hades
     image: neo4j:latest
