@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: participants-hades
-          image: angadsharma1016/participants_hades
+          image: angadsharma1016/hades-participants
           ports:
             - containerPort: 8081
           env:
@@ -154,7 +154,7 @@ spec:
     spec:
       containers:
         - name: coupons-hades
-          image: angadsharma1016/coupons_hades
+          image: angadsharma1016/hades-coupons
           ports:
             - containerPort: 8082
           env:
@@ -225,7 +225,7 @@ spec:
     spec:
       containers:
         - name: event-hades
-          image: angadsharma1016/event_hades
+          image: angadsharma1016/hades-event
           ports:
             - containerPort: 8080
           env:
@@ -291,7 +291,7 @@ spec:
     spec:
       containers:
         - name: simple-projection-hades
-          image: angadsharma1016/simple_projection_hades
+          image: angadsharma1016/hades-simple_projection
           ports:
             - containerPort: 8083
           env:
@@ -357,7 +357,7 @@ spec:
     spec:
       containers:
         - name: exporter-hades
-          image: angadsharma1016/exporter_hades
+          image: angadsharma1016/hades-exporter
           ports:
             - containerPort: 8084
           env:
@@ -428,7 +428,7 @@ spec:
     spec:
       containers:
         - name: analytics-hades
-          image: angadsharma1016/analytics_hades
+          image: angadsharma1016/hades-analytics
           ports:
             - containerPort: 8085
           env:
@@ -509,7 +509,7 @@ spec:
     spec:
       containers:
         - name: guests-hades
-          image: angadsharma1016/guests_hades
+          image: angadsharma1016/hades-guests
           ports:
             - containerPort: 8086
           env:
@@ -575,7 +575,7 @@ spec:
     spec:
       containers:
         - name: organization-hades
-          image: angadsharma1016/organization_hades
+          image: angadsharma1016/hades-organization
           ports:
             - containerPort: 8087
           env:
