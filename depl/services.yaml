@@ -8,8 +8,8 @@ spec:
     app: database
   ports:
     - protocol: TCP
-      port: 27017
-      targetPort: 27017
+      port: 7474
+      targetPort: 7474
 
 ---
 
@@ -183,6 +183,6 @@ spec:
     spec:
       containers:
        - name: nginx
-         image: angadsharma1016/nginx_hades
+         image: angadsharma1016/hades-nginx
          ports:
          - containerPort: 80
