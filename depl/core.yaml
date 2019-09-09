@@ -200,7 +200,7 @@ spec:
     app: backend-core
   ports:
     - protocol: TCP
-      port: 80
+      port: 8080
       targetPort: 8080
 
 ---

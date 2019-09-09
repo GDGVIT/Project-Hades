@@ -16,5 +16,5 @@ func main() {
 	model.ConnectEnforcer()
 	mux := endpoints.Init()
 	fmt.Println("Listening on port 8087....")
-	log.Fatal(http.ListenAndServe(":8087", mux))
+	log.Fatal(http.ListenAndServe("0.0.0.0:8087", mux))
 }
