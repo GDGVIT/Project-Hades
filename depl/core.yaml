@@ -8,7 +8,7 @@ spec:
     app: backend-core
   ports:
     - protocol: TCP
-      port: 80
+      port: 8081
       targetPort: 8081
 
 ---
@@ -73,7 +73,7 @@ spec:
     app: backend-svc
   ports:
     - protocol: TCP
-      port: 80
+      port: 4000
       targetPort: 4000
 
 ---
@@ -129,7 +129,7 @@ spec:
     app: backend-core
   ports:
     - protocol: TCP
-      port: 80
+      port: 8082
       targetPort: 8082
 
 ---
@@ -266,7 +266,7 @@ spec:
     app: backend-core
   ports:
     - protocol: TCP
-      port: 80
+      port: 8083
       targetPort: 8083
 
 ---
@@ -332,7 +332,7 @@ spec:
     app: backend-core
   ports:
     - protocol: TCP
-      port: 80
+      port: 8084
       targetPort: 8084
 
 ---
@@ -403,7 +403,7 @@ spec:
     app: backend-core
   ports:
     - protocol: TCP
-      port: 80
+      port: 8085
       targetPort: 8085
 
 ---
@@ -484,7 +484,7 @@ spec:
     app: backend-core
   ports:
     - protocol: TCP
-      port: 80
+      port: 8086
       targetPort: 8086
 
 ---
@@ -550,7 +550,7 @@ spec:
     app: backend-core
   ports:
     - protocol: TCP
-      port: 80
+      port: 8087
       targetPort: 8087
 
 ---
