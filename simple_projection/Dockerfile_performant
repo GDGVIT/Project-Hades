@@ -2,6 +2,8 @@ FROM scratch
 
 COPY ./bin/simple_projection /
 
+COPY policy.conf .
+
 EXPOSE 8083
 
 ENTRYPOINT ["/simple_projection"]

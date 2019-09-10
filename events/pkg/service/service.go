@@ -181,6 +181,8 @@ func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println(token.Email, query.Organization)
+	fmt.Println(model.Enforce(token.Email, query.Organization, "member"))
 	if model.Enforce(token.Email, query.Organization, "member") != true && model.Enforce(token.Email, query.Organization, "admin") != true {
 		return nil, errors.New("Unauthorized")
 	}

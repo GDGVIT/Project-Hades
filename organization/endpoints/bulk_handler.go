@@ -10,6 +10,8 @@ import (
 
 func bulkAddAttendees() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+		return
 
 		// TODO: validate if the event is there on the org or not
 
