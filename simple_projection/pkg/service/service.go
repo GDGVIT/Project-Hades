@@ -95,21 +95,20 @@ func (b *basicSimpleProjectionService) ProjectAll(ctx context.Context, event str
 		return nil, err
 	}
 	fmt.Println(query, event)
-	if model.Enforce(token.Email, query.Specific, "member") == true || model.Enforce(token.Email, query.Specific, "admin") == true {
-
-		c := make(chan model.SafeParticipantReturn)
-		mutex := &sync.Mutex{}
-		go model.ViewAll(event, query, c, mutex)
-
-		msg := <-c
-		if err := msg.Err; err != nil {
-			return nil, err
-		}
-		return msg.Participants, msg.Err
-
+	if model.Enforce(token.Email, query.Specific, "member") != true && model.Enforce(token.Email, query.Specific, "admin") != true {
+		return nil, errors.New("Error authorizing user")
 	}
 
-	return nil, errors.New("Error authorizing user")
+	c := make(chan model.SafeParticipantReturn)
+	mutex := &sync.Mutex{}
+	go model.ViewAll(event, query, c, mutex)
+
+	msg := <-c
+	if err := msg.Err; err != nil {
+		return nil, err
+	}
+	return msg.Participants, msg.Err
+
 }
 
 /**
