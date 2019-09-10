@@ -123,7 +123,7 @@ func ShowEventData(q Query, c chan EventReturn) {
 
 	for i, _ := range data {
 		ev = append(ev, Event{
-			ClubName:              data[i][i].(string),
+			ClubName:              data[i][0].(string),
 			Name:                  data[i][1].(string),
 			ToDate:                data[i][2].(string),
 			FromDate:              data[i][3].(string),

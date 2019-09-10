@@ -22,5 +22,8 @@ func Init() *http.ServeMux {
 	// Join endpoints
 	mux.HandleFunc("/api/v1/org/join", sendJoinRequest())
 	mux.HandleFunc("/api/v1/org/accept", acceptJoinRequest())
+
+	// bulk add endpoints
+	mux.HandleFunc("/api/v1/org/bulk-attendees", bulkAddAttendees())
 	return mux
 }

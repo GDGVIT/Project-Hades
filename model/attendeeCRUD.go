@@ -22,7 +22,7 @@ func CreateAttendee(eventName string, p Participant, c chan error, mutex *sync.M
 		return
 	}
 
-	// if not, rceate user
+	// if not, create user
 	if len(data) < 1 {
 		mutex.Lock()
 
@@ -191,4 +191,84 @@ func RmAttendee(q Query, c chan error) {
 	log.Println("Relation to event removed")
 	c <- nil
 	return
+}
+
+func CreateAttendeeSync(eventName string, p Participant, mutex *sync.Mutex) error {
+
+	// check if user exists
+	data, _, _, err := con.QueryNeoAll(`
+	MATCH(n:ATTENDEE)
+	WHERE n.email=$rn
+	RETURN n.email
+		`, map[string]interface{}{
+		"rn": p.Email,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	// if not, create user
+	if len(data) < 1 {
+		mutex.Lock()
+
+		rss, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
+		CREATE (n:ATTENDEE {name:$name, registrationNumber:$registrationNumber,
+			email:$email, phoneNumber:$phoneNumber, gender: $gender})<-[:ATTENDS]-(a) `, map[string]interface{}{
+			"EventName":          eventName,
+			"name":               p.Name,
+			"registrationNumber": p.RegistrationNumber,
+			"email":              p.Email,
+			"phoneNumber":        p.PhoneNumber,
+			"gender":             p.Gender,
+		})
+		if err != nil {
+			return err
+		}
+		log.Println(rss)
+		mutex.Unlock()
+	} else {
+
+		// if yes, check if relation exists
+
+		data, _, _, err := con.QueryNeoAll(`
+		MATCH(n:EVENT)-[r:ATTENDS]->(b)
+		WHERE b.email=$rn and n.name=$ev
+		RETURN r
+			`, map[string]interface{}{
+			"rn": p.Email,
+			"ev": eventName,
+		})
+
+		rel := fmt.Sprintf("%v", data)
+		log.Println("HAGGA\n\n\n\n")
+		log.Println(rel)
+		if err != nil {
+			return err
+		}
+
+		if rel == "[]" || rel == "" {
+
+			// if doesnt exist then create relation
+			mutex.Lock()
+
+			rss, err := con.ExecNeo(`MATCH(a:EVENT) WHERE a.name=$EventName
+			MATCH(b:ATTENDEE) WHERE b.email=$rn
+			CREATE (b)<-[:ATTENDS]-(a) `, map[string]interface{}{
+				"EventName": eventName,
+				"rn":        p.Email,
+			})
+			if err != nil {
+				return err
+			}
+			log.Println(rss)
+
+			mutex.Unlock()
+		} else {
+			return fmt.Errorf("User has already registered")
+		}
+	}
+
+	log.Printf("Created attendee node")
+	return nil
 }
