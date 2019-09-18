@@ -186,6 +186,15 @@ func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (
 	if model.Enforce(token.Email, query.Organization, "member") != true && model.Enforce(token.Email, query.Organization, "admin") != true {
 		return nil, errors.New("Unauthorized")
 	}
+
+	isEventOfOrg, err := model.IsEventOfOrg(query.Specific, token.Organization)
+	if err != nil {
+		return nil, err
+	}
+	if !isEventOfOrg {
+		return nil, errors.New("The event does not belong to this organization")
+	}
+
 	ce := make(chan model.EventReturn)
 
 	go model.ShowEventData(query, ce)
@@ -234,6 +243,13 @@ func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query)
 	if !model.Enforce(token.Email, query.Organization, "member") && !model.Enforce(token.Email, query.Organization, "admin") {
 		return "Error authorizing user", nil
 	}
+	isEventOfOrg, err := model.IsEventOfOrg(query.Specific, token.Organization)
+	if err != nil {
+		return "Some error occurred while checking if the event belongs to this org", err
+	}
+	if !isEventOfOrg {
+		return "The event is not of this org", errors.New("The event does not belong to this organization")
+	}
 
 	ce := make(chan error)
 
@@ -279,6 +295,13 @@ func (b *basicEventsService) DeleteEvent(ctx context.Context, query model.Query)
 		return "Error authorizing user", nil
 	}
 
+	isEventOfOrg, err := model.IsEventOfOrg(query.Specific, token.Organization)
+	if err != nil {
+		return "Some error occurred while checking if the event belongs to this org", err
+	}
+	if !isEventOfOrg {
+		return "The event is not of this org", errors.New("The event does not belong to this organization")
+	}
 	ce := make(chan error)
 
 	go model.DeleteEvent(query, ce)

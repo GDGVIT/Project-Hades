@@ -6,21 +6,40 @@ import (
 	"sync"
 
 	"github.com/GDGVIT/Project-Hades/model"
+	"github.com/GDGVIT/Project-Hades/organization/endpoints/views"
 )
 
 func bulkAddAttendees() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusNotFound)
-		return
 
-		// TODO: validate if the event is there on the org or not
-
+		token := r.Header.Get("Authorization")
+		tk, err := model.ValidateToken(token)
+		if err != nil {
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
+			return
+		}
 		data := struct {
 			Attendees []model.Participant `json:"attendees"`
 			EventName string              `json:"eventName"`
 		}{}
 
 		json.NewDecoder(r.Body).Decode(&data)
+
+		if !model.Enforce(tk.Email, tk.Organization, "admin") {
+			json.NewEncoder(w).Encode(views.Msg{"Error: User does not have sufficient permission", nil})
+			return
+		}
+
+		isEventOfOrg, err := model.IsEventOfOrg(data.EventName, tk.Organization)
+		if err != nil {
+			json.NewEncoder(w).Encode(views.Msg{"Error: Some error occurred while checking if the event belongs to this org", nil})
+			return
+		}
+		if !isEventOfOrg {
+			json.NewEncoder(w).Encode(views.Msg{"Error: The event does not belong to this organization", nil})
+			return
+		}
+
 		mutex := &sync.Mutex{}
 		errs := []error{}
 

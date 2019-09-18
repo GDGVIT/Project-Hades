@@ -328,3 +328,25 @@ e.clubName, e.name, e.toDate, e.fromDate, e.toTime, e.fromTime, e.budget, e.desc
 	}
 	return events, orgs, nil
 }
+
+func IsEventOfOrg(eventname, orgname string) (bool, error) {
+	data, _, _, err := con.QueryNeoAll(`
+MATCH(n:ORG)<-(a:EVENT) WHERE n.name = $name 
+AND a.name = $eventname
+RETURN n.createdAt
+				`, map[string]interface{}{
+		"name":      orgname,
+		"eventname": eventname,
+	})
+
+	if err != nil {
+		return false, err
+	}
+
+	// if org exists then throw error
+	if len(data) > 1 {
+		return false, nil
+	} else {
+		return true, nil
+	}
+}
