@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -95,6 +94,7 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 	if err != nil {
 		return err.Error(), err
 	}
+
 	if model.Enforce(token.Email, event.ClubName, "member") == true || model.Enforce(token.Email, event.ClubName, "admin") == true {
 
 		ce := make(chan error)
@@ -103,11 +103,13 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 			return "some error occurred", err
 		}
 
-		data, err := json.Marshal(event)
-		if err != nil {
-			return "error occurred while unmarshaling json", err
-		}
-		go publishEvent("hades.event.CreateEvent", data)
+		//data, err := json.Marshal(event)
+		/*
+			if err != nil {
+				return "error occurred while unmarshaling json", err
+			}
+		*/
+		//go publishEvent("hades.event.CreateEvent", data)
 		return "created", nil
 	}
 	return "Error authorizing user", nil
@@ -179,10 +181,9 @@ func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (
 	// authorize user
 	token, err := model.VerifyToken(ctx)
 	if err != nil {
+		fmt.Println("Hello world")
 		return nil, err
 	}
-	fmt.Println(token.Email, query.Organization)
-	fmt.Println(model.Enforce(token.Email, query.Organization, "member"))
 	if model.Enforce(token.Email, query.Organization, "member") != true && model.Enforce(token.Email, query.Organization, "admin") != true {
 		return nil, errors.New("Unauthorized")
 	}

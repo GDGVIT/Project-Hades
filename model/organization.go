@@ -331,7 +331,7 @@ e.clubName, e.name, e.toDate, e.fromDate, e.toTime, e.fromTime, e.budget, e.desc
 
 func IsEventOfOrg(eventname, orgname string) (bool, error) {
 	data, _, _, err := con.QueryNeoAll(`
-MATCH(n:ORG)<-(a:EVENT) WHERE n.name = $name 
+MATCH(n:ORG)<-[r]-(a:EVENT) WHERE n.name = $name 
 AND a.name = $eventname
 RETURN n.createdAt
 				`, map[string]interface{}{
