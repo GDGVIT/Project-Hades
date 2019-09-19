@@ -95,7 +95,11 @@ func (b *basicEventsService) CreateEvent(ctx context.Context, event model.Event)
 		return err.Error(), err
 	}
 
-	if model.Enforce(token.Email, event.ClubName, "member") == true || model.Enforce(token.Email, event.ClubName, "admin") == true {
+	access, err := model.EnforceRoleEither(token.Email, event.ClubName)
+	if err != nil {
+		return "some error occurred", err
+	}
+	if access {
 
 		ce := make(chan error)
 		go model.CreateEvent(event, ce)

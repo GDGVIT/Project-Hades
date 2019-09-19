@@ -350,3 +350,92 @@ RETURN n.createdAt
 		return true, nil
 	}
 }
+
+func EnforceRoleMember(email, org string) (bool, error) {
+
+	data, _, _, err := con.QueryNeoAll(`
+MATCH(n:ORG)<-[r:MEMBER]-(a:USER) WHERE n.name = $name 
+AND a.email = $email
+RETURN n.createdAt
+				`, map[string]interface{}{
+		"name":  org,
+		"email": email,
+	})
+
+	if err != nil {
+		return false, err
+	}
+
+	// if role exists
+	if len(data) > 1 {
+		return true, nil
+	} else {
+		return false, nil
+	}
+}
+
+func EnforceRoleAdmin(email, org string) (bool, error) {
+
+	data, _, _, err := con.QueryNeoAll(`
+MATCH(n:ORG)<-[r:ADMIN]-(a:USER) WHERE n.name = $name 
+AND a.email = $email
+RETURN n.createdAt
+				`, map[string]interface{}{
+		"name":  org,
+		"email": email,
+	})
+
+	if err != nil {
+		return false, err
+	}
+
+	// if role exists
+	if len(data) > 1 {
+		return true, nil
+	} else {
+		return false, nil
+	}
+}
+
+func EnforceRoleEither(email, org string) (bool, error) {
+
+	data, _, _, err := con.QueryNeoAll(`
+MATCH(n:ORG)<-[r:MEMBER]-(a:USER) WHERE n.name = $name 
+AND a.email = $email
+RETURN n.createdAt
+				`, map[string]interface{}{
+		"name":  org,
+		"email": email,
+	})
+
+	if err != nil {
+		return false, err
+	}
+
+	// if role exists
+	if len(data) > 1 {
+		return true, nil
+	} else {
+
+		data, _, _, err = con.QueryNeoAll(`
+MATCH(n:ORG)<-[r:ADMIN]-(a:USER) WHERE n.name = $name 
+AND a.email = $email
+RETURN n.createdAt
+				`, map[string]interface{}{
+			"name":  org,
+			"email": email,
+		})
+
+		if err != nil {
+			return false, err
+		}
+
+		// if role exists
+		if len(data) > 1 {
+			return true, nil
+		} else {
+			return false, nil
+		}
+
+	}
+}
