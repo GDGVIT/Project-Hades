@@ -26,7 +26,8 @@ func bulkAddAttendees() http.HandlerFunc {
 
 		json.NewDecoder(r.Body).Decode(&data)
 
-		access, err := model.EnforceRoleAdmin(tk.Email, tk.Organization)
+		console.log(tk.Email, tk.Organization)
+		access, err := model.EnforceRoleEither(tk.Email, tk.Organization)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
