@@ -34,16 +34,19 @@ func bulkAddAttendees() http.HandlerFunc {
 		}
 
 		if !access {
+			w.WriteHeader(http.StatusUnauthorized)
 			json.NewEncoder(w).Encode(views.Msg{"failed to authenticate user", errors.New("failed to authenticate user")})
 			return
 		}
 
 		isEventOfOrg, err := model.IsEventOfOrg(data.EventName, tk.Organization)
 		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(views.Msg{"Error: Some error occurred while checking if the event belongs to this org", nil})
 			return
 		}
 		if !isEventOfOrg {
+			w.WriteHeader(http.StatusUnauthorized)
 			json.NewEncoder(w).Encode(views.Msg{"Error: The event does not belong to this organization", nil})
 			return
 		}
