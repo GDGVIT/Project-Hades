@@ -367,7 +367,7 @@ RETURN n.createdAt
 	}
 
 	// if role exists
-	if len(data) > 1 {
+	if fmt.Sprintf("%t", data) != "[]" {
 		return true, nil
 	} else {
 		return false, nil
@@ -390,7 +390,7 @@ RETURN n.createdAt
 	}
 
 	// if role exists
-	if len(data) > 1 {
+	if fmt.Sprintf("%t", data) != "[]" {
 		return true, nil
 	} else {
 		return false, nil
@@ -413,7 +413,7 @@ RETURN n.createdAt
 	}
 
 	// if role exists
-	if len(data) > 1 {
+	if fmt.Sprintf("%t", data) != "[]" {
 		return true, nil
 	} else {
 
@@ -431,7 +431,7 @@ RETURN n.createdAt
 		}
 
 		// if role exists
-		if len(data) > 1 {
+		if fmt.Sprintf("%t", data) != "[]" {
 			return true, nil
 		} else {
 			return false, nil

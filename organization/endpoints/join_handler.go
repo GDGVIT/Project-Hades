@@ -2,6 +2,7 @@ package endpoints
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/GDGVIT/Project-Hades/model"
@@ -73,8 +74,16 @@ func acceptJoinRequest() http.HandlerFunc {
 		}
 		req := views.AddMembers{}
 		json.NewDecoder(r.Body).Decode(&req)
-		if !model.Enforce(tk.Email, req.Org, "admin") {
-			json.NewEncoder(w).Encode(views.Msg{"Error: User does not have sufficient permission", nil})
+
+		access, err := model.EnforceRoleAdmin(tk.Email, req.Org)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
+			return
+		}
+
+		if !access {
+			json.NewEncoder(w).Encode(views.Msg{"failed to authenticate user", errors.New("failed to authenticate user")})
 			return
 		}
 

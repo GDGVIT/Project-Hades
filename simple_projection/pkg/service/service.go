@@ -95,8 +95,13 @@ func (b *basicSimpleProjectionService) ProjectAll(ctx context.Context, event str
 		return nil, err
 	}
 	fmt.Println(query, event)
-	if model.Enforce(token.Email, query.Specific, "member") != true && model.Enforce(token.Email, query.Specific, "admin") != true {
-		return nil, errors.New("Error authorizing user")
+	access, err := model.EnforceRoleEither(token.Email, query.Specific)
+	if err != nil {
+		return nil, err
+	}
+
+	if !access {
+		return nil, errors.New("failed to authenticate user")
 	}
 
 	c := make(chan model.SafeParticipantReturn)
@@ -185,22 +190,25 @@ func (b *basicSimpleProjectionService) ProjectPresent(ctx context.Context, event
 	if err != nil {
 		return nil, err
 	}
-	if model.Enforce(token.Email, query.Specific, "member") == true || model.Enforce(token.Email, query.Specific, "admin") == true {
 
-		c := make(chan model.SafeParticipantReturn)
-		mutex := &sync.Mutex{}
-		go model.ViewPresent(event, query, day, c, mutex)
-
-		msg := <-c
-		if err := msg.Err; err != nil {
-			return nil, err
-		}
-		return msg.Participants, msg.Err
-		return rs, err
-
+	access, err := model.EnforceRoleEither(token.Email, query.Specific)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil, errors.New("Error authorizing user")
+	if !access {
+		return nil, errors.New("failed to authenticate user")
+	}
+
+	c := make(chan model.SafeParticipantReturn)
+	mutex := &sync.Mutex{}
+	go model.ViewPresent(event, query, day, c, mutex)
+
+	msg := <-c
+	if err := msg.Err; err != nil {
+		return nil, err
+	}
+	return msg.Participants, msg.Err
 }
 
 /**
@@ -246,21 +254,24 @@ func (b *basicSimpleProjectionService) ProjectAbsent(ctx context.Context, event 
 	if err != nil {
 		return nil, err
 	}
-	if model.Enforce(token.Email, query.Specific, "member") == true || model.Enforce(token.Email, query.Specific, "admin") == true {
 
-		c := make(chan model.SafeParticipantReturn)
-		go model.ViewAbsent(event, query, day, c)
-
-		msg := <-c
-		if err := msg.Err; err != nil {
-			return nil, err
-		}
-		return msg.Participants, msg.Err
-		return rs, err
-
+	access, err := model.EnforceRoleEither(token.Email, query.Specific)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil, errors.New("Error authorizing user")
+	if !access {
+		return nil, errors.New("failed to authenticate user")
+	}
+
+	c := make(chan model.SafeParticipantReturn)
+	go model.ViewAbsent(event, query, day, c)
+
+	msg := <-c
+	if err := msg.Err; err != nil {
+		return nil, err
+	}
+	return msg.Participants, msg.Err
 }
 
 // NewBasicSimpleProjectionService returns a naive, stateless implementation of SimpleProjectionService.

@@ -87,7 +87,14 @@ func createOrg() http.HandlerFunc {
 			json.NewEncoder(w).Encode(views.Msg{"", err.Error()})
 			return
 		}
-		if model.Enforce(tk.Email, data.Name, "member") || model.Enforce(tk.Email, data.Name, "admin") {
+		access, err := model.EnforceRoleEither(tk.Email, data.Name)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
+			return
+		}
+
+		if access {
 			json.NewEncoder(w).Encode(views.Msg{"Policy for this user already exists", nil})
 			return
 		}
@@ -155,13 +162,18 @@ func loginOrg() http.HandlerFunc {
 			})
 			return
 		}
+		access, err := model.EnforceRoleEither(token.Email, data.Name)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
+			return
+		}
 
-		// check if user is authorized for the role
-		if !model.Enforce(token.Email, data.Name, data.Role) {
-			w.WriteHeader(http.StatusUnauthorized)
+		if !access {
 			json.NewEncoder(w).Encode(views.Msg{"failed to authenticate user", errors.New("failed to authenticate user")})
 			return
 		}
+
 		// generate and return token
 		cc := make(chan model.TokenReturn)
 		go model.TokenGen(token.Email, data.Role, data.Name, cc)
@@ -291,11 +303,19 @@ func addMembers() http.HandlerFunc {
 		data := views.AddMembers{}
 		json.NewDecoder(r.Body).Decode(&data)
 		tk, err := model.ValidateToken(r.Header.Get("Authorization"))
-		if err != nil || !model.Enforce(tk.Email, tk.Organization, "admin") {
-			w.WriteHeader(http.StatusUnauthorized)
-			json.NewEncoder(w).Encode(views.Msg{"error authorizing user", err.Error()})
+
+		access, err := model.EnforceRoleAdmin(tk.Email, data.Org)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
 			return
 		}
+
+		if !access {
+			json.NewEncoder(w).Encode(views.Msg{"failed to authenticate user", errors.New("failed to authenticate user")})
+			return
+		}
+
 		if err := model.InviteUserToOrg(data.Email, data.Org); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(views.Msg{"", err.Error()})

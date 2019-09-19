@@ -188,8 +188,13 @@ func (b *basicEventsService) ReadEvent(ctx context.Context, query model.Query) (
 		fmt.Println("Hello world")
 		return nil, err
 	}
-	if model.Enforce(token.Email, query.Organization, "member") != true && model.Enforce(token.Email, query.Organization, "admin") != true {
-		return nil, errors.New("Unauthorized")
+	access, err := model.EnforceRoleEither(token.Email, query.Organization)
+	if err != nil {
+		return nil, err
+	}
+
+	if !access {
+		return nil, errors.New("failed to authenticate user")
 	}
 
 	isEventOfOrg, err := model.IsEventOfOrg(query.Specific, token.Organization)
@@ -245,9 +250,15 @@ func (b *basicEventsService) UpdateEvent(ctx context.Context, query model.Query)
 		fmt.Println("Hello world")
 		return "Error authorizing user", err
 	}
-	if !model.Enforce(token.Email, query.Organization, "member") && !model.Enforce(token.Email, query.Organization, "admin") {
-		return "Error authorizing user", nil
+	access, err := model.EnforceRoleEither(token.Email, query.Organization)
+	if err != nil {
+		return "", err
 	}
+
+	if !access {
+		return "", errors.New("failed to authenticate user")
+	}
+
 	isEventOfOrg, err := model.IsEventOfOrg(query.Specific, token.Organization)
 	if err != nil {
 		return "Some error occurred while checking if the event belongs to this org", err
@@ -295,9 +306,13 @@ func (b *basicEventsService) DeleteEvent(ctx context.Context, query model.Query)
 		fmt.Println("Hello world")
 		return "Error authorizing user", err
 	}
+	access, err := model.EnforceRoleEither(token.Email, query.Organization)
+	if err != nil {
+		return "", err
+	}
 
-	if !model.Enforce(token.Email, query.Organization, "member") && !model.Enforce(token.Email, query.Organization, "admin") {
-		return "Error authorizing user", nil
+	if !access {
+		return "", errors.New("failed to authenticate user")
 	}
 
 	isEventOfOrg, err := model.IsEventOfOrg(query.Specific, token.Organization)

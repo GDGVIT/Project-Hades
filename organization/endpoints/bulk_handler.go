@@ -2,6 +2,7 @@ package endpoints
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"sync"
 
@@ -25,8 +26,15 @@ func bulkAddAttendees() http.HandlerFunc {
 
 		json.NewDecoder(r.Body).Decode(&data)
 
-		if !model.Enforce(tk.Email, tk.Organization, "admin") {
-			json.NewEncoder(w).Encode(views.Msg{"Error: User does not have sufficient permission", nil})
+		access, err := model.EnforceRoleAdmin(tk.Email, tk.Organization)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
+			return
+		}
+
+		if !access {
+			json.NewEncoder(w).Encode(views.Msg{"failed to authenticate user", errors.New("failed to authenticate user")})
 			return
 		}
 
