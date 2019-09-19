@@ -3,6 +3,7 @@ package endpoints
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"sync"
 
@@ -26,7 +27,7 @@ func bulkAddAttendees() http.HandlerFunc {
 
 		json.NewDecoder(r.Body).Decode(&data)
 
-		console.log(tk.Email, tk.Organization)
+		fmt.Println(tk.Email, tk.Organization)
 		access, err := model.EnforceRoleEither(tk.Email, tk.Organization)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
