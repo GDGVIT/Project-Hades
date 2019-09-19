@@ -1349,7 +1349,7 @@
       "examples": [
         {
           "title": "request-example",
-          "content": "{\n\t\"email\":\"test1@test.com\",\n\t\"org\":\"GDG-VIT\"\n}",
+          "content": "{\n\t\"email\":\"test1@test.com\",\n\t\"org\":\"GDG-VIT\",\n\"accept\": true\n}",
           "type": "json"
         },
         {
@@ -1361,6 +1361,55 @@
     },
     "version": "0.0.0",
     "filename": "organization/endpoints/join_handler.go",
+    "groupTitle": "organization"
+  },
+  {
+    "type": "get",
+    "url": "/api/v1/org/bulk-attendees",
+    "title": "Create attendees in bulk",
+    "name": "Create_attendees_in_bulk",
+    "group": "organization",
+    "permission": [
+      {
+        "name": "member"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "organization",
+            "description": "<p>name of the organization</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "eventname",
+            "description": "<p>name of the event</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "object",
+            "optional": false,
+            "field": "attendees",
+            "description": "<p>list of attendees</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "request-example",
+          "content": "\n{\n\t\"eventname\": \"developer 101\",\n\t\"organization\": \"DSC VIT\",\n\t\"attendees\": [{\n\t\t\"name\": \"Vamsee\",\n\t\t\"registrationNumber\": \"17BCB0068\",\n\t\t\"email\": \"vamseevk2001@gmail.com\",\n\t\t\"phoneNumber\": \"9390214409\",\n\t\t\"gender\": \"F\",\n\t}, {\n\t\t\"name\": \"Vamsee\",\n\t\t\"registrationNumber\": \"17BCB0069\",\n\t\t\"email\": \"vamseevk2001@gmail.com\",\n\t\t\"phoneNumber\": \"9390214409\",\n\t\t\"gender\": \"F\",\n\t}]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "organization/endpoints/bulk_handler.go",
     "groupTitle": "organization"
   },
   {
@@ -1547,7 +1596,7 @@
       "examples": [
         {
           "title": "request-example",
-          "content": "\ncurl localhost/api/v1/org/view-req?q=GDG-VIT -H '{\"Authorization\":\"asdbasbdbasjdbasjhbdhasd\"}'",
+          "content": "\ncurl localhost/api/v1/org/view-req?org=GDG-VIT -H '{\"Authorization\":\"asdbasbdbasjdbasjhbdhasd\"}'",
           "type": "json"
         },
         {

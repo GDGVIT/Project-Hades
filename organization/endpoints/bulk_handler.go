@@ -11,6 +11,39 @@ import (
 	"github.com/GDGVIT/Project-Hades/organization/endpoints/views"
 )
 
+/**
+* @api {get} /api/v1/org/bulk-attendees Create attendees in bulk
+* @apiName Create attendees in bulk
+* @apiGroup organization
+*
+* @apiPermission member
+* @apiParam {string} organization name of the organization
+* @apiParam {string} eventname name of the event
+* @apiParam {object} attendees list of attendees
+*
+*
+* @apiParamExample {json} request-example
+*
+* {
+*	"eventname": "developer 101",
+*	"organization": "DSC VIT",
+*	"attendees": [{
+*		"name": "Vamsee",
+*		"registrationNumber": "17BCB0068",
+*		"email": "vamseevk2001@gmail.com",
+*		"phoneNumber": "9390214409",
+*		"gender": "F",
+*	}, {
+*		"name": "Vamsee",
+*		"registrationNumber": "17BCB0069",
+*		"email": "vamseevk2001@gmail.com",
+*		"phoneNumber": "9390214409",
+*		"gender": "F",
+*	}]
+*}
+*
+**/
+
 func bulkAddAttendees() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
