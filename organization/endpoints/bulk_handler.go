@@ -21,14 +21,15 @@ func bulkAddAttendees() http.HandlerFunc {
 			return
 		}
 		data := struct {
-			Attendees []model.Participant `json:"attendees"`
-			EventName string              `json:"eventName"`
+			Attendees    []model.Participant `json:"attendees"`
+			EventName    string              `json:"eventName"`
+			Organization string              `json:"Organization"`
 		}{}
 
 		json.NewDecoder(r.Body).Decode(&data)
 
 		fmt.Println(tk.Email, tk.Organization)
-		access, err := model.EnforceRoleEither(tk.Email, tk.Organization)
+		access, err := model.EnforceRoleEither(tk.Email, data.Organization)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(views.Msg{"Some error occurred", err.Error()})
