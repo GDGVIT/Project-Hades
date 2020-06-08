@@ -10,7 +10,7 @@ require (
 	github.com/jinzhu/gorm v1.9.12
 	github.com/johnnadratowski/golang-neo4j-bolt-driver v0.0.0-20181101021923-6b24c0085aae
 	github.com/lightstep/lightstep-tracer-go v0.20.0
-	github.com/mitchellh/mapstructure v1.1.2
+	github.com/mitchellh/mapstructure v1.3.2
 	github.com/nats-io/go-nats v1.7.2
 	github.com/oklog/oklog v0.3.2
 	github.com/opentracing/opentracing-go v1.1.0
