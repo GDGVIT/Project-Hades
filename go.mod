@@ -13,7 +13,7 @@ require (
 	github.com/mitchellh/mapstructure v1.3.2
 	github.com/nats-io/go-nats v1.7.2
 	github.com/oklog/oklog v0.3.2
-	github.com/opentracing/opentracing-go v1.1.0
+	github.com/opentracing/opentracing-go v1.2.0
 	github.com/openzipkin/zipkin-go-opentracing v0.3.5
 	github.com/prometheus/client_golang v1.7.0
 	github.com/rs/cors v1.7.0
